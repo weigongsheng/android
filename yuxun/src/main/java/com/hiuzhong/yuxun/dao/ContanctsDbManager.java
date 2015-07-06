@@ -20,8 +20,8 @@ public class ContanctsDbManager {
 
     public ContanctsDbManager(Context context) {
         helper = new ContactDBHelper(context);
-        //ÒòÎªgetWritableDatabaseÄÚ²¿µ÷ÓÃÁËmContext.openOrCreateDatabase(mName, 0, mFactory);
-        //ËùÒÔÒªÈ·±£contextÒÑ³õÊ¼»¯,ÎÒÃÇ¿ÉÒÔ°ÑÊµÀı»¯DBManagerµÄ²½Öè·ÅÔÚActivityµÄonCreateÀï
+        //å› ä¸ºgetWritableDatabaseå†…éƒ¨è°ƒç”¨äº†mContext.openOrCreateDatabase(mName, 0, mFactory);
+        //æ‰€ä»¥è¦ç¡®ä¿contextå·²åˆå§‹åŒ–,æˆ‘ä»¬å¯ä»¥æŠŠå®ä¾‹åŒ–DBManagerçš„æ­¥éª¤æ”¾åœ¨Activityçš„onCreateé‡Œ
         db = helper.getWritableDatabase();
     }
 
@@ -30,14 +30,14 @@ public class ContanctsDbManager {
      * @param contacts
      */
     public void add(Contact... contacts) {
-        db.beginTransaction();  //¿ªÊ¼ÊÂÎñ
+        db.beginTransaction();  //å¼€å§‹äº‹åŠ¡
         try {
             for (Contact person : contacts) {
                 db.execSQL("INSERT INTO person VALUES(null, ?, ?, ?)", new Object[]{person.faceImgPath, person.nickName, person.account});
             }
-            db.setTransactionSuccessful();  //ÉèÖÃÊÂÎñ³É¹¦Íê³É
+            db.setTransactionSuccessful();  //è®¾ç½®äº‹åŠ¡æˆåŠŸå®Œæˆ
         } finally {
-            db.endTransaction();    //½áÊøÊÂÎñ
+            db.endTransaction();    //ç»“æŸäº‹åŠ¡
         }
     }
 

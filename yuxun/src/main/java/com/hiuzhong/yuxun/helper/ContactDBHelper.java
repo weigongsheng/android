@@ -1,11 +1,11 @@
 package com.hiuzhong.yuxun.helper;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;  
-import android.database.sqlite.SQLiteOpenHelper;  
-  
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 public class ContactDBHelper extends SQLiteOpenHelper {
-  
+
     private static final String DATABASE_NAME = "yuxun.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -17,21 +17,21 @@ public class ContactDBHelper extends SQLiteOpenHelper {
 
 
     public ContactDBHelper(Context context) {
-        //CursorFactoryÉèÖÃÎªnull,Ê¹ÓÃÄ¬ÈÏÖµ  
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);  
-    }  
-  
-    //Êı¾İ¿âµÚÒ»´Î±»´´½¨Ê±onCreate»á±»µ÷ÓÃ  
-    @Override  
-    public void onCreate(SQLiteDatabase db) {  
+        //CursorFactoryè®¾ç½®ä¸ºnull,ä½¿ç”¨é»˜è®¤å€¼
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    //æ•°æ®åº“ç¬¬ä¸€æ¬¡è¢«åˆ›å»ºæ—¶onCreateä¼šè¢«è°ƒç”¨
+    @Override
+    public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " +TABLE_NAME+
                 "("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+COLUMN_FACE_IMG+" varchar," +
                 COLUMN_NICK_NAME+" varchar, "+COLUMN_ACCOUNT+" VARCHAR)");
-    }  
-  
-    //Èç¹ûDATABASE_VERSIONÖµ±»¸ÄÎª2,ÏµÍ³·¢ÏÖÏÖÓĞÊı¾İ¿â°æ±¾²»Í¬,¼´»áµ÷ÓÃonUpgrade  
-    @Override  
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {  
+    }
+
+    //å¦‚æœDATABASE_VERSIONå€¼è¢«æ”¹ä¸º2,ç³»ç»Ÿå‘ç°ç°æœ‰æ•°æ®åº“ç‰ˆæœ¬ä¸åŒ,å³ä¼šè°ƒç”¨onUpgrade
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("ALTER TABLE contacts ADD COLUMN other STRING");
-    }  
-}  
+    }
+}
