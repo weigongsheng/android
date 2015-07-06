@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 动态加载 加载完毕的文本颜色 -->
+    <color name="fond_load_finish_color">#7D7D7E</color>
+
+
+</resources>
