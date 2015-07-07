@@ -6,15 +6,61 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 
+import com.hiuzhong.baselib.adapter.SimpleGroupAdapter;
+import com.hiuzhong.yuxun.dao.ContactsDbManager;
+import com.hiuzhong.yuxun.vo.Contact;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
 
 public class ContactListActivity extends AppCompatActivity {
 
-    private ExpandableListView contactListView;
+    protected ExpandableListView contactListView;
+    protected SimpleGroupAdapter adapter;
+
+
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
         contactListView = (ExpandableListView) findViewById(R.id.contactListView);
+//        initListData();
+//        getActionBar().setCustomView(R.layout.contactlist_bar);
+        getSupportActionBar().setCustomView(R.layout.contactlist_bar);
+    }
+
+    private void initListData() {
+        ContactsDbManager manager = new ContactsDbManager(this);
+        List<Contact> allContact = manager.query();
+        adapter = new SimpleGroupAdapter(this,R.layout.layout_contact_head,R.layout.layout_contact_item,
+                new int[]{ R.id.imageView,R.id.account,R.id.contactNickName}
+                ,new String[]{"faceImgPath","account","nickName"});
+        HashMap<String,List<Map<String,String>>> datas = new HashMap<>();
+        for (Contact c:allContact){
+            String fc = c.firstChar ;
+            List<Map<String,String>> item = datas.get(c.firstChar);
+            if(item == null){
+                item = new ArrayList<>();
+                datas.put(c.firstChar,item);
+            }
+            Map<String,String> data = new Hashtable<>();
+            data.put("faceImgPath",c.faceImgPath);
+            data.put("account",c.account);
+            data.put("nickName",c.nickName);
+            data.put("firstChar",c.firstChar);
+            item.add(data);
+        }
+        adapter.datas=datas;
+        adapter.heads = new ArrayList<>(adapter.datas.keySet().size());
+        adapter.heads.addAll(adapter.datas.keySet());
+        Collections.sort(adapter.heads);
+        contactListView.setAdapter(adapter);
     }
 
     @Override

@@ -7,13 +7,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ContactDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "yuxun.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_NAME="contacts";
     public static final String COLUMN_FACE_IMG="face_img";
     public static final String COLUMN_ID="_id";
     public static final String COLUMN_NICK_NAME="nick_name";
     public static final String COLUMN_ACCOUNT="account";
+    public static final String COLUMN_FIRST_CHAR="first_char";
 
 
     public ContactDBHelper(Context context) {
@@ -32,6 +33,6 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     //如果DATABASE_VERSION值被改为2,系统发现现有数据库版本不同,即会调用onUpgrade
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("ALTER TABLE contacts ADD COLUMN other STRING");
+        db.execSQL("ALTER TABLE contacts ADD COLUMN "+COLUMN_FIRST_CHAR+" STRING");
     }
 }

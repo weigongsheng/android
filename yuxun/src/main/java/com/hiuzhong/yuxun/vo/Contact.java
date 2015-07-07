@@ -8,5 +8,6 @@ public class Contact {
     public String faceImgPath;
     public String nickName;
     public String account;
+    public String firstChar;
 
 }

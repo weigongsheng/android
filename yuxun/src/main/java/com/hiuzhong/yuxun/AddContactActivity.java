@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.hiuzhong.baselib.listener.ImgUploadedListener;
 import com.hiuzhong.baselib.util.ImageLoaderUtil;
 import com.hiuzhong.baselib.view.UploadImgView;
-import com.hiuzhong.yuxun.dao.ContanctsDbManager;
+import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.vo.Contact;
 
 
@@ -82,15 +82,13 @@ public class AddContactActivity extends AppCompatActivity implements ImgUploaded
             tip("账号不能为空");
             return;
         }
-        ContanctsDbManager manager = new ContanctsDbManager(this);
+        ContactsDbManager manager = new ContactsDbManager(this);
         if (manager.existAccount(account.toString())) {
             tip("账号已存在");
             return;
         }
         manager.add(c);
         tip("添加联系人成功");
-
-
     }
     private void tip(String tip) {
         Toast.makeText(this, tip, Toast.LENGTH_SHORT).show();

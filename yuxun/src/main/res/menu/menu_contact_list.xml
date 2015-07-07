@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.hiuzhong.yuxun.ContactListActivity">
     <item android:id="@+id/action_title" android:title="联系人列表"
-        android:orderInCategory="2" app:showAsAction="always" />
+        android:orderInCategory="2" app:showAsAction="always"   />
 
 </menu>

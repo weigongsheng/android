@@ -8,17 +8,22 @@ import android.database.sqlite.SQLiteDatabase;
 import com.hiuzhong.yuxun.helper.ContactDBHelper;
 import com.hiuzhong.yuxun.vo.Contact;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by gongsheng on 2015/7/5.
  */
-public class ContanctsDbManager {
+public class ContactsDbManager {
     private ContactDBHelper helper;
     private SQLiteDatabase db;
 
-    public ContanctsDbManager(Context context) {
+    public ContactsDbManager(Context context) {
         helper = new ContactDBHelper(context);
         //因为getWritableDatabase内部调用了mContext.openOrCreateDatabase(mName, 0, mFactory);
         //所以要确保context已初始化,我们可以把实例化DBManager的步骤放在Activity的onCreate里
@@ -31,14 +36,30 @@ public class ContanctsDbManager {
      */
     public void add(Contact... contacts) {
         db.beginTransaction();  //开始事务
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         try {
             for (Contact person : contacts) {
-                db.execSQL("INSERT INTO person VALUES(null, ?, ?, ?)", new Object[]{person.faceImgPath, person.nickName, person.account});
+                person.firstChar = String.valueOf(getFirstChar(person.nickName.charAt(0)));
+                db.execSQL("INSERT INTO person VALUES(null, ?, ?, ?,?)", new Object[]{person.faceImgPath, person.nickName, person.account, person.firstChar});
             }
             db.setTransactionSuccessful();  //设置事务成功完成
         } finally {
             db.endTransaction();    //结束事务
         }
+    }
+
+    public static char getFirstChar(char c) {
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+        try {
+            String[] fc =  PinyinHelper.toHanyuPinyinStringArray(c, format);
+            if (fc != null && fc[0] != null) {
+               return fc[0].charAt(0);
+            }
+        } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+            badHanyuPinyinOutputFormatCombination.printStackTrace();
+        }
+        return c;
     }
 
     /**
@@ -48,7 +69,7 @@ public class ContanctsDbManager {
     public void updateFaceImg(Contact person) {
         ContentValues cv = new ContentValues();
         cv.put(ContactDBHelper.COLUMN_FACE_IMG, person.faceImgPath);
-        db.update("person", cv, ContactDBHelper.COLUMN_FACE_IMG + " = ?", new String[]{person.faceImgPath});
+        db.update("person", cv, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{person.account});
     }
 
     public boolean existAccount(String account){
@@ -57,13 +78,15 @@ public class ContanctsDbManager {
         return re.moveToNext();
     }
     /**
-     * update person's age
+     *
      * @param person
      */
     public void updateNickName(Contact person) {
         ContentValues cv = new ContentValues();
+        person.firstChar = String.valueOf(getFirstChar(person.nickName.charAt(0)));
         cv.put(ContactDBHelper.COLUMN_NICK_NAME, person.nickName);
-        db.update(ContactDBHelper.TABLE_NAME, cv, ContactDBHelper.COLUMN_NICK_NAME + " = ?", new String[]{person.nickName});
+        cv.put(ContactDBHelper.COLUMN_FIRST_CHAR, ""+person.firstChar);
+        db.update(ContactDBHelper.TABLE_NAME, cv, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{person.account});
     }
     /**
      * update person's age
