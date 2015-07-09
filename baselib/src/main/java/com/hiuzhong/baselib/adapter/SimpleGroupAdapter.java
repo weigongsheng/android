@@ -1,11 +1,10 @@
 package com.hiuzhong.baselib.adapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONObject;
-
+import java.util.Set;
 
 import android.content.Context;
 import android.util.Log;
@@ -19,20 +18,46 @@ import android.widget.TextView;
 import com.hiuzhong.baselib.util.ImageLoaderUtil;
 
 public class SimpleGroupAdapter extends BaseExpandableListAdapter {
-    public ArrayList<Character> heads;
-    public Map<Character, List<JSONObject>> datas;
+    private final int headTextId;
+    private final String headField;
+    public ArrayList<String> heads;
+    public Map<String, List<Map<String,String>>> datas;
     public Context cnt;
     private int headLayoutId;
     private int itemLayoutId;
     private int[] itemIds;
     private String[] fieldNames;
 
-    public SimpleGroupAdapter(Context cnt, int headLayoutId, int itemLayoutId, int[] itemIds, String[] fieldNames) {
+
+    /**
+     * 构造函数
+     * @param cnt Context
+     * @param headLayoutId 分组头部布局资源文件 R.layout.
+     * @param itemLayoutId
+     * @param itemIds 子项中各个view的id
+     * @param fieldNames 各个子view对应 map中key的名称
+     */
+    public SimpleGroupAdapter(Context cnt,
+                              int headLayoutId,
+                              int itemLayoutId,
+                              int headTextId,
+                              String headField,
+                              int[] itemIds,
+                              String[] fieldNames) {
         this.headLayoutId = headLayoutId;
         this.itemLayoutId = itemLayoutId;
         this.itemIds = itemIds;
         this.fieldNames = fieldNames;
         this.cnt = cnt;
+        this.headTextId = headTextId;
+        this.headField = headField;
+    }
+
+    public void build(){
+        Set<String> allHead = datas.keySet();
+        heads = new ArrayList<>(allHead.size());
+        heads.addAll(allHead);
+        Collections.sort(heads);
     }
 
     @Override
@@ -75,8 +100,8 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-        TextView view = (TextView) LayoutInflater.from(cnt).inflate(headLayoutId, null);
-        view.setText(heads.get(groupPosition).toString());
+       TextView view = (TextView) LayoutInflater.from(cnt).inflate(headLayoutId, null).findViewById(headTextId);
+        view.setText(heads.get(groupPosition));
         view.setClickable(true);
         return view;
     }
@@ -88,9 +113,9 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
         if (view == null) {
             view = LayoutInflater.from(cnt).inflate(itemLayoutId, null);
         }
-        JSONObject itemData = datas.get(heads.get(groupPosition)).get(childPosition);
+        Map<String, String> itemData = datas.get(heads.get(groupPosition)).get(childPosition);
         for (int i = 0; i < itemIds.length; i++) {
-            fillViewValue(view.findViewById(itemIds[i]), itemData.optString(fieldNames[i]));
+            fillViewValue(view.findViewById(itemIds[i]), itemData.get(fieldNames[i]));
         }
         return view;
     }
@@ -113,5 +138,15 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
         }
     }
 
+
+    public void clear() {
+        try {
+            heads.clear();
+            datas.clear();
+            notifyDataSetChanged();
+        } catch (Exception e) {
+
+        }
+    }
 
 }

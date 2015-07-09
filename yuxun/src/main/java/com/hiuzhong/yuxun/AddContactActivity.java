@@ -88,9 +88,13 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
             tip("账号已存在");
             return;
         }
+        c.nickName = nickName.toString();
+        c.account = account.toString();
         manager.add(c);
         tip("添加联系人成功");
+        finish();
     }
+
     private void tip(String tip) {
         Toast.makeText(this, tip, Toast.LENGTH_SHORT).show();
     }

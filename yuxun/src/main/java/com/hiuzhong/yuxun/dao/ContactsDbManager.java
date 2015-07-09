@@ -41,7 +41,7 @@ public class ContactsDbManager {
         try {
             for (Contact person : contacts) {
                 person.firstChar = String.valueOf(getFirstChar(person.nickName.charAt(0)));
-                db.execSQL("INSERT INTO person VALUES(null, ?, ?, ?,?)", new Object[]{person.faceImgPath, person.nickName, person.account, person.firstChar});
+                db.execSQL("INSERT INTO "+ContactDBHelper.TABLE_CONTACTS_NAME +" VALUES(null, ?, ?, ?,?)", new Object[]{person.faceImgPath, person.nickName, person.account, person.firstChar});
             }
             db.setTransactionSuccessful();  //设置事务成功完成
         } finally {
@@ -51,6 +51,7 @@ public class ContactsDbManager {
 
     public static char getFirstChar(char c) {
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+        format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         try {
             String[] fc =  PinyinHelper.toHanyuPinyinStringArray(c, format);
             if (fc != null && fc[0] != null) {
@@ -69,11 +70,11 @@ public class ContactsDbManager {
     public void updateFaceImg(Contact person) {
         ContentValues cv = new ContentValues();
         cv.put(ContactDBHelper.COLUMN_FACE_IMG, person.faceImgPath);
-        db.update("person", cv, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{person.account});
+        db.update(ContactDBHelper.TABLE_CONTACTS_NAME, cv, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{person.account});
     }
 
     public boolean existAccount(String account){
-        Cursor re = db.rawQuery("select " + ContactDBHelper.COLUMN_ID + " form " + ContactDBHelper.TABLE_NAME + " where "
+        Cursor re = db.rawQuery("select " + ContactDBHelper.COLUMN_ID + " from " + ContactDBHelper.TABLE_CONTACTS_NAME + " where "
                 + ContactDBHelper.COLUMN_ACCOUNT + " =  '" + account + "'", null);
         return re.moveToNext();
     }
@@ -86,7 +87,7 @@ public class ContactsDbManager {
         person.firstChar = String.valueOf(getFirstChar(person.nickName.charAt(0)));
         cv.put(ContactDBHelper.COLUMN_NICK_NAME, person.nickName);
         cv.put(ContactDBHelper.COLUMN_FIRST_CHAR, ""+person.firstChar);
-        db.update(ContactDBHelper.TABLE_NAME, cv, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{person.account});
+        db.update(ContactDBHelper.TABLE_CONTACTS_NAME, cv, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{person.account});
     }
     /**
      * update person's age
@@ -95,11 +96,11 @@ public class ContactsDbManager {
     public void updateAccount(Contact person) {
         ContentValues cv = new ContentValues();
         cv.put(ContactDBHelper.COLUMN_ACCOUNT, person.account);
-        db.update(ContactDBHelper.TABLE_NAME, cv, ContactDBHelper.COLUMN_ACCOUNT+" = ?", new String[]{person.account});
+        db.update(ContactDBHelper.TABLE_CONTACTS_NAME, cv, ContactDBHelper.COLUMN_ACCOUNT+" = ?", new String[]{person.account});
     }
 
     public void deleteContact(String account){
-        db.delete(ContactDBHelper.TABLE_NAME, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{String.valueOf(account)});
+        db.delete(ContactDBHelper.TABLE_CONTACTS_NAME, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{String.valueOf(account)});
 
     }
 
@@ -112,6 +113,7 @@ public class ContactsDbManager {
             contact.account = c.getString(c.getColumnIndex(ContactDBHelper.COLUMN_ACCOUNT));
             contact.nickName = c.getString(c.getColumnIndex(ContactDBHelper.COLUMN_NICK_NAME));
             contact.faceImgPath = c.getString(c.getColumnIndex(ContactDBHelper.COLUMN_FACE_IMG));
+            contact.firstChar = c.getString(c.getColumnIndex(ContactDBHelper.COLUMN_FIRST_CHAR));
             contacts.add(contact);
         }
         c.close();
@@ -119,7 +121,8 @@ public class ContactsDbManager {
     }
 
     public Cursor queryTheCursor() {
-        Cursor c = db.rawQuery("SELECT * FROM "+ ContactDBHelper.TABLE_NAME, null);
+        Cursor c = db.rawQuery("SELECT * FROM "+ ContactDBHelper.TABLE_CONTACTS_NAME, null);
+
         return c;
     }
 

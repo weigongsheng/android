@@ -1,5 +1,7 @@
 package com.hiuzhong.yuxun.vo;
 
+import android.provider.BaseColumns;
+
 /**
  * Created by gongsheng on 2015/7/5.
  */

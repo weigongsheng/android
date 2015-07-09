@@ -2,47 +2,53 @@ package com.hiuzhong.yuxun;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
 import com.hiuzhong.baselib.adapter.SimpleGroupAdapter;
+import com.hiuzhong.baselib.listener.OnRefreshListener;
+import com.hiuzhong.baselib.listener.RefreshResultNotify;
+import com.hiuzhong.baselib.view.PullToRefreshLayout;
 import com.hiuzhong.yuxun.activity.YuXunActivity;
-import com.hiuzhong.yuxun.application.YuXunApplication;
 import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.vo.Contact;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
 
-public class ContactListActivity extends YuXunActivity {
+public class ContactListActivity extends YuXunActivity implements OnRefreshListener {
 
     protected ExpandableListView contactListView;
     protected SimpleGroupAdapter adapter;
+    private ContactsDbManager manager;
+    PullToRefreshLayout refreshLayout;
 
-
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_contact_list);
         super.onCreate(savedInstanceState);
         contactListView = (ExpandableListView) findViewById(R.id.contactListView);
+
+        refreshLayout = (PullToRefreshLayout) findViewById(R.id.contactListViewContainer);
+        refreshLayout.setOnRefreshListener(this);
+        manager = new ContactsDbManager(this);
+        adapter = new SimpleGroupAdapter(this,R.layout.layout_contact_head
+                ,R.layout.layout_contact_item
+                ,R.id.contactHead
+                ,"firstChar"
+                ,new int[]{ R.id.imageView,R.id.account,R.id.contactNickName}
+                ,new String[]{"faceImgPath","account","nickName"});
         initListData();
     }
 
     private void initListData() {
-        ContactsDbManager manager = new ContactsDbManager(this);
         List<Contact> allContact = manager.query();
-        adapter = new SimpleGroupAdapter(this,R.layout.layout_contact_head,R.layout.layout_contact_item,
-                new int[]{ R.id.imageView,R.id.account,R.id.contactNickName}
-                ,new String[]{"faceImgPath","account","nickName"});
         HashMap<String,List<Map<String,String>>> datas = new HashMap<>();
         for (Contact c:allContact){
             String fc = c.firstChar ;
@@ -59,10 +65,11 @@ public class ContactListActivity extends YuXunActivity {
             item.add(data);
         }
         adapter.datas=datas;
-        adapter.heads = new ArrayList<>(adapter.datas.keySet().size());
-        adapter.heads.addAll(adapter.datas.keySet());
-        Collections.sort(adapter.heads);
+        adapter.build();
         contactListView.setAdapter(adapter);
+        for (int i = 0, k = contactListView.getCount(); i < k; i++) {
+            contactListView.expandGroup(i);
+        }
     }
 
     @Override
@@ -90,5 +97,12 @@ public class ContactListActivity extends YuXunActivity {
     public void toAddContact(View view){
         Intent intent = new Intent(this,AddContactActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh(RefreshResultNotify notify) {
+        adapter.clear();
+        initListData();
+        notify.refreshSuccess();
     }
 }
