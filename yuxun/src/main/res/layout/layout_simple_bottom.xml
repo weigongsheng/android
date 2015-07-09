@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/layout_act_bottom"
+         android:layout_width="fill_parent"
+        android:layout_height="@dimen/height_common_bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:background="@color/bg_common_bottom"
+        android:gravity="center_vertical"
+         
+        >
+
+        <ImageView
+            android:id="@+id/imageViewHome"
+            android:layout_height="wrap_content"
+             android:layout_width="0.0px"
+	        android:layout_weight="1.0"
+            android:src="@drawable/ic_chat"
+            android:onClick="jumpTo"
+            android:tag="0"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewInfo"
+            android:layout_height="wrap_content"
+             android:layout_width="0.0px"
+	        android:layout_weight="1.0"
+            android:src="@drawable/ic_contact"
+            android:onClick="jumpTo"
+            android:tag="1"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewPics"
+            android:layout_height="wrap_content"
+             android:layout_width="0.0px"
+	        android:layout_weight="1.0"
+            android:onClick="jumpTo"
+            android:tag="2"
+            android:src="@drawable/ic_discover" />
+
+        <ImageView
+            android:id="@+id/imageViewVideos"
+             android:layout_width="0.0px"
+	        android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:onClick="jumpTo"
+            android:tag="3"
+            android:src="@drawable/ic_me" />
+
+
+        
+    </LinearLayout>
+
+</merge>

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="dark_blue"  >#1F2D47</color>
+    <color name="bg_common_bottom" >#ffffff</color>
     <!-- 文本淡蓝色 -->
     <color name="color_light_blue">#34B3FA</color>
+    <!-- default texture colro of button -->
+    <color name="color_head_text">#ffffff</color>
     <!-- default texture colro of button -->
     <color name="default_btn_text">#ffffff</color>
     <color name="light_gray">#e0e0e0</color>

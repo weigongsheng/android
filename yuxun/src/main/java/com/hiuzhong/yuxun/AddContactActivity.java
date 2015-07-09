@@ -1,5 +1,6 @@
 package com.hiuzhong.yuxun;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.vo.Contact;
 
 
-public class AddContactActivity extends AppCompatActivity implements ImgUploadedListener {
+public class AddContactActivity extends Activity implements ImgUploadedListener {
     private UploadImgView faceView;
 
     @Override

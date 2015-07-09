@@ -1,12 +1,16 @@
 package com.hiuzhong.yuxun;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ExpandableListView;
 
 import com.hiuzhong.baselib.adapter.SimpleGroupAdapter;
+import com.hiuzhong.yuxun.activity.YuXunActivity;
+import com.hiuzhong.yuxun.application.YuXunApplication;
 import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.vo.Contact;
 
@@ -18,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ContactListActivity extends AppCompatActivity {
+public class ContactListActivity extends YuXunActivity {
 
     protected ExpandableListView contactListView;
     protected SimpleGroupAdapter adapter;
@@ -27,12 +31,10 @@ public class ContactListActivity extends AppCompatActivity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
+        super.onCreate(savedInstanceState);
         contactListView = (ExpandableListView) findViewById(R.id.contactListView);
-//        initListData();
-//        getActionBar().setCustomView(R.layout.contactlist_bar);
-        getSupportActionBar().setCustomView(R.layout.contactlist_bar);
+        initListData();
     }
 
     private void initListData() {
@@ -83,5 +85,10 @@ public class ContactListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void toAddContact(View view){
+        Intent intent = new Intent(this,AddContactActivity.class);
+        startActivity(intent);
     }
 }

@@ -1,19 +1,54 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:actionBarStyle" >@style/myActionBarStyle</item>
-        <item name="actionBarStyle" >@style/myActionBarStyle</item>
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
     </style>
 
-    <style name="myActionBarStyle" parent="android:Widget.ActionBar">
-        <item name="android:background">@color/dark_blue</item>
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <!--   <style name="activityTheme" parent="@android:style/Theme">
+          <item name="android:windowIsTranslucent">true</item>
+      </style>
+   -->
+
+
+    <style name="activityTheme" parent="android:Theme.Light">
+
+        <item name="android:windowAnimationStyle">@style/Animation</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Animation">
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <!-- <item name="android:activityCloseExitAnimation">@null</item> -->
+        <item name="android:taskOpenEnterAnimation">@null</item>
+        <item name="android:taskOpenExitAnimation">@null</item>
+        <item name="android:taskCloseEnterAnimation">@null</item>
+        <item name="android:taskCloseExitAnimation">@null</item>
+        <item name="android:taskToFrontEnterAnimation">@null</item>
+        <item name="android:taskToFrontExitAnimation">@null</item>
+        <item name="android:taskToBackEnterAnimation">@null</item>
+        <item name="android:taskToBackExitAnimation">@null</item>
     </style>
 
     <style name="defaultButtonStyle" >
         <item name="android:background">@drawable/default_button_effect</item>
         <item name="android:textColor">@color/default_btn_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_height">47dp</item>
     </style>
     <style name="defaultEditStyleStyle" >
         <item name="android:textColorHint">@color/edit_hint_color</item>
