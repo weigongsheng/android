@@ -27,6 +27,7 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
     private int itemLayoutId;
     private int[] itemIds;
     private String[] fieldNames;
+    public ViewGroup vg;
 
 
     /**
@@ -100,7 +101,7 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-       TextView view = (TextView) LayoutInflater.from(cnt).inflate(headLayoutId, null).findViewById(headTextId);
+        TextView view = (TextView) LayoutInflater.from(cnt).inflate(headLayoutId,vg,false).findViewById(headTextId);
         view.setText(heads.get(groupPosition));
         view.setClickable(true);
         return view;
@@ -111,7 +112,7 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = LayoutInflater.from(cnt).inflate(itemLayoutId, null);
+            view = LayoutInflater.from(cnt).inflate(itemLayoutId, vg,false);
         }
         Map<String, String> itemData = datas.get(heads.get(groupPosition)).get(childPosition);
         for (int i = 0; i < itemIds.length; i++) {

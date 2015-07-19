@@ -83,16 +83,38 @@ public class ImageLoaderUtil {
 		}
 		return null;
 	}
-	public static Bitmap loadFromFile(Context cnt, String filePath) {
+	public static Bitmap loadFromFile(Context cnt, String filePath,int cachMaxTime) {
 		File file = new File(cnt.getFilesDir().getAbsolutePath() + "/"
 				+ filePath);
 		FileInputStream in=null;
 		try {
-			if (!file.exists() || System.currentTimeMillis() - file.lastModified() > MAX_CACHE_TIME) {// 空
+			if (!file.exists() || System.currentTimeMillis() - file.lastModified() > cachMaxTime) {// 空
 				return null;
 			}
 			in = new FileInputStream(file);
 				return BitmapFactory.decodeStream(new FileInputStream(file));
+		} catch (Exception e) {
+			Log.e("Asyload Image fail ", e.getMessage());
+		} finally {
+			if(in != null){
+				try {
+					in.close();
+				} catch (IOException e) { 	}
+			}
+		}
+		return null;
+	}
+
+	public static Bitmap loadFromFile(Context cnt, String filePath ) {
+		File file = new File(cnt.getFilesDir().getAbsolutePath() + "/"
+				+ filePath);
+		FileInputStream in=null;
+		try {
+			if (!file.exists() ) {// 空
+				return null;
+			}
+			in = new FileInputStream(file);
+			return BitmapFactory.decodeStream(new FileInputStream(file));
 		} catch (Exception e) {
 			Log.e("Asyload Image fail ", e.getMessage());
 		} finally {
