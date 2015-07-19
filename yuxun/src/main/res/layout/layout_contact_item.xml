@@ -1,33 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="49dp"
+    android:padding="4dp"
+    >
 
     <ImageView
-        android:layout_width="99dp"
-        android:layout_height="99dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/imageView"
         android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/contactNickName"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/dark_gray_bg_0"
+        android:text="Large Text"
+        android:id="@+id/contactNickName"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/imageView"
+        android:layout_marginLeft="10dp"
+         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/dark_gray_bg_1"
         android:text="Medium Text"
         android:id="@+id/account"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@id/contactNickName"
-        android:layout_alignStart="@id/contactNickName" />
+        android:layout_alignStart="@id/contactNickName"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

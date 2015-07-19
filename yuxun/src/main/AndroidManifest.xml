@@ -2,16 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hiuzhong.yuxun" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:name=".application.YuXunApplication"
         android:allowBackup="true"
         android:configChanges="keyboardHidden|orientation"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Light.NoTitleBar" >
+        android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -20,44 +33,41 @@
         <activity
             android:name=".ContactListActivity"
             android:label="@string/title_activity_contact_list"
-            android:theme="@style/activityTheme"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:theme="@style/activityTheme" >
         </activity>
         <activity
             android:name=".AddContactActivity"
-            android:label="@string/title_activity_add_contact" >
+            android:label="@string/title_activity_add_contact"
+            android:theme="@style/NOBarTheme" >
         </activity>
         <activity
-            android:name=".ChatActivity"
+            android:name=".ChatListActivity"
             android:label="@string/title_activity_chat"
-            android:theme="@style/activityTheme"
-             >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hiuzhong.yuxun.activity.YuXunActivity" />
+            android:theme="@style/activityTheme" >
         </activity>
         <activity
             android:name=".DiscoverActivity"
             android:label="@string/title_activity_discover"
-            android:theme="@style/activityTheme"
-             >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hiuzhong.yuxun.activity.YuXunActivity" />
+            android:theme="@style/activityTheme" >
         </activity>
         <activity
             android:name=".MeActivity"
             android:label="@string/title_activity_me"
-            android:theme="@style/activityTheme"
-             >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hiuzhong.yuxun.activity.YuXunActivity" />
+            android:theme="@style/activityTheme" >
+        </activity>
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/NOBarTheme" >
+        </activity>
+        <activity
+            android:name=".EditContactActivity"
+            android:label="@string/title_activity_edit_contact"
+            android:theme="@style/NOBarTheme" >
+        </activity>
+        <activity
+            android:name=".ContactDetailActivity"
+            android:label="@string/title_activity_contact_detail" >
         </activity>
     </application>
 

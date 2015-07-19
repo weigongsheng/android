@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:padding="4dp"
+    >
+
+    <ImageView
+        android:id="@+id/list_contactHeadImg"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_me" />
+
+    <TextView
+        android:id="@+id/list_lastMsgTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/dark_gray_bg_2"
+        android:text="20150102"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/list_nicklName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/list_contactHeadImg"
+        android:textColor="@color/dark_gray_bg_0"
+        android:layout_marginLeft="7dp"
+        android:text="nick name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/list_lastMsg"
+        android:layout_marginLeft="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/list_contactHeadImg"
+        android:layout_toRightOf="@+id/list_contactHeadImg"
+        android:textColor="@color/dark_gray_bg_1"
+        android:text="lastMsg"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+</RelativeLayout>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,16 +17,32 @@ import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.vo.Contact;
 
 
-public class AddContactActivity extends Activity implements ImgUploadedListener {
+
+public class EditContactActivity extends Activity implements ImgUploadedListener {
     private UploadImgView faceView;
+    private Contact contact;
+//    private Bitmap contactFaceBitmap;
+    private TextView nickName;
+    private TextView account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_contact);
+        setContentView(R.layout.activity_edit_contact);
         faceView = (UploadImgView) findViewById(R.id.faceImg);
+        nickName= (TextView) findViewById(R.id.userNickName);
+        account = (TextView) findViewById(R.id.userAccount);
+        initData();
+    }
+
+    private void initData(){
+        ContactsDbManager dao = new ContactsDbManager(this);
+        contact =dao.queryById(getIntent().getStringExtra("contactId"));
+        faceView.setImageBitmap( ImageLoaderUtil.loadFromFile(this, contact.faceImgPath));
+        nickName.setText(contact.nickName);
+        account.setText(contact.account);
+        faceView.faceImgFileName = contact.faceImgPath;
         faceView.parentActivity = this;
-        faceView.faceImgFileName = "" + System.currentTimeMillis() + ".jpg";
         faceView.uploadListener=this;
 
     }
@@ -35,7 +50,7 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_contact, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_contact, menu);
         return true;
     }
 
@@ -54,27 +69,23 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        faceView.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+    public void SendMsg(View v){
+        Intent intent = new Intent(this,ChatActivity.class);
+        intent.putExtra("contactId", String.valueOf(contact.id));
+        startActivity(intent);
+        finish();
     }
 
     @Override
-    public void onLoadFinish(Bitmap img) {
-        ImageLoaderUtil.saveBitmapToFile(this, faceView.faceImgFileName, img);
+    public void onLoadFinish(Bitmap imgPath) {
+        ImageLoaderUtil.saveBitmapToFile(this, contact.faceImgPath, imgPath);
         faceView.setTag("ok");
     }
 
     public void saveContactInfo(View view) {
         Contact c = new Contact();
-        c.faceImgPath = faceView.faceImgFileName;
-        CharSequence nickName = ((TextView) findViewById(R.id.userNickName)).getText();
-        CharSequence account = ((TextView) findViewById(R.id.userAccount)).getText();
-        if (faceView.getTag() == null || !faceView.getTag().equals("ok")) {
-            tip(".请上传头像");
-            return;
-        }
+        CharSequence nickName =this.nickName.getText();
+        CharSequence account = this.account.getText();
         if (nickName == null) {
             tip("昵称不能为空");
             return;
@@ -84,14 +95,12 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
             return;
         }
         ContactsDbManager manager = new ContactsDbManager(this);
-        if (manager.existAccount(account.toString())) {
-            tip("账号已存在");
-            return;
-        }
         c.nickName = nickName.toString();
         c.account = account.toString();
-        manager.add(c);
-        tip("添加联系人成功");
+        manager.updateAccount(c);
+        manager.updateFaceImg(c);
+        manager.updateNickName(c);
+        tip("保存联系人成功");
         finish();
     }
 
@@ -100,7 +109,16 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
         Toast.makeText(this, tip, Toast.LENGTH_SHORT).show();
     }
 
+    public void delContact(View v){
+        ContactsDbManager manager = new ContactsDbManager(this);
+        manager.deleteContact(contact.account);
+        manager.closeDB();
+        Toast.makeText(this,"删除成功",Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
     public void back(View v){
         finish();
     }
+
 }

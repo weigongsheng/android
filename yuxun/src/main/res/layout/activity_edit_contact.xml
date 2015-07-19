@@ -1,11 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.hiuzhong.yuxun.AddContactActivity">
-
+    tools:context=".EditContactActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:background="@color/dark_blue"
@@ -28,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="添加联系人"
+            android:text="联系人信息"
             android:id="@+id/head_title_text"
             android:layout_centerVertical="true"
             android:textColor="@color/color_head_text"
@@ -38,7 +37,6 @@
 
 
     </RelativeLayout>
-
 
 
     <RelativeLayout
@@ -68,7 +66,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/blank_info_squ"
-             />
+            />
 
 
     </RelativeLayout>
@@ -92,7 +90,7 @@
             style="@style/defaultLableStyleStyle"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-              />
+            />
 
         <EditText
             android:id="@+id/userNickName"
@@ -105,7 +103,7 @@
             android:maxLength="10"
             style="@style/defaultEditStyleStyle"
             android:hint="输入用户昵称"
-             />
+            />
     </RelativeLayout>
 
     <RelativeLayout
@@ -116,7 +114,7 @@
         android:paddingLeft="@dimen/margin_left_add_user"
         android:paddingRight="@dimen/margin_left_add_user"
         android:layout_alignParentLeft="true"
-         >
+        >
 
 
         <TextView
@@ -126,7 +124,7 @@
             style="@style/defaultLableStyleStyle"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-             />
+            />
 
         <EditText
             android:id="@+id/userAccount"
@@ -139,7 +137,7 @@
             android:gravity="right"
             android:singleLine="true"
             android:hint="用户北斗号或app号"
-             />
+            />
     </RelativeLayout>
 
 
@@ -156,14 +154,30 @@
         <Button
             android:layout_width="fill_parent"
             style="@style/defaultButtonStyle"
-            android:text="@string/add"
-            android:id="@+id/button"
-            android:layout_centerHorizontal="true"
+            android:text="@string/send_msg"
+            android:id="@+id/sendMsg"
+            android:layout_alignParentTop="true"
+            android:onClick="SendMsg"
+            />
+        <Button
+            android:layout_width="fill_parent"
+            style="@style/defaultSysButtonStyle"
+            android:text="@string/save"
+            android:id="@+id/saveContact"
+            android:layout_below="@id/sendMsg"
+            android:layout_marginTop="5dp"
             android:onClick="saveContactInfo"
-
+            />
+        <Button
+            android:layout_width="fill_parent"
+            style="@style/defaultSysButtonStyle"
+            android:text="删除联系人"
+            android:id="@+id/delContact"
+            android:onClick="delContact"
+            android:layout_below="@id/saveContact"
+            android:layout_marginTop="5dp"
             />
 
     </RelativeLayout>
-
 
 </RelativeLayout>

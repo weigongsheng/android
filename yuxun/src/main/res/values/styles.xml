@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -50,6 +50,11 @@
         <item name="android:textSize">14sp</item>
         <item name="android:layout_height">47dp</item>
     </style>
+    <style name="defaultSysButtonStyle" >
+        <item name="android:textColor">@color/default_btn_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_height">47dp</item>
+    </style>
     <style name="defaultEditStyleStyle" >
         <item name="android:textColorHint">@color/edit_hint_color</item>
         <item name="android:textSize">@dimen/edit_text_size</item>
@@ -58,5 +63,18 @@
     <style name="defaultLableStyleStyle" >
         <item name="android:textSize">@dimen/label_text_size</item>
     </style>
+
+
+    <style name="BarTheme" parent="android:Theme.Holo.Light">
+        <item name="android:windowActionBar">true</item>
+        <item name="android:logo">@null</item>
+    </style>
+    <style name="NOBarTheme" parent="android:Theme.Holo.Light.NoActionBar">
+
+    </style>
+    <style name="FullScreenThemeTheme" parent="android:Theme.Holo.Light.NoActionBar.Fullscreen">
+
+    </style>
+
 
 </resources>

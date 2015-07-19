@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import com.hiuzhong.baselib.adapter.SimpleGroupAdapter;
@@ -15,6 +16,7 @@ import com.hiuzhong.yuxun.activity.YuXunActivity;
 import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.vo.Contact;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -44,6 +46,7 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
                 ,"firstChar"
                 ,new int[]{ R.id.imageView,R.id.account,R.id.contactNickName}
                 ,new String[]{"faceImgPath","account","nickName"});
+        adapter.vg=contactListView;
         initListData();
     }
 
@@ -62,6 +65,7 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
             data.put("account",c.account);
             data.put("nickName",c.nickName);
             data.put("firstChar",c.firstChar);
+            data.put("contactId",String.valueOf(c.id));
             item.add(data);
         }
         adapter.datas=datas;
@@ -70,6 +74,13 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
         for (int i = 0, k = contactListView.getCount(); i < k; i++) {
             contactListView.expandGroup(i);
         }
+        contactListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                goToChat(groupPosition, childPosition);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -104,5 +115,12 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
         adapter.clear();
         initListData();
         notify.refreshSuccess();
+    }
+
+    public void goToChat(int p,int c){
+        Map<String,String> data = (Map<String, String>) adapter.getChild(p,c);
+        Intent intent = new Intent(this,EditContactActivity.class);
+        intent.putExtra("contactId", data.get("contactId"));
+        startActivity(intent);
     }
 }

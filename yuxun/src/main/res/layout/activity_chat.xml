@@ -5,20 +5,91 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.hiuzhong.yuxun.ChatActivity">
-    <include
-        android:id="@+id/head_title"
-        layout="@layout/layout_simple_head"
-        ></include>
+
+    <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:background="@color/dark_blue"
+        android:layout_height="@dimen/height_common_head"
+        android:id="@+id/relativeLayout">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_menu_back"
+            android:onClick="back"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="张三"
+            android:id="@+id/head_title_text"
+            android:layout_centerVertical="true"
+            android:textColor="@color/color_head_text"
+            android:layout_centerHorizontal="true" />
 
 
+    </RelativeLayout>
 
-    <include
-        android:id="@+id/common_bottom"
-        layout="@layout/layout_simple_bottom"
-        android:layout_below="@+id/contactListView"
+    <ScrollView
+        android:id="@+id/msgScrollView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/inputBottom"
+        android:background="@color/light_gray"
+        android:fillViewport="true"  >
+
+
+        <LinearLayout
+            android:id="@+id/msgScrollContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:gravity="left"
+            >
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/inputBottom"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        />
+        android:padding="3dp"
+        >
+
+
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/msgEdit"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:focusableInTouchMode="true"
+            />
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="37dp"
+            android:text="发送"
+            android:textSize="14dp"
+            android:id="@+id/button2"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:onClick="sendMsg"
+             />
+    </RelativeLayout>
+
 
 </RelativeLayout>
