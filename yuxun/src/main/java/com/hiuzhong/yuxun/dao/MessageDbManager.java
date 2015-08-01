@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by gongsheng on 2015/7/5.
@@ -23,9 +24,10 @@ public class MessageDbManager {
     public static String[] projection = {
             EntityContract.MessageEntity._ID,
             EntityContract.MessageEntity.COLUMN_NAME_CONTENT,
-            EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ID,
+            EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ACCOUNT,
             EntityContract.MessageEntity.COLUMN_NAME_TYPE,
             EntityContract.MessageEntity.COLUMN_NAME_TIME,
+            EntityContract.MessageEntity.COLUMN_NAME_FLAG
      };
 
 
@@ -41,22 +43,35 @@ public class MessageDbManager {
     /**
      * add message
      */
-    public void add(String contactId,String msgType,String msg) {
+    public void add(String contractAccount,String msgType,String msg) {
 
         ContentValues values = new ContentValues();
-        values.put(EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ID, contactId);
+        values.put(EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ACCOUNT, contractAccount);
         values.put(EntityContract.MessageEntity.COLUMN_NAME_TYPE, msgType);
         values.put(EntityContract.MessageEntity.COLUMN_NAME_CONTENT, msg);
+        values.put(EntityContract.MessageEntity.COLUMN_NAME_FLAG, 1);
         values.put(EntityContract.MessageEntity.COLUMN_NAME_TIME, ContactDBHelper.df.format(new Date()));
+        db.insert(EntityContract.MessageEntity.TABLE_NAME, EntityContract.MessageEntity.COLUMN_NAME_NULLABLE, values);
+    }
+    /**
+     * add message
+     */
+    public void addNewMsg(String contAccount,String msgType,String msg,String time) {
+        ContentValues values = new ContentValues();
+        values.put(EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ACCOUNT, contAccount);
+        values.put(EntityContract.MessageEntity.COLUMN_NAME_TYPE, msgType);
+        values.put(EntityContract.MessageEntity.COLUMN_NAME_CONTENT, msg);
+        values.put(EntityContract.MessageEntity.COLUMN_NAME_FLAG, 0);
+        values.put(EntityContract.MessageEntity.COLUMN_NAME_TIME, time);
         db.insert(EntityContract.MessageEntity.TABLE_NAME, EntityContract.MessageEntity.COLUMN_NAME_NULLABLE, values);
     }
 
 
 
 
-    public List<String[]> query(int pageSize,int startPage,String contactId) {
+    public List<String[]> query(int pageSize,int startPage,String contactAccount) {
         ArrayList<String[]> result = new ArrayList<String[]>();
-        Cursor c = queryTheCursor(pageSize,startPage,contactId);
+        Cursor c = queryTheCursor(pageSize,startPage,contactAccount);
         String[] data =null;
         while (c.moveToNext()) {
             data= new String[projection.length];
@@ -69,12 +84,12 @@ public class MessageDbManager {
         return result;
     }
 
-    public Cursor queryTheCursor(int pageSize, int startPage,String contactId) {
+    public Cursor queryTheCursor(int pageSize, int startPage,String contactAccount) {
         String whereCause = null;
         String[] paras= null;
-        if (contactId != null){
-            whereCause=EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ID+" =? ";
-            paras = new String[]{contactId};
+        if (contactAccount != null){
+            whereCause=EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ACCOUNT+" =? ";
+            paras = new String[]{contactAccount};
         }//db.rawQuery("select * from message where _id =1 order by _id desc Limit 3 offset 0",null);
        return db.query(EntityContract.MessageEntity.TABLE_NAME, projection, whereCause
                , paras, null, null,  EntityContract.MessageEntity._ID + " desc Limit " + pageSize + " Offset " + (startPage * pageSize));
@@ -91,10 +106,10 @@ public class MessageDbManager {
         String maxId= "max("+ EntityContract.MessageEntity._ID+")";
         Cursor c = db.query(
                 EntityContract.MessageEntity.TABLE_NAME,  // The table to query
-                new String[]{maxId, EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ID},                               // The columns to return
+                new String[]{maxId, EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ACCOUNT},// The columns to return
                 null,                                // The columns for the WHERE clause
                 null,                            // The values for the WHERE clause
-                EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ID,                                     //  group the rows
+                EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ACCOUNT,                                     //  group the rows
                 null,                                     // don't filter by row groups
                 maxId + " desc"                                 // The sort order
         );
@@ -125,6 +140,12 @@ public class MessageDbManager {
             }
             return re;
         }
+        return null;
+    }
+
+    public Map<String,Integer> queryUnreadCound(){
+
+
         return null;
     }
 

@@ -14,6 +14,7 @@ public class Contact {
     public String account;
     public String firstChar;
     public String lastMsg;
+    public boolean isStrange=false;
 
     public String[] getLastMsgInfo(){
         if(lastMsg == null){
@@ -31,6 +32,13 @@ public class Contact {
            re[2] = lastMsg.substring(re[0].length()+re[1].length()+MSG_SPLIT.length()*2);
         }
 
+        return re;
+    }
+
+    public static Contact createStranger(String account){
+        Contact re = new Contact();
+        re.account = account;
+        re.isStrange=true;
         return re;
     }
 

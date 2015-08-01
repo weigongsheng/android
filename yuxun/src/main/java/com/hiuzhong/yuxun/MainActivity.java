@@ -80,10 +80,7 @@ public class MainActivity extends Activity {
     }
 
     private void loadMainUi(Message msg) {
-        if(msg.getData() != null && msg.getData().getString("json") != null){
-
-        }
-        startActivity(new Intent(MainActivity.this, ChatListActivity.class).putExtra("b_index",0));
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
         Log.i(TAG, "loadMainUi");
         finish();
     }

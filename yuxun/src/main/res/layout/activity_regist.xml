@@ -28,12 +28,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="@dimen/item_layout_height"
         android:layout_below="@id/divid1"
         android:layout_centerHorizontal="true"
         android:divider="@color/dark_gray_bg_2"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="@dimen/itme_layout_span"
+        android:paddingRight="@dimen/itme_layout_span"
         android:id="@+id/rowName"
         >
 
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="点击上面的“下一步”按钮即表示您同意"
-            android:id="@+id/textView4"
+            android:id="@+id/tipTitleContract"
             android:layout_below="@+id/btnNext"
             android:textColor="@color/dark_gray_bg_1"
             android:layout_marginTop="20dp"
@@ -109,9 +109,9 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="《用户协议》"
             android:layout_marginTop="20dp"
-            android:id="@+id/textView5"
+            android:id="@+id/actContract"
             android:textColor="@color/color_light_blue"
-            android:layout_below="@+id/textView4"
+            android:layout_below="@+id/tipTitleContract"
             android:layout_centerHorizontal="true"
             android:clickable="true"
             android:onClick="toShowMsg"
@@ -125,7 +125,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="gone"
-        android:background="@color/dark_gray_bg_2_trans"
+        android:background="@color/trans_gray"
         >
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"

@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 public class ContactDBHelper extends SQLiteOpenHelper {
     public static  final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final String DATABASE_NAME = "yuxun.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
 
     private static final String TEXT_TYPE = " TEXT";
@@ -29,9 +29,10 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     public static final String CREATE_TABLE_MESSAGE= "CREATE TABLE IF NOT EXISTS " + EntityContract.MessageEntity.TABLE_NAME + " (" +
             EntityContract.MessageEntity._ID + " INTEGER PRIMARY KEY," +
             EntityContract.MessageEntity.COLUMN_NAME_CONTENT + TEXT_TYPE +" not null"+ COMMA_SEP +
-            EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ID  + INTEGER_TYPE +" not null"+ COMMA_SEP +
+            EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ACCOUNT  + INTEGER_TYPE +" not null"+ COMMA_SEP +
             EntityContract.MessageEntity.COLUMN_NAME_TYPE + TEXT_TYPE+" not null" + COMMA_SEP +
-            EntityContract.MessageEntity.COLUMN_NAME_TIME + TEXT_TYPE   +
+            EntityContract.MessageEntity.COLUMN_NAME_TIME + TEXT_TYPE    + COMMA_SEP +
+            EntityContract.MessageEntity.COLUMN_NAME_FLAG + TEXT_TYPE +
             " )";
 
     public ContactDBHelper(Context context) {

@@ -155,6 +155,27 @@ public class ContactsDbManager {
         }
         return null;
     }
+    public Contact queryByAcccount(String account) {
+        Cursor c = db.query(
+                ContactDBHelper.TABLE_CONTACTS_NAME,  // The table to query
+                projection,                               // The columns to return
+                ContactDBHelper.COLUMN_ACCOUNT + " =? ",                                // The columns for the WHERE clause
+                new String[]{account},                            // The values for the WHERE clause
+                null,                                     //  group the rows
+                null,                                     // don't filter by row groups
+                null
+        );
+        if (c.moveToNext()) {
+            Contact contact = new Contact();
+            contact.id = c.getInt(c.getColumnIndex(ContactDBHelper.COLUMN_ID));
+            contact.account = c.getString(c.getColumnIndex(ContactDBHelper.COLUMN_ACCOUNT));
+            contact.nickName = c.getString(c.getColumnIndex(ContactDBHelper.COLUMN_NICK_NAME));
+            contact.faceImgPath = c.getString(c.getColumnIndex(ContactDBHelper.COLUMN_FACE_IMG));
+            contact.firstChar = c.getString(c.getColumnIndex(ContactDBHelper.COLUMN_FIRST_CHAR));
+            return contact;
+        }
+        return null;
+    }
 
     public Cursor queryTheCursor() {
         Cursor c = db.rawQuery("SELECT * FROM " + ContactDBHelper.TABLE_CONTACTS_NAME, null);
