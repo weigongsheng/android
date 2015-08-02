@@ -155,12 +155,12 @@ public class ContactsDbManager {
         }
         return null;
     }
-    public Contact queryByAcccount(String account) {
+    public Contact queryByAccount(String account) {
         Cursor c = db.query(
                 ContactDBHelper.TABLE_CONTACTS_NAME,  // The table to query
                 projection,                               // The columns to return
                 ContactDBHelper.COLUMN_ACCOUNT + " =? ",                                // The columns for the WHERE clause
-                new String[]{account},                            // The values for the WHERE clause
+                new String[]{account},                             // The values for the WHERE clause
                 null,                                     //  group the rows
                 null,                                     // don't filter by row groups
                 null

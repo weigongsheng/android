@@ -15,10 +15,10 @@
     <RelativeLayout
         android:id="@+id/layoutHeadInfo"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="70dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/head_title"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="5dp">
 
         <ImageView
             android:id="@+id/headImg"
@@ -28,7 +28,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_me" />
+            android:src="@drawable/default_head" />
 
         <TextView
             android:id="@+id/tipAccount"
@@ -61,8 +61,7 @@
     <RelativeLayout
         android:id="@+id/layout1"
         style="@style/detailItemLayoutWide"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+
         android:layout_below="@+id/divid2">
 
         <TextView
@@ -112,15 +111,193 @@
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
+
     <View
-        android:id="@+id/divid4"
+    android:id="@+id/divid5"
+    style="@style/divideStyle"
+    android:layout_below="@+id/layout2" />
+
+    <View
+        android:id="@+id/divid6"
         style="@style/divideStyle"
-        android:layout_below="@+id/layout2" />
+        android:layout_marginTop="@dimen/item_layout_height"
+        android:layout_below="@+id/divid5" />
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid6"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toChangePwd"
+        android:id="@+id/layoutChPwd"
+        >
+
+        <TextView
+            style="@style/darkLabelStyle"
+            android:text="修改密码"
+            android:id="@+id/tipchPwd"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imgMoreMsg"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_more"
+            />
+
+    </RelativeLayout>
+
+
+    <View
+        android:id="@+id/divid7"
+        style="@style/divideStyle"
+        android:layout_below="@+id/layoutChPwd" />
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid7"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toBdGrant"
+        android:id="@+id/layoutGrant"
+        >
+
+        <TextView
+            style="@style/darkLabelStyle"
+            android:text="北斗授权"
+            android:id="@+id/tip_bdgrant"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imgMoreMsg2"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_more"
+            />
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/divid8"
+        style="@style/divideStyle"
+        android:layout_below="@+id/layoutGrant" />
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid8"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toCharge"
+        android:id="@+id/layoutCharge"
+        >
+
+        <TextView
+            style="@style/darkLabelStyle"
+            android:text="充值业务"
+            android:id="@+id/tipcharge"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imgMoreMsg3"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_more"
+            />
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/divid9_1"
+        style="@style/divideStyle"
+        android:layout_below="@id/layoutCharge" />
+
+    <View
+        android:id="@+id/divid9"
+        style="@style/divideStyle"
+        android:layout_marginTop="@dimen/item_layout_height"
+        android:layout_below="@id/divid9_1" />
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid9"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toCleanMsg"
+        android:id="@+id/layoutCleanMsg"
+        >
+
+        <TextView
+            style="@style/darkLabelStyle"
+            android:text="清空短信"
+            android:id="@+id/tipcleanmsg"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imgMoreMsg5"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_more"
+            />
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/divid10"
+        style="@style/divideStyleInner"
+        android:layout_below="@+id/layoutCleanMsg" />
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid10"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toCleanMsg"
+        android:id="@+id/layoutContactus"
+
+        >
+
+        <TextView
+            style="@style/darkLabelStyle"
+            android:text="联系我们"
+            android:id="@+id/tipcontactus"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imgMoreMsg6"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_more"
+            />
 
 
 
+    </RelativeLayout>
+    <View
+        android:id="@+id/divid11"
+        style="@style/divideStyle"
+        android:layout_below="@id/layoutContactus" />
 
+    <Button
+        android:id="@+id/btnQuit"
+        android:layout_below="@id/divid11"
+        android:layout_marginTop="@dimen/item_layout_height"
 
+        style="@style/readAlarmBtn"
+        android:text="退出登录"
+
+        />
 
     <include
         android:id="@+id/common_bottom"

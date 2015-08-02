@@ -13,15 +13,23 @@ import com.hiuzhong.yuxun.ChatActivity;
 import com.hiuzhong.yuxun.R;
 import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.dao.MessageDbManager;
+import com.hiuzhong.yuxun.dao.MsgCountDbManager;
 import com.hiuzhong.yuxun.helper.ActivityHelper;
 import com.hiuzhong.yuxun.helper.WebServiceHelper;
+import com.hiuzhong.yuxun.receiver.OnReceiveCountMsgListener;
+import com.hiuzhong.yuxun.receiver.OnReceiveMsgListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class MsgService extends Service {
 
+    public static MsgService  msgService = null;
     //获取消息线程
     private MessageThread messageThread = null;
     //点击查看
@@ -35,6 +43,24 @@ public class MsgService extends Service {
     protected MessageDbManager msgDao;
     protected ContactsDbManager contDao;
 
+    protected OnReceiveCountMsgListener countMsgListener;
+
+    protected  OnReceiveMsgListener curContatListener;
+
+    protected MsgCountDbManager countDbo;
+
+    public void setCountMsgListener(OnReceiveCountMsgListener listener){
+        this.countMsgListener = listener;
+    }
+
+    public void setCurContatListener(OnReceiveMsgListener listener){
+        this.curContatListener = listener;
+    }
+
+    public static final MsgService  getCurService(){
+        return msgService;
+    }
+
 //    private JSONObject myAccount;
     String account;
     String pwd;
@@ -45,9 +71,10 @@ public class MsgService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        countDbo = new MsgCountDbManager(this);
+        msgService = this;
         //初始化
         messageNotification = new Notification();
-        messageNotification.icon = R.drawable.ic_me;
         messageNotification.tickerText = "新消息";
         messageNotification.defaults = Notification.DEFAULT_SOUND;
         messageNotificatioManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -74,48 +101,75 @@ public class MsgService extends Service {
     class MessageThread extends Thread {
         //运行状态，下一步骤有大用
         public boolean isRunning = true;
-
         public void run() {
-            while (isRunning) try {
-                //休息3秒
-                Thread.sleep(3 * 1000);
-                //获取服务器消息
-                JSONObject msg = getServerMessage();
-                JSONArray msges = msg.getJSONObject("data").getJSONArray("AppToApp");
-                if (msg != null && msges.length() > 0) {
-                    String account = msges.getJSONObject(msges.length() - 1).optString("SendAppNumber");
-                    Notification.Builder builder = new Notification.Builder(MsgService.this);
-                    builder.setAutoCancel(true);
-                    builder.setSmallIcon(R.drawable.ic_me);
-                    builder.setContentTitle("新消息" + messageNotificationID);
-                    builder.setContentText(account + ":"
-                            + msges.getJSONObject(msges.length() - 1).optString("MsgContent"));
-                    builder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
-                    messageIntent.putExtra(ChatActivity.INTENT_PARA_CONTACT, account);
-                    builder.setContentIntent(PendingIntent.getActivity(MsgService.this, 0, messageIntent, 0));
-                    Bundle b = new Bundle();
-                    b.putString(ChatActivity.INTENT_PARA_CONTACT, account);
+            while (true) {
+                try {
+                    //休息3秒
+                    Thread.sleep(3 * 1000);
+                    //获取服务器消息
+                    JSONObject msg = getServerMessage();
+                    if (msg == null || msg.getJSONObject("data") == null) {
+                        continue;
+                    }
+                    JSONArray msges = msg.getJSONObject("data").getJSONArray("AppToApp");
+                    if (msg != null && msges.length() > 0) {
+                        sendMsgCount(msges);
+                        String account = msges.getJSONObject(msges.length() - 1).optString("SendAppNumber");
+                        Notification.Builder builder = new Notification.Builder(MsgService.this);
+                        builder.setAutoCancel(true);
+                        builder.setSmallIcon(R.mipmap.ic_launcher);
+                        builder.setContentTitle("新消息" );
+                        builder.setContentText(account + ":"
+                                + msges.getJSONObject(msges.length() - 1).optString("MsgContent"));
+                        builder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+                        messageIntent.putExtra(ChatActivity.INTENT_PARA_CONTACT, account);
+                        builder.setContentIntent(PendingIntent.getActivity(MsgService.this, 0, messageIntent, 0));
+                        Bundle b = new Bundle();
+                        b.putString(ChatActivity.INTENT_PARA_CONTACT, account);
 
 //                    builder.addExtras(b);
 //                        //更新通知栏
 //                        messageNotification.setLatestEventInfo(MsgService.this,
 //                                "新消息", "奥巴马宣布,本拉登兄弟挂了!" + serverMessage, messagePendingIntent);
-                    messageNotificatioManager.notify(0, builder.build());
-                    //每次通知完，通知ID递增一下，避免消息覆盖掉
-                    messageNotificationID++;
-                    saveMsg(msg);
+                        messageNotificatioManager.notify(messageNotificationID, builder.build());
+                        //每次通知完，通知ID递增一下，避免消息覆盖掉
+                        saveMsg(msg);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    continue;
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                return;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                continue;
             }
         }
     }
 
 
+    protected  void sendMsgCount(JSONArray msg) throws JSONException {
+        HashMap<String,Integer> allCount = new HashMap<>();
+        for(int i=0,j=msg.length();i<j;i++){
+            JSONObject m = msg.getJSONObject(i);
+            String account = m.optString("SendAppNumber");
+            Integer c = allCount.get(account);
+            if(c == null){
+                c=0;
+            }
+            ++c;
+            allCount.put(account,c);
+            if(curContatListener != null){
+                curContatListener.onMessage(account,m.optString("MsgContent"),m.optString("InsertTime"));
+            }
+        }
+        Set<Map.Entry<String, Integer>> data = allCount.entrySet();
+        for(Map.Entry<String, Integer> en:data){
+            countDbo.add(en.getKey(),en.getValue());
+        }
+        if(countMsgListener != null){
+          countMsgListener.onMessage(allCount);
+        }
+    }
 
     /**
      * 这里以此方法为服务器Demo，仅作示例
@@ -145,9 +199,11 @@ public class MsgService extends Service {
     @Override
     public void onDestroy() {
         messageThread.interrupt();
-        messageNotificatioManager.cancel(0);
+        messageNotificatioManager.cancel(messageNotificationID);
+        messageNotificatioManager.cancelAll();
         msgDao.closeDB();
         contDao.closeDB();
+        countDbo.closeDB();
         super.onDestroy();
     }
 }

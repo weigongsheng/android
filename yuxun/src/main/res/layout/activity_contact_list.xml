@@ -14,8 +14,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:text=""
+            android:textSize="@dimen/txtSize_head"
             android:id="@+id/head_title_text"
             android:layout_centerVertical="true"
             android:textColor="@color/color_head_text"
@@ -28,7 +28,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_add_btn"
+            android:src="@drawable/contacts_add_friend"
             android:onClick="toAddContact"
             android:layout_marginRight="8dp"
             />

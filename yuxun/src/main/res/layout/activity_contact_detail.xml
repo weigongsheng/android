@@ -4,9 +4,241 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.hiuzhong.yuxun.ContactDetailActivity">
+    tools:context="com.hiuzhong.yuxun.ContactDetailActivity" android:background="@color/tiny_gray"
+    >
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/dark_blue"
+        android:layout_height="@dimen/height_common_head"
+        android:id="@+id/headLayout">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_menu_back"
+            android:onClick="back"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="联系人信息"
+            android:id="@+id/head_title_text"
+            android:layout_centerVertical="true"
+            android:textColor="@color/color_head_text"
+            android:layout_centerHorizontal="true"
+
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/headLayout"
+        android:id="@+id/relativeLayout2">
+
+        <ImageView
+            android:id="@+id/detailContactHeadImg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_me" />
+
+
+        <TextView
+            android:id="@+id/detaillName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/detailContactHeadImg"
+            android:textColor="@color/dark_gray_bg_0"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="8dp"
+            android:text="nick name"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/detailAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_gray_bg_1"
+            android:text="北斗号:"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_alignLeft="@+id/detaillName"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="17dp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/detailItemLayoutHeight"
+        style="@style/detailItemLayout"
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/sendMsgLayout"
+        android:layout_marginTop="@dimen/detailItemSplit"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="sendMsg"
+        >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_centerVertical="true"
+            android:text="发送消息"
+            android:id="@+id/sendMsgTip"
+            android:layout_marginLeft="15dp"
+            />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imgMoreMsg"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_more"
+         />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/detailItemLayoutHeight"
+        android:layout_below="@+id/sendMsgLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/showPosLayout"
+        style="@style/detailItemLayout"
+        android:layout_marginTop="@dimen/detailItemSplit"
+        android:onClick="showPositon"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_centerVertical="true"
+            android:text="查看位置"
+            android:id="@+id/posiTip"
+            android:layout_marginLeft="15dp"
+            />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imgMorePosi"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_more"
+            />
+
+
+</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/detailItemLayoutHeight"
+        android:layout_below="@id/showPosLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/showBalance"
+        android:layout_marginTop="@dimen/detailItemSplit"
+        style="@style/detailItemLayout"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="showBalance"
+        android:visibility="gone"
+        >
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_centerVertical="true"
+            android:text="查看余额"
+            android:id="@+id/tipBalance"
+            android:layout_marginLeft="15dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textBalance"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"
+            />
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/detailItemLayoutHeight"
+        android:layout_below="@+id/showBalance"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/removeHistory"
+        android:layout_marginTop="@dimen/detailItemLayoutHeight"
+        style="@style/detailItemLayout"
+        >
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_centerVertical="true"
+            android:text="清空聊天记录"
+            android:id="@+id/cleanHistory"
+            android:layout_marginLeft="15dp"
+            />
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/detailItemLayoutHeight"
+        android:layout_below="@+id/removeHistory"
+        android:layout_marginTop="@dimen/detailItemLayoutHeight"
+        style="@style/detailItemLayout"
+        android:onClick="deleteContact"
+        >
+
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center"
+            android:textColor="#ff2800"
+            android:text="删除当前联系人"
+            android:id="@+id/deleteBton"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
 
 </RelativeLayout>

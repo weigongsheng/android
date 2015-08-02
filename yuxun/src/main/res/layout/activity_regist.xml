@@ -19,19 +19,15 @@
     </include>
     <View
         android:id="@+id/divid1"
-        android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:background="@color/dark_gray_bg_2"
+        style="@style/divideStyle"
         android:layout_below="@+id/head_title"
         android:layout_marginTop="40dp"
         />
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_layout_height"
+        style="@style/detailItemLayoutWide"
         android:layout_below="@id/divid1"
-        android:layout_centerHorizontal="true"
-        android:divider="@color/dark_gray_bg_2"
+
         android:paddingLeft="@dimen/itme_layout_span"
         android:paddingRight="@dimen/itme_layout_span"
         android:id="@+id/rowName"
@@ -44,7 +40,6 @@
             android:id="@+id/textView2"
             android:textSize="17sp"
             android:paddingLeft="10dp"
-
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             />
@@ -56,20 +51,17 @@
             android:text=""
             android:phoneNumber="true"
             android:paddingLeft="5dp"
-            android:layout_toRightOf="@id/textView2"
-            android:layout_centerVertical="true"
+            style="@style/defaultEditStyleStyle"
+            android:hint="请输入手机号码"
             android:layout_marginLeft="10dp"
-            />
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/textView2"
+              />
     </RelativeLayout>
-
-
     <View
         android:id="@+id/dividn"
-        android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:background="@color/dark_gray_bg_1"
+        style="@style/divideStyle"
         android:layout_below="@+id/rowName"
-        android:layout_marginTop="5dp"
         />
 
     <RelativeLayout
@@ -77,17 +69,14 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/dividn"
         android:layout_marginTop="40dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+
         android:layout_centerHorizontal="true">
 
         <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:text="下一步"
             android:id="@+id/btnNext"
             android:layout_alignParentTop="true"
-            android:background="@drawable/default_but_press"
+            style="@style/defaultButtonStyle"
             android:layout_centerHorizontal="true"
             android:onClick="toNext"
             />
@@ -98,10 +87,13 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="点击上面的“下一步”按钮即表示您同意"
             android:id="@+id/tipTitleContract"
+            android:textSize="12sp"
             android:layout_below="@+id/btnNext"
             android:textColor="@color/dark_gray_bg_1"
             android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -110,10 +102,11 @@
             android:text="《用户协议》"
             android:layout_marginTop="20dp"
             android:id="@+id/actContract"
-            android:textColor="@color/color_light_blue"
+            android:textColor="@color/dark_blue"
             android:layout_below="@+id/tipTitleContract"
             android:layout_centerHorizontal="true"
             android:clickable="true"
+            android:textSize="12sp"
             android:onClick="toShowMsg"
             />
     </RelativeLayout>

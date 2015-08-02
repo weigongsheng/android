@@ -42,4 +42,8 @@ public class Contact {
         return re;
     }
 
+    public boolean isBdAccount(){
+        return account.length()>=5 && account.length() <=7;
+    }
+
 }

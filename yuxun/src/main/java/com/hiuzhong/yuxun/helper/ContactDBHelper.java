@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 public class ContactDBHelper extends SQLiteOpenHelper {
     public static  final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final String DATABASE_NAME = "yuxun.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
 
     private static final String TEXT_TYPE = " TEXT";
@@ -25,6 +25,7 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_FIRST_CHAR="first_char";
     public static final String SQL_DELETE_ENTRIES ="DROP TABLE IF EXISTS " + TABLE_CONTACTS_NAME;
     public static final String SQL_DELETE_MESSAGE ="DROP TABLE IF EXISTS " + EntityContract.MessageEntity.TABLE_NAME;
+    public static final String SQL_DELETE_MESSAGE_COUNT ="DROP TABLE IF EXISTS " + EntityContract.MessageEntity.TABLE_NAME;
 
     public static final String CREATE_TABLE_MESSAGE= "CREATE TABLE IF NOT EXISTS " + EntityContract.MessageEntity.TABLE_NAME + " (" +
             EntityContract.MessageEntity._ID + " INTEGER PRIMARY KEY," +
@@ -33,6 +34,11 @@ public class ContactDBHelper extends SQLiteOpenHelper {
             EntityContract.MessageEntity.COLUMN_NAME_TYPE + TEXT_TYPE+" not null" + COMMA_SEP +
             EntityContract.MessageEntity.COLUMN_NAME_TIME + TEXT_TYPE    + COMMA_SEP +
             EntityContract.MessageEntity.COLUMN_NAME_FLAG + TEXT_TYPE +
+            " )";
+    public static final String CREATE_TABLE_MESSAGE_COUNT= "CREATE TABLE IF NOT EXISTS " + EntityContract.MSGCount.TABLE_NAME + " (" +
+            EntityContract.MSGCount._ID + " INTEGER PRIMARY KEY," +
+            EntityContract.MSGCount.COLUMN_NAME_ACCOUNT + TEXT_TYPE +" not null"+ COMMA_SEP +
+            EntityContract.MSGCount.COLUMN_NAME_COUNT  + INTEGER_TYPE +" not null" +
             " )";
 
     public ContactDBHelper(Context context) {
@@ -47,6 +53,7 @@ public class ContactDBHelper extends SQLiteOpenHelper {
                 "("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+COLUMN_FACE_IMG+" varchar," +
                 COLUMN_NICK_NAME+" varchar, "+COLUMN_ACCOUNT+" VARCHAR, "+COLUMN_FIRST_CHAR+" VARCHAR ) ");
         db.execSQL(CREATE_TABLE_MESSAGE);
+        db.execSQL(CREATE_TABLE_MESSAGE_COUNT);
     }
 
     //如果DATABASE_VERSION值被改为2,系统发现现有数据库版本不同,即会调用onUpgrade
@@ -54,7 +61,9 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_DELETE_ENTRIES);
         db.execSQL(SQL_DELETE_MESSAGE);
+        db.execSQL(SQL_DELETE_MESSAGE_COUNT);
         onCreate(db);
 
     }
+
 }

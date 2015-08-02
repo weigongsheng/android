@@ -13,10 +13,28 @@
 
 
 
+    <com.hiuzhong.baselib.view.PullToRefreshLayout
+        android:id="@+id/contactListViewContainer"
+        android:layout_width="fill_parent"
+        android:layout_above="@+id/common_bottom"
+        android:layout_below="@id/head_title"
+        android:layout_height="wrap_content">
+        <include layout="@layout/refresh_head" />
+        <ExpandableListView
+            android:id="@+id/contactListView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="1dp"
+            android:groupIndicator="@null"
+            />
+    </com.hiuzhong.baselib.view.PullToRefreshLayout>
+
+
+
     <include
         android:id="@+id/common_bottom"
         layout="@layout/layout_simple_bottom"
-        android:layout_below="@+id/contactListView"
+        android:layout_below="@+id/contactListViewContainer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.widget.Toast;
 
@@ -26,7 +25,7 @@ import java.io.IOException;
  * Created by gongsheng on 2015/7/25.
  */
 public class WebServiceHelper {
-    public static final String WS_NS = "http://tempuri.org/";
+    public static final String WS_NS = "http://tempuri.org/";//http://tempuri.org/
     public static final String URL = "http://service.ubinavi.com.cn:3339/Appwebsite/appservice.asmx";
     public static final int WS_ERROR = 0XEE1;
     public static final int WS_WSTIP = 0X1F;
@@ -284,18 +283,57 @@ public class WebServiceHelper {
             @Override
             protected void onPostExecute(String data) {
                 if (data == null) {
-                    Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT);
+                    Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
                         JSONObject jsonObject = new JSONObject(data);
                         if (jsonObject.optInt("code", -1) != 0) {
-                            Toast.makeText(WebServiceHelper.this.cnt, jsonObject.optString("tip"), Toast.LENGTH_SHORT);
+                            Toast.makeText(WebServiceHelper.this.cnt, jsonObject.optString("tip"), Toast.LENGTH_SHORT).show();
                             WebServiceHelper.this.callBck.whenFail(jsonObject);
                         } else {
                             WebServiceHelper.this.callBck.whenResponse(jsonObject);
                         }
                     } catch (JSONException e) {
-                        Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT);
+                        Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
+                        WebServiceHelper.this.callBck.whenError();
+                    }
+                }
+            }
+        }.execute(para);
+        return this;
+    }
+
+    public WebServiceHelper callWs(final int ig, final int ii, String... values) {
+        WsPara[] para = new WsPara[paraName.length];
+        for (int i = 0; i < para.length; i++) {
+            para[i] = new WsPara(paraName[i], values[i]);
+        }
+        new AsyncTask<WsPara, Void, String>() {
+            @Override
+            protected String doInBackground(WsPara... params) {
+                try {
+                    return WebServiceHelper.callWS(WebServiceHelper.this.methodName, WebServiceHelper.this.resultName, params);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String data) {
+                if (data == null) {
+                    Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        JSONObject jsonObject = new JSONObject(data);
+                        if (jsonObject.optInt("code", -1) != 0) {
+                            Toast.makeText(WebServiceHelper.this.cnt, jsonObject.optString("tip"), Toast.LENGTH_SHORT).show();
+                            WebServiceHelper.this.callBck.whenFail(jsonObject);
+                        } else {
+                            WebServiceHelper.this.callBck.whenResponse(jsonObject,ig,ii);
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
                         WebServiceHelper.this.callBck.whenError();
                     }
                 }
@@ -310,6 +348,25 @@ public class WebServiceHelper {
 
     public static WebServiceHelper createSendBdClient(Context cnt, WsCallBack callBack) {
         return new WebServiceHelper(cnt, "WebSetAppToBdMsg", "WebSetAppToBdMsgResult", callBack, "username", "pwd", "bdNum", "content");
+    }
+
+    public static WebServiceHelper createQueryBalanceReqClient(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebQueryBDBalanceRequest","WebQueryBDBalanceRequestResult",
+                callBack,"username","pwd","bdNumber");
+    }
+
+    public static WebServiceHelper createQueryBalanceClient(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebQueryBDBalanceResult","WebQueryBDBalanceResultResult",
+                callBack,"username","pwd","tabId");
+    }
+
+    public static WebServiceHelper createRequestPosiClient(Context cnt,WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebSetAppViewBdPostionRequest","WebSetAppViewBdPostionRequestResult",
+                callBack,"username","pwd","bdNum");
+    }
+    public static WebServiceHelper createGetPosiClient(Context cnt,WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebGetBdPostion","WebGetBdPostionResult",
+                callBack,"username","pwd","bdNum");
     }
 
 }

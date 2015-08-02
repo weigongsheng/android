@@ -17,4 +17,11 @@ public final class EntityContract {
 
         public static final String COLUMN_NAME_NULLABLE =null;
     }
+
+    public static  abstract class MSGCount implements BaseColumns {
+        public static final String TABLE_NAME = "message_count";
+        public static final String COLUMN_NAME_ACCOUNT = "contactAccount";
+        public static final String COLUMN_NAME_COUNT = "m_count";
+        public static final String COLUMN_NAME_NULLABLE =null;
+    }
 }
