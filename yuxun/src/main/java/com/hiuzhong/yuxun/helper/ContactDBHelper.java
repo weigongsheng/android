@@ -10,8 +10,8 @@ import java.text.SimpleDateFormat;
 
 public class ContactDBHelper extends SQLiteOpenHelper {
     public static  final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final String DATABASE_NAME = "yuxun.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final String DATABASE_NAME = "yuxun";
+    private static final int DATABASE_VERSION = 9;
 
 
     private static final String TEXT_TYPE = " TEXT";
@@ -43,7 +43,7 @@ public class ContactDBHelper extends SQLiteOpenHelper {
 
     public ContactDBHelper(Context context) {
         //CursorFactory设置为null,使用默认值
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME+ActivityHelper.myAccount.optString("account")+".db", null, DATABASE_VERSION);
     }
 
     //数据库第一次被创建时onCreate会被调用

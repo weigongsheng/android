@@ -1,0 +1,149 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.hiuzhong.yuxun.ChangePwdActivity">
+    <include
+        android:id="@+id/includeHead"
+        layout="@layout/layout_simple_head"
+        ></include>
+
+    <View
+        android:id="@+id/divid1"
+        style="@style/divideStyle"
+        android:layout_below="@id/includeHead"
+        android:layout_marginTop="@dimen/item_layout_height"
+        >
+    </View>
+
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid1"
+        android:id="@+id/layoutCurPwd"
+
+        >
+        <TextView
+            style="@style/defaultLableStyleStyle"
+            android:text="当前密码"
+            android:id="@+id/textView4"
+            android:layout_alignParentLeft="true"
+            />
+
+        <EditText
+            style="@style/defaultEditStyleStyle"
+            android:id="@+id/inputCurPwd"
+            android:hint="请输入当前密码"
+            android:password="true"
+            />
+
+        </RelativeLayout>
+    <View
+        android:id="@+id/divid2"
+        style="@style/divideStyleInner"
+        android:layout_below="@id/layoutCurPwd"
+        >
+    </View>
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid2"
+        android:id="@+id/layoutNewPwd"
+
+        >
+        <TextView
+            style="@style/defaultLableStyleStyle"
+            android:text="新密码"
+            android:id="@+id/textView5"
+            android:layout_alignParentLeft="true"
+            />
+
+        <EditText
+            style="@style/defaultEditStyleStyle"
+            android:id="@+id/inputNewPwd"
+            android:hint="请输入新密码"
+            android:password="true"
+            />
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/divid3"
+        style="@style/divideStyleInner"
+        android:layout_below="@id/layoutNewPwd"
+        >
+    </View>
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid3"
+        android:id="@+id/layoutConfirmPwd"
+
+        >
+        <TextView
+            style="@style/defaultLableStyleStyle"
+            android:text="确认密码"
+            android:id="@+id/textView7"
+            android:layout_alignParentLeft="true"
+            />
+
+        <EditText
+            style="@style/defaultEditStyleStyle"
+            android:id="@+id/inputConfirmPwd"
+            android:hint="确认新密码"
+            android:password="true"
+            />
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/divid4"
+        style="@style/divideStyleInner"
+        android:layout_below="@id/layoutConfirmPwd"
+        >
+    </View>
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid4"
+        android:id="@+id/layoutShowPwd"
+
+        >
+        <TextView
+            style="@style/defaultLableStyleStyle"
+            android:text="显示密码"
+            android:id="@+id/textView8"
+            android:layout_alignParentLeft="true"
+            />
+
+        <com.hiuzhong.baselib.view.SwitchView
+            android:id="@+id/switchShowPwd"
+            android:layout_width="@dimen/switch_width"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+
+            />
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/divid5"
+        style="@style/divideStyle"
+        android:layout_below="@id/layoutShowPwd"
+        >
+    </View>
+
+    <Button
+        android:text="确认修改"
+        android:id="@+id/btnLogin"
+        style="@style/defaultSubmitBtn"
+        android:layout_below="@id/divid5"
+        android:layout_marginTop="@dimen/item_layout_height"
+        android:onClick="submit"
+        />
+    <include
+        android:id="@+id/loadingLayoutInclude"
+        layout="@layout/layout_loading"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        >
+
+    </include>
+</RelativeLayout>

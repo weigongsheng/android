@@ -11,25 +11,29 @@
         ></include>
 
 
-
-    <ListView
-        android:id="@+id/msgListView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/head_title"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+    <com.hiuzhong.baselib.view.PullToRefreshLayout
+        android:id="@+id/contactListViewContainer"
+        android:layout_width="fill_parent"
         android:layout_above="@+id/common_bottom"
-        android:divider="@color/light_gray"
-        android:dividerHeight="1dp"
-        android:footerDividersEnabled="true"
-        />
+        android:layout_below="@id/head_title"
+        android:layout_height="wrap_content">
+        <include layout="@layout/refresh_head" />
+        <ListView
+            android:id="@+id/msgListView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:divider="@color/light_gray"
+            android:dividerHeight="1px"
+            android:footerDividersEnabled="true"
+            />
+    </com.hiuzhong.baselib.view.PullToRefreshLayout>
+
 
 
     <include
         android:id="@+id/common_bottom"
         layout="@layout/layout_simple_bottom"
-        android:layout_below="@+id/contactListView"
+        android:layout_below="@+id/contactListViewContainer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

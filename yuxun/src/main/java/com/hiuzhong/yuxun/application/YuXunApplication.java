@@ -41,13 +41,17 @@ public class YuXunApplication extends Application {
 
     @Override
     public void onTerminate() {
-        stopService(new Intent(this,MsgService.class));
+        closeAllAct();
         super.onTerminate();
+        System.exit(0);
+    }
+    public void closeAllAct(){
+        stopService(new Intent(this,MsgService.class));
         finishReg();
         for (Activity activity : activities) {
             activity.finish();
         }
         activities.clear();
-        System.exit(0);
+
     }
 }

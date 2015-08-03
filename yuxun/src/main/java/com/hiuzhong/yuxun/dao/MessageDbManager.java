@@ -150,6 +150,9 @@ public class MessageDbManager {
     }
 
 
+    public void cleanMsg(){
+        db.execSQL("delete  from "+EntityContract.MessageEntity.TABLE_NAME);
+    }
 
     /**
      * close database

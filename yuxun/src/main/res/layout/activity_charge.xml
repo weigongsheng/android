@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.hiuzhong.yuxun.ChargeActivity">
+
+    <include
+        android:id="@+id/includeHead"
+        layout="@layout/layout_simple_head"></include>
+
+
+    <TextView
+        android:id="@+id/divid0"
+        style="@style/divideStyle"
+        android:layout_below="@+id/includeHead"
+        android:layout_marginTop="@dimen/item_layout_height" />
+
+    <RelativeLayout
+        android:id="@+id/layoutInput"
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid0">
+
+
+        <TextView
+            android:id="@+id/textView12"
+            style="@style/defaultLableStyleStyle"
+            android:text="北斗号" />
+
+        <EditText
+            android:id="@+id/inputBdNum"
+            style="@style/defaultEditStyleStyle"
+            android:gravity="left"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="80dp"
+            android:hint="请输入北斗号"
+            />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/secondtDivi"
+        style="@style/divideStyleInner"
+        android:layout_below="@+id/layoutInput" />
+    <RelativeLayout
+        android:id="@+id/layoutInput2"
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/secondtDivi">
+
+
+        <TextView
+            android:id="@+id/textView13"
+            style="@style/defaultLableStyleStyle"
+            android:text="充值密码" />
+
+        <EditText
+            android:id="@+id/inputBdPwd"
+            style="@style/defaultEditStyleStyle"
+            android:gravity="left"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="80dp"
+            android:hint="请输入充值密码"
+              />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divid4"
+        style="@style/divideStyle"
+        android:layout_below="@+id/layoutInput2" />
+
+    <Button
+        android:id="@+id/submitCharge"
+        style="@style/defaultButtonStyle"
+        android:text="充值"
+        android:layout_below="@id/divid4"
+        android:layout_marginTop="@dimen/item_layout_height"
+        android:onClick="toCharge"
+        />
+    <include
+        android:id="@+id/loadingLayoutInclude"
+        layout="@layout/layout_loading"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        >
+
+    </include>
+
+
+</RelativeLayout>

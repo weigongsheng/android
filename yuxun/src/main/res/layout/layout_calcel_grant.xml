@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <View
+        android:id="@+id/divid2"
+        style="@style/divideStyleInner"
+        android:layout_below="@+id/layoutCancel1" />
+
+    <RelativeLayout
+        android:layout_below="@+id/divid2"
+        style="@style/detailItemLayoutWide"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="北斗号:17935"
+            android:id="@+id/tipBdNum2"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:text="取消授权"
+            android:id="@+id/cancelGran2"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/item_margin_Right"
+            style="@style/remove_red_button"
+
+            />
+    </RelativeLayout>
+</RelativeLayout>

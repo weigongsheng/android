@@ -136,10 +136,8 @@ public class MsgService extends Service {
                         saveMsg(msg);
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                     return;
                 } catch (JSONException e) {
-                    e.printStackTrace();
                     continue;
                 }
             }
@@ -201,6 +199,8 @@ public class MsgService extends Service {
         messageThread.interrupt();
         messageNotificatioManager.cancel(messageNotificationID);
         messageNotificatioManager.cancelAll();
+        this.setCurContatListener(null);
+        this.setCountMsgListener(null);
         msgDao.closeDB();
         contDao.closeDB();
         countDbo.closeDB();

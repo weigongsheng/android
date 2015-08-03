@@ -162,7 +162,8 @@ protected void showMsg(String msg){
                 }
             });
         }
-        showMsgClient.callWs("66621979360", "11", "2");
+        showMsgClient.callWs(ActivityHelper.getMyAccount(this).optString("account"),
+                ActivityHelper.getMyAccount(this).optString("pwd"), "2");
     }
 
     protected void sentMsg(){

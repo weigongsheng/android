@@ -74,4 +74,8 @@ public class MsgCountDbManager {
         db.close();
     }
 
+    public void clean(){
+        db.execSQL("delete from "+EntityContract.MSGCount.TABLE_NAME );
+    }
+
 }

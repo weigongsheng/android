@@ -167,7 +167,6 @@ public class WebServiceHelper {
         SoapObject result = (SoapObject) envelope.bodyIn;
 
         SoapPrimitive detail = (SoapPrimitive) result.getProperty(respResult);
-        System.out.println("result" + result);
         try {
             if (detail.getValue() == null || detail.getValue().toString().length() < 1) {
                 sendErrorMsg(handler, "服务无返回数据");
@@ -204,7 +203,6 @@ public class WebServiceHelper {
         SoapObject result = (SoapObject) envelope.bodyIn;
 
         SoapPrimitive detail = (SoapPrimitive) result.getProperty(respResult);
-        System.out.println("result" + result);
         return detail.getValue().toString();
     }
 
@@ -367,6 +365,33 @@ public class WebServiceHelper {
     public static WebServiceHelper createGetPosiClient(Context cnt,WsCallBack callBack){
         return new WebServiceHelper(cnt,"WebGetBdPostion","WebGetBdPostionResult",
                 callBack,"username","pwd","bdNum");
+    }
+
+    public static WebServiceHelper createGrantListClient(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebGetGrantBdList","WebGetGrantBdListResult",
+                callBack,"username","pwd");
+
+    }
+
+    public static WebServiceHelper createGrantCancelClient(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebDeleteBDGrantAppViewPostion","WebDeleteBDGrantAppViewPostionResult",
+                callBack,"username","pwd","bdNum");
+
+    }
+    public static WebServiceHelper createGrantRegClient(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebSetAppViewBdPostionRequest","WebSetAppViewBdPostionRequestResult",
+                callBack,"username","pwd","bdNum");
+
+    }
+    public static WebServiceHelper createChargeRequestClient(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebSupplyForBDRequest","WebSupplyForBDRequestResult",
+                callBack,"username","pwd","bdNumber","supplyCode");
+
+    }
+    public static WebServiceHelper createConfirmChargeClient(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebSupplyForBDResult","WebSupplyForBDResultResult",
+                callBack,"username","pwd","tabId");
+
     }
 
 }

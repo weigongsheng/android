@@ -12,6 +12,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hiuzhong.baselib.util.WebUtil;
+import com.hiuzhong.yuxun.helper.ActivityHelper;
+import com.hiuzhong.yuxun.helper.WebServiceHelper;
+import com.hiuzhong.yuxun.helper.WsCallBack;
+import com.hiuzhong.yuxun.service.MsgService;
+
+import org.json.JSONObject;
 
 
 public class MainActivity extends Activity {
@@ -21,6 +27,8 @@ public class MainActivity extends Activity {
     protected static final int NAET_FAIL=0XF12;
     protected static final int INIT_FINISH=0XF01;
     protected static final int FETCH_DATA_FAIL=0XF03;
+
+    private WebServiceHelper wsClient;
 
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -80,6 +88,38 @@ public class MainActivity extends Activity {
     }
 
     private void loadMainUi(Message msg) {
+        JSONObject myAccount = ActivityHelper.getMyAccount(this);
+        if(myAccount.optBoolean("autoLogin")){
+            WebServiceHelper.createLoginClient(this, new WsCallBack() {
+                @Override
+                public void whenResponse(JSONObject json, int... position) {
+                    toList();
+                }
+                @Override
+                public void whenError() {
+                    toLogin();
+                }
+
+                @Override
+                public void whenFail(JSONObject json) {
+                    toLogin();
+                }
+            }).callWs(myAccount.optString("account"),myAccount.optString("pwd"));
+        }else{
+            toLogin();
+        }
+
+    }
+
+    protected  void toList(){
+        Intent intent =new Intent(this,ChatListActivity.class);
+        intent.putExtra("b_index", 0);
+        startActivity(intent);
+        startService(new Intent(getApplicationContext(),MsgService.class));
+        finish();
+    }
+
+    protected void toLogin(){
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         Log.i(TAG, "loadMainUi");
         finish();
