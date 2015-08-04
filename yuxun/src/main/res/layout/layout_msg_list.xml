@@ -2,15 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:padding="4dp"
+    android:padding="@dimen/list_layout_padding"
     >
 
     <ImageView
-        android:id="@+id/list_contactHeadImg"
+        android:id="@+id/detailContactHeadImg"
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/list_item_margin_left"
         android:src="@drawable/ic_me" />
 
     <TextView
@@ -28,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/list_contactHeadImg"
+        android:layout_toRightOf="@+id/detailContactHeadImg"
         android:textColor="@color/dark_gray_bg_0"
         android:layout_marginLeft="7dp"
         android:text="nick name"
@@ -40,9 +41,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/list_contactHeadImg"
-        android:layout_toRightOf="@+id/list_contactHeadImg"
+        android:layout_toEndOf="@+id/detailContactHeadImg"
+        android:layout_toRightOf="@+id/detailContactHeadImg"
         android:textColor="@color/dark_gray_bg_1"
         android:text="lastMsg"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        style="@style/numTip"
+        android:text="0"
+        android:id="@+id/list_textNumTip"
+        android:layout_alignTop="@id/detailContactHeadImg"
+        android:layout_alignRight="@id/detailContactHeadImg"
+        android:visibility="gone"
+        />
 </RelativeLayout>

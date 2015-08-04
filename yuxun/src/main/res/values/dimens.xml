@@ -3,12 +3,32 @@
     <dimen name="activity_horizontal_margin">0dp</dimen>
     <dimen name="activity_vertical_margin">0dp</dimen>
 
-    <dimen name="margin_left_add_user">10dp</dimen>
+    <dimen name="margin_left_add_user">15dp</dimen>
 
     <dimen name="edit_text_size">15sp</dimen>
     <dimen name="label_text_size">15sp</dimen>
+    <dimen name="btn_text_size">15sp</dimen>
 
-
+    <dimen name="btn_radius">4dp</dimen>
     <dimen name="height_common_bottom">45dp</dimen>
-    <dimen name="height_common_head">50dp</dimen>
+    <dimen name="height_common_head">40dp</dimen>
+    <dimen name="detailItemLayoutHeight">50dp</dimen>
+    <dimen name="detailItemSplit">1px</dimen>
+    <dimen name="dividHeight">1px</dimen>
+    <dimen name="width_pri_btn">310dp</dimen>
+    <dimen name="size_head_img">65dp</dimen>
+    <dimen name="item_layout_height">44dp</dimen>
+    <dimen name="itme_layout_span">15dp</dimen>
+    <dimen name="inner_divid_margin_Left">15dp</dimen>
+    <dimen name="itemLabelTextSize">15sp</dimen>
+    <dimen name="size_num_tip">11sp</dimen>
+    <dimen name="item_margin_left">20dp</dimen>
+    <dimen name="list_item_margin_left">10dp</dimen>
+    <dimen name="list_layout_padding">4dp</dimen>
+    <dimen name="item_margin_Right">10dp</dimen>
+    <dimen name="width_editText">130dp</dimen>
+    <dimen name="editTextMarginLeft">15dp</dimen>
+    <dimen name="txtSize_head">19sp</dimen>
+    <dimen name="switch_width">35dp</dimen>
+
 </resources>

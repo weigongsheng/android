@@ -3,14 +3,25 @@
     android:layout_width="match_parent"
     android:background="@color/dark_blue"
     android:layout_height="@dimen/height_common_head">
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/backImgBtn"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/ic_menu_back"
+        android:visibility="gone"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:textSize="@dimen/txtSize_head"
+        android:text=""
         android:id="@+id/head_title_text"
         android:layout_centerVertical="true"
         android:textColor="@color/color_head_text"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

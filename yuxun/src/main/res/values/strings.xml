@@ -13,4 +13,16 @@
     <string name="title_activity_me">MeActivity</string>
     <string name="title_activity_edit_contact">EditContactActivity</string>
     <string name="title_activity_contact_detail">ContactDetailActivity</string>
+    <string name="title_activity_show_position">ShowPositionActivity</string>
+    <string name="title_activity_regist">regist</string>
+    <string name="title_activity_msg_show">MsgShowActivity</string>
+    <string name="smsAppSecret">913e67f26645b1c283acafb58278c7e6</string>
+    <string name="smsAppKey">916397df375c</string>
+    <string name="title_activity_valid_code">ValidCodeActivity</string>
+    <string name="resendVc">发送验证码</string>
+    <string name="title_activity_setting_pwd">SettingPwdActivity</string>
+    <string name="title_activity_forget_pwd">ForgetPwdActivity</string>
+    <string name="title_activity_change_pwd">ChangePwdActivity</string>
+    <string name="title_activity_require_bd_grant">RequireBdGrantActivity</string>
+    <string name="title_activity_charge">ChargeActivity</string>
 </resources>
