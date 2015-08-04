@@ -1,38 +1,83 @@
 package com.hiuzhong.yuxun;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hiuzhong.yuxun.application.YuXunApplication;
+import com.hiuzhong.yuxun.helper.ActivityHelper;
+import com.hiuzhong.yuxun.helper.WebServiceHelper;
+import com.hiuzhong.yuxun.helper.WsCallBack;
+import com.hiuzhong.yuxun.service.MsgService;
 
-public class LoginActivity extends AppCompatActivity {
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+
+public class LoginActivity extends Activity {
+    TextView userName;
+    TextView pwd;
+    Handler handler;
+    private WebServiceHelper loginClient;
+    private View laodingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        userName = (TextView) findViewById(R.id.userName);
+        pwd = (TextView) findViewById(R.id.userPwd);
+        ActivityHelper.setTitle(this);
+        ((YuXunApplication)getApplication()).addRegistAct(this);
+        handler = WebServiceHelper.createMsgHandler(this);
+        laodingView = findViewById(R.id.loadingLayoutInclude);
+        loginClient = WebServiceHelper.createLoginClient(this, new WsCallBack() {
+            @Override
+            public void whenResponse(JSONObject json,int ... p) {
+                Toast.makeText(LoginActivity.this,json.optString("tip"),Toast.LENGTH_SHORT).show();
+                laodingView.setVisibility(View.GONE);
+                ActivityHelper.saveMyAccount(LoginActivity.this,"",userName.getText().toString(),pwd.getText().toString());
+                toListMsg();
+            }
+
+            @Override
+            public void whenError() {
+
+            }
+
+            @Override
+            public void whenFail(JSONObject json) {
+                laodingView.setVisibility(View.GONE);
+            }
+        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
+
+    public void login(View v){
+        laodingView.setVisibility(View.VISIBLE);
+            loginClient.callWs(userName.getText().toString(), pwd.getText().toString());
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    protected  void toListMsg(){
+        Intent intent =new Intent(this,ChatListActivity.class);
+        intent.putExtra("b_index", 0);
+        startActivity(intent);
+        startService(new Intent(getApplicationContext(),MsgService.class));
+        finish();
+    }
+    public  void toRegist(View v){
+        startActivity(new Intent(this,RegistActivity.class));
+    }
+    
+    public  void toRePwd(View v){
+        startActivity(new Intent(this,RegistActivity.class).putExtra("type",1));
     }
 }
