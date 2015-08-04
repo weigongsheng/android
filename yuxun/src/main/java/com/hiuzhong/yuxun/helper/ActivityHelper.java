@@ -19,6 +19,16 @@ import org.json.JSONObject;
  * Created by gongsheng on 2015/7/25.
  */
 public class ActivityHelper {
+    public static boolean msgChanged=false;
+    public static boolean contactChange=false;
+
+    public static void msgChanged(){
+        msgChanged = true;
+    }
+    public static void contactChanged(){
+        contactChange = true;
+    }
+
     public static JSONObject myAccount=null;
     public static void setTitle(Activity act, String... title) {
         TextView t = (TextView) act.findViewById(R.id.head_title_text);

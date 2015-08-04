@@ -28,7 +28,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="联系人信息"
             android:id="@+id/head_title_text"
             android:layout_centerVertical="true"
@@ -40,7 +40,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/list_layout_padding"
         android:layout_below="@id/headLayout"
         android:id="@+id/relativeLayout2">
 
@@ -80,9 +80,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/detailItemLayoutHeight"
-        style="@style/detailItemLayout"
+        style="@style/detailItemLayoutWide_single"
         android:layout_below="@+id/relativeLayout2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -97,11 +95,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_centerVertical="true"
+             style="@style/defaultLableStyleStyle"
             android:text="发送消息"
             android:id="@+id/sendMsgTip"
-            android:layout_marginLeft="15dp"
+
             />
 
         <ImageView
@@ -118,26 +115,22 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/detailItemLayoutHeight"
         android:layout_below="@+id/sendMsgLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/showPosLayout"
-        style="@style/detailItemLayout"
-        android:layout_marginTop="@dimen/detailItemSplit"
+        style="@style/detailItemLayoutWide_inner"
         android:onClick="showPositon"
         android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
         >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_centerVertical="true"
+            style="@style/defaultLableStyleStyle"
             android:text="查看位置"
             android:id="@+id/posiTip"
-            android:layout_marginLeft="15dp"
+
             />
 
         <ImageView
@@ -154,30 +147,22 @@
 </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/detailItemLayoutHeight"
         android:layout_below="@id/showPosLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/showBalance"
-        android:layout_marginTop="@dimen/detailItemSplit"
-        style="@style/detailItemLayout"
+        style="@style/detailItemLayoutWide_inner"
         android:clickable="true"
         android:focusable="true"
         android:onClick="showBalance"
         android:visibility="gone"
         >
 
-
-
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_centerVertical="true"
+            style="@style/defaultLableStyleStyle"
             android:text="查看余额"
             android:id="@+id/tipBalance"
-            android:layout_marginLeft="15dp"
+
             />
 
         <TextView
@@ -192,53 +177,32 @@
 
     </RelativeLayout>
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/detailItemLayoutHeight"
         android:layout_below="@+id/showBalance"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:id="@+id/removeHistory"
         android:layout_marginTop="@dimen/detailItemLayoutHeight"
-        style="@style/detailItemLayout"
+        style="@style/detailItemLayoutWide_single"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toCleanMsg"
         >
-
-
-
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_centerVertical="true"
+            style="@style/defaultLableStyleStyle"
             android:text="清空聊天记录"
             android:id="@+id/cleanHistory"
-            android:layout_marginLeft="15dp"
+
             />
 
-
-
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/detailItemLayoutHeight"
+    <Button
+        style="@style/readAlarmBtn"
+        android:onClick="deleteContact"
         android:layout_below="@+id/removeHistory"
         android:layout_marginTop="@dimen/detailItemLayoutHeight"
-        style="@style/detailItemLayout"
-        android:onClick="deleteContact"
-        >
+        android:text="删除当前联系人"
+        />
 
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:gravity="center"
-            android:textColor="#ff2800"
-            android:text="删除当前联系人"
-            android:id="@+id/deleteBton"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
 
 
 </RelativeLayout>

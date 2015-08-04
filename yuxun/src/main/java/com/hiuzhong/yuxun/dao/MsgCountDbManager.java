@@ -75,7 +75,12 @@ public class MsgCountDbManager {
     }
 
     public void clean(){
-        db.execSQL("delete from "+EntityContract.MSGCount.TABLE_NAME );
+        db.execSQL("delete from " + EntityContract.MSGCount.TABLE_NAME);
+    }
+    public void clean(String account){
+       db.delete(EntityContract.MSGCount.TABLE_NAME
+                ,EntityContract.MSGCount.COLUMN_NAME_ACCOUNT+" = ?"
+                ,new String[]{account});
     }
 
 }

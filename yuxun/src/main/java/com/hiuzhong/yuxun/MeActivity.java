@@ -3,11 +3,18 @@ package com.hiuzhong.yuxun;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hiuzhong.baselib.listener.ImgUploadedListener;
+import com.hiuzhong.baselib.util.ImageLoaderUtil;
 import com.hiuzhong.baselib.view.SwitchView;
+import com.hiuzhong.baselib.view.UploadImgView;
 import com.hiuzhong.yuxun.activity.YuXunActivity;
 import com.hiuzhong.yuxun.application.YuXunApplication;
 import com.hiuzhong.yuxun.dao.MessageDbManager;
@@ -20,15 +27,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class MeActivity extends YuXunActivity {
-
-
+public class MeActivity extends YuXunActivity implements ImgUploadedListener {
     private SwitchView switchAutoLogin;
     private SwitchView switchSound;
     private JSONObject myAccount;
     private MessageDbManager msgDao;
     private MsgCountDbManager msgCountDao;
     private WebServiceHelper wsClientContactUs;
+    protected UploadImgView myHeadImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +58,15 @@ public class MeActivity extends YuXunActivity {
             }
         });
 
-
+        ((TextView)findViewById(R.id.account)).setText(myAccount.optString("account"));
+        myHeadImg = (UploadImgView) findViewById(R.id.headImg);
+        myHeadImg.parentActivity=this;
+        Bitmap img = ImageLoaderUtil.loadFromFile(this, myAccount.optString("faceImgPath"));
+        if(img != null){
+            myHeadImg.setImageBitmap(img);
+        }
+        myHeadImg.faceImgFileName=myAccount.optString("account")+".jpg";
+        myHeadImg.uploadListener =  this;
         switchAutoLogin.setState(myAccount.optBoolean("autoLogin"));
         switchSound.setState( myAccount.optBoolean("soundOn"));
         ActivityHelper.setTitle(this);
@@ -70,6 +84,17 @@ public class MeActivity extends YuXunActivity {
         });
     }
 
+    public void onLoadFinish(Bitmap imgBitMap){
+        ImageLoaderUtil.saveBitmapToFile(MeActivity.this, myHeadImg.faceImgFileName, imgBitMap);
+        try {
+            myAccount.put("faceImgPath", myHeadImg.faceImgFileName);
+            ActivityHelper.reSaveMyAccount(this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     protected void setAutoLogin(Boolean autoLogin){
         try {
             myAccount.putOpt("autoLogin", autoLogin);
@@ -78,6 +103,12 @@ public class MeActivity extends YuXunActivity {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        myHeadImg.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     protected  void setSound(boolean soundOn){

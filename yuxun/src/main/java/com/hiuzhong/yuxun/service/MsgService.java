@@ -36,6 +36,7 @@ public class MsgService extends Service {
     private Intent messageIntent = null;
 //    private PendingIntent messagePendingIntent = null;
 
+
     //通知栏消息
     private int messageNotificationID = 1000;
     private Notification messageNotification = null;
@@ -48,6 +49,7 @@ public class MsgService extends Service {
     protected  OnReceiveMsgListener curContatListener;
 
     protected MsgCountDbManager countDbo;
+    private JSONObject myAccount;
 
     public void setCountMsgListener(OnReceiveCountMsgListener listener){
         this.countMsgListener = listener;
@@ -92,6 +94,7 @@ public class MsgService extends Service {
         account =json.optString("account");
         pwd =json.optString("pwd");
         json= null;
+        myAccount = ActivityHelper.getMyAccount(this);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -118,19 +121,15 @@ public class MsgService extends Service {
                         Notification.Builder builder = new Notification.Builder(MsgService.this);
                         builder.setAutoCancel(true);
                         builder.setSmallIcon(R.mipmap.ic_launcher);
-                        builder.setContentTitle("新消息" );
+                        builder.setContentTitle("新消息");
                         builder.setContentText(account + ":"
                                 + msges.getJSONObject(msges.length() - 1).optString("MsgContent"));
+                        boolean sound = myAccount.optBoolean("soundOn");
                         builder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
                         messageIntent.putExtra(ChatActivity.INTENT_PARA_CONTACT, account);
                         builder.setContentIntent(PendingIntent.getActivity(MsgService.this, 0, messageIntent, 0));
                         Bundle b = new Bundle();
                         b.putString(ChatActivity.INTENT_PARA_CONTACT, account);
-
-//                    builder.addExtras(b);
-//                        //更新通知栏
-//                        messageNotification.setLatestEventInfo(MsgService.this,
-//                                "新消息", "奥巴马宣布,本拉登兄弟挂了!" + serverMessage, messagePendingIntent);
                         messageNotificatioManager.notify(messageNotificationID, builder.build());
                         //每次通知完，通知ID递增一下，避免消息覆盖掉
                         saveMsg(msg);
@@ -204,6 +203,7 @@ public class MsgService extends Service {
         msgDao.closeDB();
         contDao.closeDB();
         countDbo.closeDB();
+        msgService = null;
         super.onDestroy();
     }
 }

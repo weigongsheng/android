@@ -153,6 +153,11 @@ public class MessageDbManager {
     public void cleanMsg(){
         db.execSQL("delete  from "+EntityContract.MessageEntity.TABLE_NAME);
     }
+    public void cleanMsg(String account) {
+        db.delete(EntityContract.MessageEntity.TABLE_NAME
+                ,EntityContract.MessageEntity.COLUMN_NAME_CONTACT_ACCOUNT + " = ?"
+                , new String[]{account});
+    }
 
     /**
      * close database

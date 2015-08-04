@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
 
     private void loadMainUi(Message msg) {
         JSONObject myAccount = ActivityHelper.getMyAccount(this);
-        if(myAccount.optBoolean("autoLogin")){
+        if(myAccount != null && myAccount.optBoolean("autoLogin")){
             WebServiceHelper.createLoginClient(this, new WsCallBack() {
                 @Override
                 public void whenResponse(JSONObject json, int... position) {

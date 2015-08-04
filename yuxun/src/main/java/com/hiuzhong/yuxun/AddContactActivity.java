@@ -15,6 +15,7 @@ import com.hiuzhong.baselib.listener.ImgUploadedListener;
 import com.hiuzhong.baselib.util.ImageLoaderUtil;
 import com.hiuzhong.baselib.view.UploadImgView;
 import com.hiuzhong.yuxun.dao.ContactsDbManager;
+import com.hiuzhong.yuxun.helper.ActivityHelper;
 import com.hiuzhong.yuxun.vo.Contact;
 
 
@@ -29,6 +30,7 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
         faceView.parentActivity = this;
         faceView.faceImgFileName = "" + System.currentTimeMillis() + ".jpg";
         faceView.uploadListener=this;
+        ActivityHelper.initHeadInf(this);
 
     }
 
@@ -91,6 +93,7 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
         c.nickName = nickName.toString();
         c.account = account.toString();
         manager.add(c);
+        ActivityHelper.contactChanged();
         tip("添加联系人成功");
         finish();
     }

@@ -45,7 +45,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/headImg"
+            android:layout_toRightOf="@id/headImg"
             android:text="用户号"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -57,7 +57,7 @@
             android:layout_alignStart="@+id/tipAccount"
             android:layout_below="@+id/tipAccount"
             android:layout_marginTop="10dp"
-            android:text="66652437459"
+            android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </RelativeLayout>
 
