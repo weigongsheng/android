@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -15,27 +14,35 @@ import android.widget.TextView;
 
 import com.hiuzhong.baselib.util.ImageLoaderUtil;
 import com.hiuzhong.yuxun.activity.YuXunActivity;
+import com.hiuzhong.yuxun.constant.Constants;
 import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.dao.MessageDbManager;
+import com.hiuzhong.yuxun.dao.MsgCountDbManager;
+import com.hiuzhong.yuxun.helper.ActivityHelper;
+import com.hiuzhong.yuxun.helper.WebServiceHelper;
+import com.hiuzhong.yuxun.helper.WsCallBack;
+import com.hiuzhong.yuxun.receiver.OnReceiveMsgListener;
+import com.hiuzhong.yuxun.service.MsgService;
 import com.hiuzhong.yuxun.vo.Contact;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import android.os.Handler;
+import java.util.concurrent.ExecutionException;
 
+import android.os.Handler;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.util.logging.LogRecord;
-
 
 public class ChatActivity extends Activity {
-
+public static final String INTENT_PARA_CONTACT="contactAccount";
     protected TextView msgInput;
     private LinearLayout msgContainer;
     private ScrollView msgScrollView;
@@ -45,9 +52,11 @@ public class ChatActivity extends Activity {
     protected Handler handler;
     protected String lasMsg;
     private Contact cant;
-    private String SERVICE_URL;
-    private String SERVICE_NAMESPACE;
-    private String methodName;
+    private WebServiceHelper charWsClient;
+    private JSONObject myAccount;
+    private Handler msgHandler;
+    private MsgCountDbManager msgcountDao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +66,59 @@ public class ChatActivity extends Activity {
         msgContainer = (LinearLayout) findViewById(R.id.msgScrollContainer);
         msgScrollView = (ScrollView) findViewById(R.id.msgScrollView);
         msgDao = new MessageDbManager(this);
+        msgcountDao =new MsgCountDbManager(this);
         initData();
         showLostMsg();
+        if(cant.account.length()>=5 && cant.account.length()<=7){
+            charWsClient = WebServiceHelper.createSendBdClient(this, new WsCallBack() {
+                @Override
+                public void whenResponse(JSONObject json,int ... p) {
+                    Toast.makeText(ChatActivity.this,"发送成功",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }else {
+            charWsClient = WebServiceHelper.createSendAppClient(this, new WsCallBack() {
+                @Override
+                public void whenResponse(JSONObject json,int ... p) {
+                    Toast.makeText(ChatActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        msgHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == Constants.MSG_WHAT_CUR) {
+                    showReceivedMsg(msg.getData().getString("msg"));
+                    if(!cant.isStrange){
+                        msgcountDao.cleanCount(cant.account);
+                    }
+                }
+            }
+        };
+
+        myAccount = ActivityHelper.getMyAccount(this);
+        MsgService.getCurService().setCurContatListener(new OnReceiveMsgListener() {
+            @Override
+            public void onMessage(String account, String msg, String time) {
+                if (account.equals(cant.account)) {
+                    Message m = new Message();
+                    m.what = Constants.MSG_WHAT_CUR;
+                    Bundle b = new Bundle();
+                    b.putString("msg", msg);
+                    m.setData(b);
+                    msgHandler.sendMessage(m);
+                }
+            }
+        });
+
+        ActivityHelper.initHeadInf(this,cant.nickName == null?cant.account:cant.nickName);
+        msgcountDao.cleanCount(cant.account);
     }
 
     private void showLostMsg(){
-        List<String[]> msgs = msgDao.query(3, 0,String.valueOf(cant.id));
+        List<String[]> msgs = msgDao.query(3, 0,cant.account);
         if(msgs == null){
             return ;
         }
@@ -84,9 +140,12 @@ public class ChatActivity extends Activity {
 //       Map<String,String> source= (Map<String, String>) getIntent().getSerializableExtra("contactInfo");
 //        contactId = source.get("contactId");
         ContactsDbManager dao = new ContactsDbManager(this);
-        cant =dao.queryById(getIntent().getStringExtra("contactId"));
-
-        contactFaceBitmap = ImageLoaderUtil.loadFromFile(this, cant.faceImgPath);
+        cant =dao.queryByAccount(getIntent().getStringExtra(INTENT_PARA_CONTACT));
+        if(cant == null){
+            cant = Contact.createStranger(getIntent().getStringExtra(INTENT_PARA_CONTACT));
+        }else{
+          contactFaceBitmap = ImageLoaderUtil.loadFromFile(this, cant.faceImgPath);
+        }
         msgInput.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -102,22 +161,25 @@ public class ChatActivity extends Activity {
 
 
 
-    public void sendMsg(View textView) {
+    public void sendMsg(View v) {
         CharSequence msg = msgInput.getText();
         if (msg != null && ! msg.equals("")) {
-            lastMsgChange( msg.toString());
             inflateSendMst(msg);
-            msgDao.add(String.valueOf(cant.id), MessageDbManager.MSG_TYPE_SEND, msg.toString());
-            showReceivedMsg("yes " + msg);
+            if(!cant.isStrange){
+                msgDao.add(cant.account, MessageDbManager.MSG_TYPE_SEND, msg.toString());
+            }
             handler.sendEmptyMessage(0);
+            charWsClient.callWs(myAccount.optString("account"), myAccount.optString("pwd"), cant.account, msg.toString());
 
         }
     }
     public void showReceivedMsg(CharSequence msg) {
         if (msg != null) {
-            lastMsgChange(msg.toString());
+            //TODO
             inflateReceivedMsg(msg);
-            msgDao.add(String.valueOf(cant.id), MessageDbManager.MSG_TYPE_RECEIVE, msg.toString());
+            if(!cant.isStrange){
+                msgDao.add(String.valueOf(cant.account), MessageDbManager.MSG_TYPE_RECEIVE, msg.toString());
+            }
             handler.sendEmptyMessage(0);
         }
     }
@@ -128,6 +190,7 @@ public class ChatActivity extends Activity {
         ((ImageView) sentView.findViewById(R.id.myFaceImg)).setImageResource(R.drawable.ic_me);
         msgContainer.addView(sentView);
         msgInput.setText(null);
+        ActivityHelper.msgChanged();
     }
 
     private void inflateReceivedMsg(CharSequence msg){
@@ -137,6 +200,7 @@ public class ChatActivity extends Activity {
             ((ImageView) sentView.findViewById(R.id.senderHeadImg)).setImageBitmap(contactFaceBitmap);
         }
         msgContainer.addView(sentView);
+        ActivityHelper.msgChanged();
     }
 
     public void back(View v){
@@ -146,45 +210,11 @@ public class ChatActivity extends Activity {
 
     @Override
     public void finish() {
-        if(getIntent().getIntExtra("p",-1)>0){
+        if(getIntent().getIntExtra("p",-1)<0){
             YuXunActivity.LAST_MSG_CHANGED=false;
         }
         setResult(1, getIntent().putExtra("lastMsg", lasMsg));
         super.finish();
-    }
-
-    public void lastMsgChange(String lastMsg){
-        lasMsg = lastMsg;
-        YuXunActivity.LAST_MSG_CHANGED=true;
-    }
-
-    public List<String> receiveMsgFromServer(){
-        HttpTransportSE ht = new HttpTransportSE(SERVICE_URL);
-        SoapObject soapObject = new SoapObject(SERVICE_NAMESPACE, methodName);
-        // 添加一个请求参数
-        soapObject.addProperty("theRegionCode", "");
-        // 使用soap1.1协议创建envelop对象
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-                SoapEnvelope.VER11);
-        envelope.bodyOut = soapObject;
-        // 设置与.NET提供的webservice保持较好的兼容性
-        envelope.dotNet = true;
-        try {
-            ht.call(SERVICE_NAMESPACE + methodName, envelope);
-            if (envelope.getResponse() != null) {
-                // 获取服务器响应返回的SOAP消息
-                SoapObject result = (SoapObject) envelope.bodyIn;
-                SoapObject detail = (SoapObject) result.getProperty(methodName
-                        + "Result");
-                // 解析服务器响应的SOAP消息
-                return parseProvinceOrCity(detail);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     // 解析省份或城市
@@ -195,5 +225,14 @@ public class ChatActivity extends Activity {
             result.add(detail.getProperty(i).toString().split(",")[0]);
         }
         return result;
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            MsgService.getCurService().setCurContatListener(null);
+        }catch (Throwable e){
+        }
+        super.onDestroy();
     }
 }
