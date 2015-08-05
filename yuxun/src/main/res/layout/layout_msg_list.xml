@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/list_item_margin_left"
-        android:src="@drawable/ic_me" />
+        android:src="@drawable/default_head" />
 
     <TextView
         android:id="@+id/list_lastMsgTime"

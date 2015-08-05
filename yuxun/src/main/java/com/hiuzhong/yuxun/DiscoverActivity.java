@@ -89,7 +89,7 @@ public class DiscoverActivity extends YuXunActivity implements OnRefreshListener
                 for (int i = 0; i <grantList.length() ; i++) {
                     if(!contacDao.existAccount(grantList.optJSONObject(i).optString("BdNum"))){//新的北斗号
                         Contact cnt = new Contact();
-                        cnt.account = json.optString("BdNum");
+                        cnt.account = grantList.optJSONObject(i).optString("BdNum");
                         cnt.nickName = cnt.account;
                         cnt.isStrange = false;
                         contacDao.add(cnt);
@@ -126,7 +126,7 @@ public class DiscoverActivity extends YuXunActivity implements OnRefreshListener
                 datas.put(c.firstChar,item);
             }
             Map<String,String> data = new Hashtable<>();
-            data.put("faceImgPath",c.faceImgPath);
+            data.put("faceImgPath",c.faceImgPath==null?"":c.faceImgPath);
             data.put("account",c.account);
             data.put("nickName",c.nickName);
             data.put("firstChar", c.firstChar);

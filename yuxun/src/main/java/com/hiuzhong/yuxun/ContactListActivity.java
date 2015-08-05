@@ -64,12 +64,11 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
                     return;
                 }
                 JSONArray grantList =json.optJSONObject("data").optJSONArray("GrantBDList");
-                json.optString("BdNum");
                 boolean nr =false;
                 for (int i = 0; i <grantList.length() ; i++) {
                     if(!contactDao.existAccount(grantList.optJSONObject(i).optString("BdNum"))){//新的北斗号
                         Contact cnt = new Contact();
-                        cnt.account = json.optString("BdNum");
+                        cnt.account = grantList.optJSONObject(i).optString("BdNum");
                         cnt.nickName = cnt.account;
                         cnt.isStrange = false;
                         contactDao.add(cnt);
@@ -107,7 +106,7 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
                 datas.put(c.firstChar,item);
             }
             Map<String,String> data = new Hashtable<>();
-            data.put("faceImgPath",c.faceImgPath);
+            data.put("faceImgPath",c.faceImgPath==null?"":c.faceImgPath);
             data.put("account",c.account);
             data.put("nickName",c.nickName);
             data.put("firstChar",c.firstChar);
