@@ -144,7 +144,7 @@ protected void showMsg(String msg){
         if(showMsgClient == null){
             showMsgClient =WebServiceHelper.createShowMsg(this, new WsCallBack() {
                 @Override
-                public void whenResponse(JSONObject json,int ... p) {
+                public void whenResponse(JSONObject json,Object ... p) {
                     Intent intent= new Intent(RegistActivity.this, MsgShowActivity.class);
                     intent.putExtra("title","用户协议");
                     intent.putExtra("msg",json.optString("data"));

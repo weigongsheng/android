@@ -6,12 +6,23 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.hiuzhong.yuxun.helper.ContactDBHelper;
+import com.hiuzhong.yuxun.vo.Contact;
 import com.hiuzhong.yuxun.vo.message.EntityContract;
 
 /**
  * Created by gongsheng on 2015/7/5.
  */
 public class MsgCountDbManager {
+
+    private static MsgCountDbManager instance;
+
+    public static MsgCountDbManager getInstance(Context cnt){
+        if(instance == null){
+            instance = new MsgCountDbManager(cnt.getApplicationContext());
+        }
+        return instance;
+    }
+
 
     public static String[] projection = {
             EntityContract.MSGCount._ID,
@@ -22,12 +33,12 @@ public class MsgCountDbManager {
 
     private ContactDBHelper helper;
     private SQLiteDatabase db;
-    public MsgCountDbManager(Context context) {
+    private MsgCountDbManager(Context context) {
         helper = new ContactDBHelper(context);
-        //因为getWritableDatabase内部调用了mContext.openOrCreateDatabase(mName, 0, mFactory);
-        //所以要确保context已初始化,我们可以把实例化DBManager的步骤放在Activity的onCreate里
         db = helper.getWritableDatabase();
     }
+
+
 
     /**
      * add message
@@ -70,8 +81,13 @@ public class MsgCountDbManager {
     /**
      * close database
      */
-    public void closeDB() {
+    private void closeDB() {
         db.close();
+    }
+    public static void close() {
+       if(instance != null){
+           instance.closeDB();
+       }
     }
 
     public void clean(){

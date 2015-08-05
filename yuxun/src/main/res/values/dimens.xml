@@ -29,6 +29,6 @@
     <dimen name="width_editText">130dp</dimen>
     <dimen name="editTextMarginLeft">15dp</dimen>
     <dimen name="txtSize_head">19sp</dimen>
-    <dimen name="switch_width">35dp</dimen>
+    <dimen name="switch_width">36dp</dimen>
 
 </resources>

@@ -5,7 +5,7 @@
             <solid android:color="@color/dark_gray_bg_3" />
         </shape>
     </item>
-    <item android:bottom="@dimen/dividHeight">
+    <item android:top="@dimen/dividHeight">
         <shape>
             <solid android:color="#ffffff" />
             <padding

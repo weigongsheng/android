@@ -43,7 +43,7 @@ public class ContactDBHelper extends SQLiteOpenHelper {
 
     public ContactDBHelper(Context context) {
         //CursorFactory设置为null,使用默认值
-        super(context, DATABASE_NAME+ActivityHelper.myAccount.optString("account")+".db", null, DATABASE_VERSION);
+        super(context, DATABASE_NAME+ActivityHelper.getMyAccount(context).optString("account")+".db", null, DATABASE_VERSION);
     }
 
     //数据库第一次被创建时onCreate会被调用

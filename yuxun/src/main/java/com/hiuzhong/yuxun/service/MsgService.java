@@ -34,8 +34,6 @@ public class MsgService extends Service {
     private MessageThread messageThread = null;
     //点击查看
     private Intent messageIntent = null;
-//    private PendingIntent messagePendingIntent = null;
-
 
     //通知栏消息
     private int messageNotificationID = 1000;
@@ -73,7 +71,7 @@ public class MsgService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        countDbo = new MsgCountDbManager(this);
+        countDbo =   MsgCountDbManager.getInstance(this);
         msgService = this;
         //初始化
         messageNotification = new Notification();
@@ -84,8 +82,8 @@ public class MsgService extends Service {
         messageIntent = new Intent(this, ChatActivity.class);
         messageIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 //        messagePendingIntent = PendingIntent.getActivity(this, 0, messageIntent, 0);
-        msgDao = new MessageDbManager(this);
-        contDao = new ContactsDbManager(this);
+        msgDao =   MessageDbManager.getInstance(this);
+        contDao =   ContactsDbManager.getInstance(this);
         //开启线程
         messageThread = new MessageThread();
         messageThread.isRunning = true;
@@ -104,20 +102,24 @@ public class MsgService extends Service {
     class MessageThread extends Thread {
         //运行状态，下一步骤有大用
         public boolean isRunning = true;
+        public boolean isApp=false;
         public void run() {
             while (true) {
                 try {
                     //休息3秒
                     Thread.sleep(3 * 1000);
                     //获取服务器消息
-                    JSONObject msg = getServerMessage();
+                    JSONObject msg = getServerMessage(isApp);
+                    String dataName = isApp?"AppToApp":"BDToApp";
+                    String accountName =isApp?"SendAppNumber":"BdNum";
+                    isApp = !isApp;
                     if (msg == null || msg.getJSONObject("data") == null) {
                         continue;
                     }
-                    JSONArray msges = msg.getJSONObject("data").getJSONArray("AppToApp");
+                    JSONArray msges = msg.getJSONObject("data").getJSONArray(dataName);
                     if (msg != null && msges.length() > 0) {
-                        sendMsgCount(msges);
-                        String account = msges.getJSONObject(msges.length() - 1).optString("SendAppNumber");
+                        sendMsgCount(msges,accountName);
+                        String account = msges.getJSONObject(msges.length() - 1).optString(accountName);
                         Notification.Builder builder = new Notification.Builder(MsgService.this);
                         builder.setAutoCancel(true);
                         builder.setSmallIcon(R.mipmap.ic_launcher);
@@ -132,7 +134,7 @@ public class MsgService extends Service {
                         b.putString(ChatActivity.INTENT_PARA_CONTACT, account);
                         messageNotificatioManager.notify(messageNotificationID, builder.build());
                         //每次通知完，通知ID递增一下，避免消息覆盖掉
-                        saveMsg(msg);
+                        saveMsg(msg,dataName,accountName);
                     }
                 } catch (InterruptedException e) {
                     return;
@@ -144,11 +146,11 @@ public class MsgService extends Service {
     }
 
 
-    protected  void sendMsgCount(JSONArray msg) throws JSONException {
+    protected  void sendMsgCount(JSONArray msg,String accountName) throws JSONException {
         HashMap<String,Integer> allCount = new HashMap<>();
         for(int i=0,j=msg.length();i<j;i++){
             JSONObject m = msg.getJSONObject(i);
-            String account = m.optString("SendAppNumber");
+            String account = m.optString(accountName);
             Integer c = allCount.get(account);
             if(c == null){
                 c=0;
@@ -173,23 +175,26 @@ public class MsgService extends Service {
      *
      * @return 返回服务器要推送的消息，否则如果为空的话，不推送
      */
-    public JSONObject getServerMessage() {
-        // WebServiceHelper.queryMsg(account,pwd)
-        return WebServiceHelper.queryMsg(account,pwd);
-//        String msg = "{\"code\":0,\"data\":{\"AppToApp\":[{\"SendAppNumber\":66621979360,\"MsgContent\":\"你们是因为太\",\"InsertTime\":\"2015-08-01 09:49:11\"},{\"SendAppNumber\":66621979360,\"MsgContent\":\"我是海浪声我\",\"InsertTime\":\"2015-08-01 09:49:16\"}]},tip:\"取得App到App的数据成功\"}";
-//        try {
-//            return new JSONObject(msg);
-//        } catch (JSONException e) {
-//           e.printStackTrace();
-//        }
-//        return null;
+    public JSONObject getServerMessage(boolean queryApp) {
+        if(queryApp){
+            return WebServiceHelper.queryMsg(account,pwd);
+        }else{
+            return WebServiceHelper.queryBdMsg(account,pwd);
+//            try {
+//                return new JSONObject("{\"code\":0,\"data\":{\"BDToApp\":[{\"BdNum\":299261,\"MsgContent\":\"大宝贝几个人要求婚姻\",\"InsertTime\":\"2015-08-05 16:52:10\"}]},\"tip\":\"取得北斗到App的数据成功\"}");
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//                return null;
+//            }
+        }
+
     }
 
-    protected void saveMsg(JSONObject source) throws JSONException {
-        JSONArray msgs = source.getJSONObject("data").getJSONArray("AppToApp");
+    protected void saveMsg(JSONObject source,String dataName,String accountName) throws JSONException {
+        JSONArray msgs = source.getJSONObject("data").getJSONArray(dataName);
         for (int i = 0; i <msgs.length() ; i++) {
             JSONObject msg = msgs.getJSONObject(i);
-            msgDao.addNewMsg(msg.optString("SendAppNumber"),MessageDbManager.MSG_TYPE_RECEIVE,msg.optString("MsgContent"),msg.optString("InsertTime"));
+            msgDao.addNewMsg(msg.optString(accountName),MessageDbManager.MSG_TYPE_RECEIVE,msg.optString("MsgContent"),msg.optString("InsertTime"));
         }
     }
 
@@ -200,9 +205,6 @@ public class MsgService extends Service {
         messageNotificatioManager.cancelAll();
         this.setCurContatListener(null);
         this.setCountMsgListener(null);
-        msgDao.closeDB();
-        contDao.closeDB();
-        countDbo.closeDB();
         msgService = null;
         super.onDestroy();
     }

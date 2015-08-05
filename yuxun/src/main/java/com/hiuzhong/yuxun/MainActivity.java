@@ -92,7 +92,7 @@ public class MainActivity extends Activity {
         if(myAccount != null && myAccount.optBoolean("autoLogin")){
             WebServiceHelper.createLoginClient(this, new WsCallBack() {
                 @Override
-                public void whenResponse(JSONObject json, int... position) {
+                public void whenResponse(JSONObject json, Object... position) {
                     toList();
                 }
                 @Override

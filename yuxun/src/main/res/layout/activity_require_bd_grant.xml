@@ -47,14 +47,10 @@
             android:onClick="reqGrant"
               />
     </RelativeLayout>
-    <View
-        android:id="@+id/divid1"
-        style="@style/divideStyle"
-        android:layout_below="@+id/layoutReqGrant" />
 
     <RelativeLayout
-        android:layout_below="@+id/divid1"
-        style="@style/detailItemLayoutWide"
+        android:layout_below="@+id/layoutReqGrant"
+        style="@style/detailItemLayoutWide_top"
         android:id="@+id/layoutCancel1"
         android:visibility="gone"
         >
@@ -79,14 +75,11 @@
 
             />
     </RelativeLayout>
-    <View
-        android:id="@+id/divid2"
-        style="@style/divideStyleInner"
-        android:layout_below="@+id/layoutCancel1" />
+
 
     <RelativeLayout
-        android:layout_below="@+id/divid2"
-        style="@style/detailItemLayoutWide"
+        android:layout_below="@+id/layoutCancel1"
+        style="@style/detailItemLayoutWide_inner"
         android:id="@+id/layoutCalcel2"
         android:visibility="gone"
         >
@@ -111,14 +104,11 @@
 
             />
     </RelativeLayout>
-    <View
-        android:id="@+id/divid3"
-        style="@style/divideStyleInner"
-        android:layout_below="@+id/layoutCalcel2" />
+
 
     <RelativeLayout
-        android:layout_below="@+id/divid3"
-        style="@style/detailItemLayoutWide"
+        android:layout_below="@+id/layoutCalcel2"
+        style="@style/detailItemLayoutWide_bottom"
         android:id="@+id/layoutCalcel3"
         android:visibility="gone"
         >

@@ -65,14 +65,14 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
         msgInput = (TextView) findViewById(R.id.msgEdit);
         msgContainer = (LinearLayout) findViewById(R.id.msgScrollContainer);
         msgScrollView = (ScrollView) findViewById(R.id.msgScrollView);
-        msgDao = new MessageDbManager(this);
-        msgcountDao =new MsgCountDbManager(this);
+        msgDao =   MessageDbManager.getInstance(this);
+        msgcountDao =  MsgCountDbManager.getInstance(this);
         initData();
         showLostMsg();
         if(cant.account.length()>=5 && cant.account.length()<=7){
-            charWsClient = WebServiceHelper.createSendBdClient(this, new WsCallBack() {
+            charWsClient = WebServiceHelper.createSendBdClient(this, new WsCallBack () {
                 @Override
-                public void whenResponse(JSONObject json,int ... p) {
+                public void whenResponse(JSONObject json,Object ... p) {
                     Toast.makeText(ChatActivity.this,"发送成功",Toast.LENGTH_SHORT).show();
                 }
             });
@@ -80,7 +80,7 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
         }else {
             charWsClient = WebServiceHelper.createSendAppClient(this, new WsCallBack() {
                 @Override
-                public void whenResponse(JSONObject json,int ... p) {
+                public void whenResponse(JSONObject json,Object ... p) {
                     Toast.makeText(ChatActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -139,7 +139,7 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
     private void initData() {
 //       Map<String,String> source= (Map<String, String>) getIntent().getSerializableExtra("contactInfo");
 //        contactId = source.get("contactId");
-        ContactsDbManager dao = new ContactsDbManager(this);
+        ContactsDbManager dao =   ContactsDbManager.getInstance(this);
         cant =dao.queryByAccount(getIntent().getStringExtra(INTENT_PARA_CONTACT));
         if(cant == null){
             cant = Contact.createStranger(getIntent().getStringExtra(INTENT_PARA_CONTACT));
@@ -204,7 +204,6 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
     }
 
     public void back(View v){
-        msgDao.closeDB();
         finish();
     }
 

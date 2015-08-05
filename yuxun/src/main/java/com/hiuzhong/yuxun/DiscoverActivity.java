@@ -36,6 +36,7 @@ public class DiscoverActivity extends YuXunActivity implements OnRefreshListener
     protected WebServiceHelper positionQueryClient;
     private ArrayList<Contact> allBdContact;
     private JSONObject myAccount;
+    private ContactsDbManager contacDao;
 
 
     @Override
@@ -45,7 +46,7 @@ public class DiscoverActivity extends YuXunActivity implements OnRefreshListener
         contactListView = (ExpandableListView) findViewById(R.id.contactListView);
         refreshLayout = (PullToRefreshLayout) findViewById(R.id.contactListViewContainer);
         refreshLayout.setOnRefreshListener(this);
-        manager = new ContactsDbManager(this);
+        manager = ContactsDbManager.getInstance(this);
         allBdContact = new ArrayList<Contact>();
         myAccount = ActivityHelper.getMyAccount(this);
         adapter = new SimplePosiGroupAdapter(this,R.layout.layout_contact_head
@@ -56,9 +57,9 @@ public class DiscoverActivity extends YuXunActivity implements OnRefreshListener
                 ,new String[]{"faceImgPath","account","nickName","position","time"});
         adapter.vg=contactListView;
         initListData();
-        positionQueryClient = WebServiceHelper.createGetPosiClient(this, new WsCallBack() {
+        positionQueryClient = WebServiceHelper.createGetPosiClient(this, new WsCallBack () {
             @Override
-            public void whenResponse(JSONObject json,int ... p) {
+            public void whenResponse(JSONObject json,Object ... p) {
                 JSONArray ja = json.optJSONObject("data").optJSONArray("BDPostion") ;
                 if(ja.length()<1){
                     return;
@@ -66,12 +67,46 @@ public class DiscoverActivity extends YuXunActivity implements OnRefreshListener
                 JSONObject jp = json.optJSONObject("data").optJSONArray("BDPostion").optJSONObject(0);
                 String position = " 经度:"+jp.optString("Lon")+" 纬度:"+jp.optString("Lat");
                 String time = jp.optString("ReportTime");
-                Map<String,String> data = (Map<String,String>) adapter.getChild(p[0],p[1]);
+                Map<String,String> data = (Map<String,String>) adapter.getChild((Integer)p[0],(Integer)p[1]);
                 data.put("position",position);
                 data.put("time",time);
                 adapter.notifyDataSetChanged();
             }
         });
+        contacDao =ContactsDbManager.getInstance(this);
+        WebServiceHelper.createGrantListClient(this, new WsCallBack() {
+            @Override
+            public void whenResponse(JSONObject json, Object... position) {
+                if(json == null){
+                    return;
+                }
+                JSONArray grantList =json.optJSONObject("data").optJSONArray("GrantBDList");
+                if(grantList.length()<1){
+                    return;
+                }
+                json.optString("BdNum");
+                boolean needReFresh =false;
+                for (int i = 0; i <grantList.length() ; i++) {
+                    if(!contacDao.existAccount(grantList.optJSONObject(i).optString("BdNum"))){//新的北斗号
+                        Contact cnt = new Contact();
+                        cnt.account = json.optString("BdNum");
+                        cnt.nickName = cnt.account;
+                        cnt.isStrange = false;
+                        contacDao.add(cnt);
+                        needReFresh =true;
+                    }
+
+                }
+                if(needReFresh){
+                    adapter.clear();
+                    adapter.clear();
+                    initListData();
+                    queryPostion();
+                }
+
+            }
+
+        }).callWs(ActivityHelper.getMyAccount(this).optString("account"), ActivityHelper.getMyAccount(this).optString("pwd"));
         queryPostion();
     }
 
@@ -119,7 +154,7 @@ public class DiscoverActivity extends YuXunActivity implements OnRefreshListener
             for(int i=0,j = adapter.getGroupCount();i<j;i++){
                 for (int k = 0,m= adapter.getChildrenCount(i); k <m ; k++) {
                     Map<String,String> data = (Map<String,String>) adapter.getChild(i,k);
-                    positionQueryClient.callWs(i,k,myAccount.optString("account"),myAccount.optString("pwd"), data.get("account"));
+                    positionQueryClient.callWs(myAccount.optString("account"), myAccount.optString("pwd"), data.get("account"), i,k);
                 }
             }
     }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hiuzhong.yuxun.helper.ActivityHelper;
@@ -22,6 +23,8 @@ public class ChargeActivity extends Activity {
     protected View loadingView;
     EditText inputBdNum;
     EditText inputChargeCode;
+    private TextView resultTip;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,17 +35,20 @@ public class ChargeActivity extends Activity {
         loadingView = findViewById(R.id.loadingLayoutInclude);
         inputBdNum = (EditText) findViewById(R.id.inputBdNum);
         inputChargeCode = (EditText) findViewById(R.id.inputBdPwd);
+        resultTip = (TextView) findViewById(R.id.resultTip);
         chargeReqClient = WebServiceHelper.createChargeRequestClient(this, new WsCallBack() {
             @Override
-            public void whenResponse(JSONObject json, int... position) {
+            public void whenResponse(JSONObject json, Object... position) {
                 String supplyID = json.optJSONObject("data").optString("SupplyID");
                 confirmChargeClient.callWs(myAccount,myPwd,supplyID);
             }
         });
         confirmChargeClient = WebServiceHelper.createConfirmChargeClient(this, new WsCallBack() {
             @Override
-            public void whenResponse(JSONObject json, int... position) {
+            public void whenResponse(JSONObject json, Object... position) {
                 Toast.makeText(ChargeActivity.this,json.optJSONObject("data").optString("SupplyContent"),Toast.LENGTH_SHORT).show();
+                String r = json.optJSONObject("data").optString("SupplyContent");
+                resultTip.setText(r);
                 loadingView.setVisibility(View.GONE);
             }
         });

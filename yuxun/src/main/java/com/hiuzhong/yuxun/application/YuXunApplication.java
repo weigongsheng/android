@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 
+import com.hiuzhong.yuxun.dao.ContactsDbManager;
+import com.hiuzhong.yuxun.dao.MessageDbManager;
+import com.hiuzhong.yuxun.dao.MsgCountDbManager;
 import com.hiuzhong.yuxun.service.MsgService;
 
 import java.util.HashSet;
@@ -33,9 +36,9 @@ public class YuXunApplication extends Application {
 
     @Override
     public void onCreate() {
-        System.setProperty("http.proxySet", "true");
-		System.setProperty("http.proxyHost", "172.31.1.246");
-		System.setProperty("http.proxyPort", "8080");
+//        System.setProperty("http.proxySet", "true");
+//		System.setProperty("http.proxyHost", "172.31.1.246");
+//		System.setProperty("http.proxyPort", "8080");
         super.onCreate();
     }
 
@@ -43,6 +46,9 @@ public class YuXunApplication extends Application {
     public void onTerminate() {
         closeAllAct();
         super.onTerminate();
+        ContactsDbManager.close();
+        MessageDbManager.close();
+        MsgCountDbManager.close();
         System.exit(0);
     }
     public void closeAllAct(){

@@ -49,8 +49,8 @@ public class ContactDetailActivity extends Activity {
         faceView = (ImageView) findViewById(R.id.detailContactHeadImg);
         nickName = (TextView) findViewById(R.id.detaillName);
         account = (TextView) findViewById(R.id.detailAccount);
-        msgDao = new MessageDbManager(this);
-        msgCountDao = new MsgCountDbManager(this);
+        msgDao =   MessageDbManager.getInstance(this);
+        msgCountDao =   MsgCountDbManager.getInstance(this);
         initData();
         if(contact.isBdAccount()){
             findViewById(R.id.showPosLayout).setVisibility(View.VISIBLE);
@@ -61,7 +61,7 @@ public class ContactDetailActivity extends Activity {
         myAccount = ActivityHelper.getMyAccount(this);
          queryClient = WebServiceHelper.createQueryBalanceClient(this, new WsCallBack() {
              @Override
-             public void whenResponse(JSONObject json,int ... p) {
+             public void whenResponse(JSONObject json,Object ... p) {
                  try {
                      banlenceText.setText(json.getJSONObject("data").optString("BalanceContent"));
                  } catch (JSONException e) {
@@ -80,7 +80,7 @@ public class ContactDetailActivity extends Activity {
         };
         questClient = WebServiceHelper.createQueryBalanceReqClient(this, new WsCallBack() {
             @Override
-            public void whenResponse(JSONObject json,int ... p) {
+            public void whenResponse(JSONObject json,Object ... p) {
                 qId = json.optJSONObject("data").optString("BalanceID");
                 handler.sendEmptyMessageDelayed(MSG_READY_QUERY,4*1000);
             }
@@ -88,13 +88,11 @@ public class ContactDetailActivity extends Activity {
     }
 
     private void initData() {
-        ContactsDbManager dao = new ContactsDbManager(this);
+        ContactsDbManager dao =  ContactsDbManager.getInstance(this);
         contact = dao.queryById(getIntent().getStringExtra("contactId"));
         faceView.setImageBitmap(ImageLoaderUtil.loadFromFile(this, contact.faceImgPath));
         nickName.setText(contact.nickName);
         account.setText(contact.account);
-        dao.closeDB();
-
     }
 
     public void back(View v) {
@@ -117,9 +115,8 @@ public class ContactDetailActivity extends Activity {
     }
 
     protected void deleteContact(){
-        ContactsDbManager dao = new ContactsDbManager(this);
+        ContactsDbManager dao = ContactsDbManager.getInstance(this);
         dao.deleteContact(contact.account);
-        dao.closeDB();
         ImageLoaderUtil.deletImg(this, contact.faceImgPath);
         Toast.makeText(this, "联系人已删除", Toast.LENGTH_SHORT).show();
         ActivityHelper.contactChanged();
@@ -131,11 +128,13 @@ public class ContactDetailActivity extends Activity {
         Intent intent = new Intent(this,ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_PARA_CONTACT, contact.account);
         startActivity(intent);
+        finish();
     }
 
     public void showPositon(View v){
-        startActivity(new Intent(this,ShowPositionActivity.class));
-    }
+        startActivity(new Intent(this,ShowPositionActivity.class).putExtra("account",contact.account).putExtra("nickName",contact.nickName));
+        finish();
+}
 
     public void showBalance(View v){
         v.setClickable(false);
@@ -161,8 +160,6 @@ public class ContactDetailActivity extends Activity {
 
     @Override
     public void finish() {
-        msgDao.closeDB();
-        msgCountDao.closeDB();
         super.finish();
     }
 }

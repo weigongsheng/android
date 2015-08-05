@@ -20,6 +20,8 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gongsheng on 2015/7/25.
@@ -257,16 +259,38 @@ public class WebServiceHelper {
         }
         return null;
     }
+    public static JSONObject queryBdMsg(String account, String pwd) {
+        try {
+            return WebServiceHelper.callWS(null, "WebGetBdToAppMsg", "WebGetBdToAppMsgResult", null
+                    , new WsPara("username", account), new WsPara("pwd", pwd));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static WebServiceHelper createShowMsg(Context cnt, WsCallBack callBack) {
         return new WebServiceHelper(cnt, "WebGetCoporationInfo", "WebGetCoporationInfoResult", callBack, "username", "pwd", "flag");
     }
 
-    public WebServiceHelper callWs(String... values) {
-        WsPara[] para = new WsPara[paraName.length];
-        for (int i = 0; i < para.length; i++) {
-            para[i] = new WsPara(paraName[i], values[i]);
+    public WebServiceHelper callWs(Object... values) {
+        WsPara[] para = null;
+        final List  extraPara = new ArrayList();
+        if(paraName.length>0){
+            para = new WsPara[paraName.length];
+            int i = 0;
+            for (; i < paraName.length; i++) {
+                para[i] = new WsPara(paraName[i], values[i].toString());
+            }
+            if(values.length>paraName.length){//有额外参数
+                int length =values.length -paraName.length;
+                int start = paraName.length;
+                for (int j =0; j < length; j++) {
+                    extraPara.add(values[start+j]);
+                }
+            }
         }
+
         new AsyncTask<WsPara, Void, String>() {
             @Override
             protected String doInBackground(WsPara... params) {
@@ -289,46 +313,7 @@ public class WebServiceHelper {
                             Toast.makeText(WebServiceHelper.this.cnt, jsonObject.optString("tip"), Toast.LENGTH_SHORT).show();
                             WebServiceHelper.this.callBck.whenFail(jsonObject);
                         } else {
-                            WebServiceHelper.this.callBck.whenResponse(jsonObject);
-                        }
-                    } catch (JSONException e) {
-                        Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
-                        WebServiceHelper.this.callBck.whenError();
-                    }
-                }
-            }
-        }.execute(para);
-        return this;
-    }
-
-    public WebServiceHelper callWs(final int ig, final int ii, String... values) {
-        WsPara[] para = new WsPara[paraName.length];
-        for (int i = 0; i < para.length; i++) {
-            para[i] = new WsPara(paraName[i], values[i]);
-        }
-        new AsyncTask<WsPara, Void, String>() {
-            @Override
-            protected String doInBackground(WsPara... params) {
-                try {
-                    return WebServiceHelper.callWS(WebServiceHelper.this.methodName, WebServiceHelper.this.resultName, params);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String data) {
-                if (data == null) {
-                    Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
-                } else {
-                    try {
-                        JSONObject jsonObject = new JSONObject(data);
-                        if (jsonObject.optInt("code", -1) != 0) {
-                            Toast.makeText(WebServiceHelper.this.cnt, jsonObject.optString("tip"), Toast.LENGTH_SHORT).show();
-                            WebServiceHelper.this.callBck.whenFail(jsonObject);
-                        } else {
-                            WebServiceHelper.this.callBck.whenResponse(jsonObject,ig,ii);
+                            WebServiceHelper.this.callBck.whenResponse(jsonObject,extraPara.size()>0?extraPara.toArray():null);
                         }
                     } catch (JSONException e) {
                         Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();

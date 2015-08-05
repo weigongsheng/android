@@ -62,7 +62,7 @@
             style="@style/defaultEditStyleStyle"
             android:layout_alignParentRight="false"
             android:numeric="integer"
-            android:hint="请输入app号/北斗号"
+            android:hint="请输入app号"
             android:gravity="left"
               />
     </RelativeLayout>

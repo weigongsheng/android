@@ -6,7 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.hiuzhong.baselib.adapter.SimpleGroupAdapter;
 import com.hiuzhong.baselib.listener.OnRefreshListener;
@@ -15,7 +17,12 @@ import com.hiuzhong.baselib.view.PullToRefreshLayout;
 import com.hiuzhong.yuxun.activity.YuXunActivity;
 import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.helper.ActivityHelper;
+import com.hiuzhong.yuxun.helper.WebServiceHelper;
+import com.hiuzhong.yuxun.helper.WsCallBack;
 import com.hiuzhong.yuxun.vo.Contact;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +37,7 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
     protected SimpleGroupAdapter adapter;
     private ContactsDbManager manager;
     PullToRefreshLayout refreshLayout;
+    private ContactsDbManager contactDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +47,7 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
 
         refreshLayout = (PullToRefreshLayout) findViewById(R.id.contactListViewContainer);
         refreshLayout.setOnRefreshListener(this);
-        manager = new ContactsDbManager(this);
+        manager =   ContactsDbManager.getInstance(this);
         adapter = new SimpleGroupAdapter(this,R.layout.layout_contact_head
                 ,R.layout.layout_contact_item
                 ,R.id.contactHead
@@ -48,6 +56,34 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
                 ,new String[]{"faceImgPath","account","nickName"});
         adapter.vg=contactListView;
         initListData();
+        contactDao = ContactsDbManager.getInstance(this);
+         WebServiceHelper.createGrantListClient(this, new WsCallBack() {
+            @Override
+            public void whenResponse(JSONObject json, Object... position) {
+                if(json == null){
+                    return;
+                }
+                JSONArray grantList =json.optJSONObject("data").optJSONArray("GrantBDList");
+                json.optString("BdNum");
+                boolean nr =false;
+                for (int i = 0; i <grantList.length() ; i++) {
+                    if(!contactDao.existAccount(grantList.optJSONObject(i).optString("BdNum"))){//新的北斗号
+                        Contact cnt = new Contact();
+                        cnt.account = json.optString("BdNum");
+                        cnt.nickName = cnt.account;
+                        cnt.isStrange = false;
+                        contactDao.add(cnt);
+                        nr = true;
+                    }
+
+                }
+                if(nr){
+                    adapter.clear();
+                    initListData();
+                }
+            }
+
+        }).callWs(ActivityHelper.getMyAccount(this).optString("account"), ActivityHelper.getMyAccount(this).optString("pwd"));
     }
 
     @Override

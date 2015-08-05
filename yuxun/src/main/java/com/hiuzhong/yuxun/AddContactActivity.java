@@ -3,6 +3,7 @@ package com.hiuzhong.yuxun;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -75,7 +76,9 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
         CharSequence account = ((TextView) findViewById(R.id.userAccount)).getText();
         if (faceView.getTag() == null || !faceView.getTag().equals("ok")) {
             tip(".请上传头像");
-            return;
+            ImageLoaderUtil.saveBitmapToFile(this, faceView.faceImgFileName, BitmapFactory.decodeResource(getResources(),R.drawable.default_head));
+            faceView.setTag("ok");
+//            return;
         }
         if (nickName == null) {
             tip("昵称不能为空");
@@ -85,7 +88,7 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
             tip("账号不能为空");
             return;
         }
-        ContactsDbManager manager = new ContactsDbManager(this);
+        ContactsDbManager manager =   ContactsDbManager.getInstance(this);
         if (manager.existAccount(account.toString())) {
             tip("账号已存在");
             return;

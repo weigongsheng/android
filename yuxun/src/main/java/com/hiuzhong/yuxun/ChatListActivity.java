@@ -53,7 +53,7 @@ public class ChatListActivity extends YuXunActivity implements OnRefreshListener
         super.onCreate(savedInstanceState);
         listView = (ListView) findViewById(R.id.msgListView);
         defHeadBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_me);
-        countDbo = new MsgCountDbManager(this);
+        countDbo =   MsgCountDbManager.getInstance(this);
         refreshLayout = (PullToRefreshLayout) findViewById(R.id.contactListViewContainer);
         refreshLayout.setOnRefreshListener(this);
         initData();
@@ -94,8 +94,8 @@ public class ChatListActivity extends YuXunActivity implements OnRefreshListener
 
     private void initData() {
         datas = new ArrayList<>();
-        MessageDbManager msgDao = new MessageDbManager(this);
-        ContactsDbManager cantDao = new ContactsDbManager(this);
+        MessageDbManager msgDao =   MessageDbManager.getInstance(this);
+        ContactsDbManager cantDao =   ContactsDbManager.getInstance(this);
         List<String[]> lastMsgs = msgDao.queryLastMsg();
         for (String[] info : lastMsgs) {
             String[] msg = msgDao.queryMsgById(info[0]);

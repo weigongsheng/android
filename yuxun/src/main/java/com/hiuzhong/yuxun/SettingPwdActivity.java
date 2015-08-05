@@ -49,13 +49,13 @@ public class SettingPwdActivity extends Activity {
         if(type ==1){
            queryClient = WebServiceHelper.createQueryPwdClient(this, new WsCallBack() {
                @Override
-               public void whenResponse(JSONObject json,int ... p) {
+               public void whenResponse(JSONObject json,Object ... p) {
                    oldPwd = json.optString("data");
                }
            }).callWs(tipAccount.getText().toString());
             changPwdClient =  WebServiceHelper.createChangePwdClient(this, new WsCallBack() {
                 @Override
-                public void whenResponse(JSONObject json,int ... p) {
+                public void whenResponse(JSONObject json,Object ... p) {
                     ActivityHelper.saveMyAccount(SettingPwdActivity.this, tipPhoneNum.getText().toString(), tipAccount.getText().toString(), pwdText.getText().toString());
                     toListMsg();
                 }
@@ -76,7 +76,7 @@ public class SettingPwdActivity extends Activity {
         }
             WebServiceHelper.regist(handler, tipAccount.getText().toString(), pwdText.getText().toString(), tipPhoneNum.getText().toString(), new WsCallBack() {
                 @Override
-                public void whenResponse(JSONObject json,int ... p) {
+                public void whenResponse(JSONObject json,Object ... p) {
                     Toast.makeText(SettingPwdActivity.this, json.optString("tip"), Toast.LENGTH_SHORT).show();
                     ActivityHelper.saveMyAccount(SettingPwdActivity.this, tipPhoneNum.getText().toString(), tipAccount.getText().toString(), pwdText.getText().toString());
                     toListMsg();

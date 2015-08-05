@@ -70,12 +70,12 @@ public class MeActivity extends YuXunActivity implements ImgUploadedListener {
         switchAutoLogin.setState(myAccount.optBoolean("autoLogin"));
         switchSound.setState( myAccount.optBoolean("soundOn"));
         ActivityHelper.setTitle(this);
-        msgDao = new MessageDbManager(this);
-        msgCountDao = new MsgCountDbManager(this);
+        msgDao = MessageDbManager.getInstance(this);
+        msgCountDao = MsgCountDbManager.getInstance(this);
 
         wsClientContactUs = WebServiceHelper.createShowMsg(this, new WsCallBack() {
             @Override
-            public void whenResponse(JSONObject json, int... position) {
+            public void whenResponse(JSONObject json, Object... position) {
                 Intent intent= new Intent(MeActivity.this, MsgShowActivity.class);
                 intent.putExtra("title","关于我们");
                 intent.putExtra("msg",json.optString("data"));
@@ -146,6 +146,7 @@ public class MeActivity extends YuXunActivity implements ImgUploadedListener {
                         msgDao.cleanMsg();
                         msgCountDao.clean();
                         Toast.makeText(MeActivity.this,"信息已全部清理",Toast.LENGTH_SHORT).show();
+                        ActivityHelper.msgChanged();
                     }
                 })
                 .setNegativeButton("否", null);
@@ -160,8 +161,6 @@ public class MeActivity extends YuXunActivity implements ImgUploadedListener {
 
     @Override
     public void finish() {
-        msgDao.closeDB();
-        msgCountDao.closeDB();
         super.finish();
     }
 }

@@ -36,7 +36,7 @@ public class EditContactActivity extends Activity implements ImgUploadedListener
     }
 
     private void initData(){
-        ContactsDbManager dao = new ContactsDbManager(this);
+        ContactsDbManager dao = ContactsDbManager.getInstance(this);
         contact =dao.queryById(getIntent().getStringExtra("contactId"));
         faceView.setImageBitmap( ImageLoaderUtil.loadFromFile(this, contact.faceImgPath));
         nickName.setText(contact.nickName);
@@ -94,7 +94,7 @@ public class EditContactActivity extends Activity implements ImgUploadedListener
             tip("账号不能为空");
             return;
         }
-        ContactsDbManager manager = new ContactsDbManager(this);
+        ContactsDbManager manager = ContactsDbManager.getInstance(this);
         c.nickName = nickName.toString();
         c.account = account.toString();
         manager.updateAccount(c);
@@ -110,9 +110,8 @@ public class EditContactActivity extends Activity implements ImgUploadedListener
     }
 
     public void delContact(View v){
-        ContactsDbManager manager = new ContactsDbManager(this);
+        ContactsDbManager manager = ContactsDbManager.getInstance(this);
         manager.deleteContact(contact.account);
-        manager.closeDB();
         Toast.makeText(this,"删除成功",Toast.LENGTH_SHORT).show();
         finish();
     }

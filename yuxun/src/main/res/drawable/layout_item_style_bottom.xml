@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:left="@dimen/itme_layout_span">
-        <shape>
+    <item android:top="@dimen/dividHeight">
+        <shape >
             <solid android:color="@color/dark_gray_bg_3" />
         </shape>
     </item>
-    <item android:top="@dimen/dividHeight">
+    <item  android:left="@dimen/item_margin_left" android:bottom="@dimen/dividHeight" >
+        <shape android:shape="rectangle" >
+            <solid android:color="@color/dark_gray_bg_3" />
+        </shape>
+    </item>
+    <item android:bottom="@dimen/dividHeight" android:top="@dimen/dividHeight">
         <shape>
             <solid android:color="#ffffff" />
-            <padding
-                android:left="@dimen/itme_layout_span"
-                android:right="@dimen/itme_layout_span" />
         </shape>
     </item>
 </layer-list>

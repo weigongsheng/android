@@ -1,11 +1,13 @@
 package com.hiuzhong.yuxun;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
@@ -22,6 +24,9 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.hiuzhong.yuxun.helper.ActivityHelper;
+import com.hiuzhong.yuxun.helper.WebServiceHelper;
+import com.hiuzhong.yuxun.helper.WsCallBack;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,78 +34,89 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class ShowPositionActivity extends Activity {
 
     private MapView mMapView;
     private BaiduMap mBaiduMap;
+    protected WebServiceHelper positionQueryClient;
+    private String nickName;
+    private String account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    SDKInitializer.initialize(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_show_position);
-    //获取地图控件引用
-    mMapView = (MapView) findViewById(R.id.bmapView);
+        //获取地图控件引用
+        mMapView = (MapView) findViewById(R.id.bmapView);
         mBaiduMap = mMapView.getMap();
-//        mMapView.get
-
+        nickName = getIntent().getStringExtra("nickName");
+        account = getIntent().getStringExtra("account");
+        ActivityHelper.initHeadInf(this,nickName==null?"定位信息":nickName);
 //普通地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        positionQueryClient = WebServiceHelper.createGetPosiClient(this, new WsCallBack() {
+            @Override
+            public void whenResponse(JSONObject json, Object... p) {
+                JSONArray ja = json.optJSONObject("data").optJSONArray("BDPostion");
+                if (ja.length() < 1) {
+                    Toast.makeText(ShowPositionActivity.this, "没有位置信息", Toast.LENGTH_SHORT);
+                    return;
+                }
+                addLine(ja);
+            }
+        });
         initMap();
+        refresh();
     }
-//{"code":0,"data":{"BDPostion":[{"BdNum":299305,"Lon":121.51786,"Lat":31.092861,"Speed":0.4,"Direction":0,"ReportTime":"2015-07-29 16:17:08"}
-// ,{"BdNum":299305,"Lon":121.51786,"Lat":31.092861,"Speed":0.4,"Direction":0,"ReportTime":"2015-07-29 16:17:08"}
-// ,{"BdNum":299305,"Lon":121.51783,"Lat":31.091944,"Speed":1.3,"Direction":350,"ReportTime":"2015-07-29 16:02:03"}
-// ,{"BdNum":299305,"Lon":121.517281,"Lat":31.092028,"Speed":0,"Direction":0,"ReportTime":"2015-07-29 15:46:58"}
-// ,{"BdNum":299305,"Lon":121.517303,"Lat":31.092611,"Speed":0,"Direction":0,"ReportTime":"2015-07-29 15:31:54"}
-// ,{"BdNum":299305,"Lon":121.517387,"Lat":31.092251,"Speed":0.2,"Direction":0,"ReportTime":"2015-07-29 15:16:51"}
-// ,{"BdNum":299305,"Lon":121.517693,"Lat":31.092417,"Speed":0,"Direction":0,"ReportTime":"2015-07-29 15:01:46"}
-// ,{"BdNum":299305,"Lon":121.51828,"Lat":31.092028,"Speed":0,"Direction":0,"ReportTime":"2015-07-29 14:46:41"}
-// ,{"BdNum":299305,"Lon":121.518333,"Lat":31.091888,"Speed":0,"Direction":0,"ReportTime":"2015-07-29 14:31:36"}
-// ,{"BdNum":299305,"Lon":121.520386,"Lat":31.088444,"Speed":0,"Direction":0,"ReportTime":"2015-07-29 14:16:31"}]},"tip":"取得北斗位置数据成功"}
-    private void initMap() {//121.501991,31.24487
 
-        try {//getIntent().getStringExtra("positionInfo")
-            String info ="[{\"BdNum\":299305,\"Lon\":121.51786,\"Lat\":31.092861,\"Speed\":0.4,\"Direction\":0,\"ReportTime\":\"2015-07-29 16:17:08\"},{\"BdNum\":299305,\"Lon\":121.51786,\"Lat\":31.092861,\"Speed\":0.4,\"Direction\":0,\"ReportTime\":\"2015-07-29 16:17:08\"},{\"BdNum\":299305,\"Lon\":121.51783,\"Lat\":31.091944,\"Speed\":1.3,\"Direction\":350,\"ReportTime\":\"2015-07-29 16:02:03\"},{\"BdNum\":299305,\"Lon\":121.517281,\"Lat\":31.092028,\"Speed\":0,\"Direction\":0,\"ReportTime\":\"2015-07-29 15:46:58\"},{\"BdNum\":299305,\"Lon\":121.517303,\"Lat\":31.092611,\"Speed\":0,\"Direction\":0,\"ReportTime\":\"2015-07-29 15:31:54\"},{\"BdNum\":299305,\"Lon\":121.517387,\"Lat\":31.092251,\"Speed\":0.2,\"Direction\":0,\"ReportTime\":\"2015-07-29 15:16:51\"},{\"BdNum\":299305,\"Lon\":121.517693,\"Lat\":31.092417,\"Speed\":0,\"Direction\":0,\"ReportTime\":\"2015-07-29 15:01:46\"},{\"BdNum\":299305,\"Lon\":121.51828,\"Lat\":31.092028,\"Speed\":0,\"Direction\":0,\"ReportTime\":\"2015-07-29 14:46:41\"},{\"BdNum\":299305,\"Lon\":121.518333,\"Lat\":31.091888,\"Speed\":0,\"Direction\":0,\"ReportTime\":\"2015-07-29 14:31:36\"},{\"BdNum\":299305,\"Lon\":121.520386,\"Lat\":31.088444,\"Speed\":0,\"Direction\":0,\"ReportTime\":\"2015-07-29 14:16:31\"}]";
-            JSONArray ja = new JSONArray(info);
-            LatLng[] position = new LatLng[ja.length()];
-            List<LatLng> positions = new ArrayList<>();
-            for (int i = 0; i < position.length; i++) {
-                JSONObject jp = ja.optJSONObject(i);
-                position[position.length-i-1] = new LatLng(Double.parseDouble(jp.optString("Lat")),Double.parseDouble(jp.optString("Lon")));
-            }
-            for (int i = 0; i <position.length ; i++) {
-                positions.add(position[i]);
-            }
-            OverlayOptions ooPolyline = new PolylineOptions().width(10)
-                    .color(0xAAFF0000).points(positions);
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private void addLine(JSONArray ja) {
+        List<LatLng> positions = new ArrayList<>();
+        LatLng[] position = new LatLng[ja.length()];
+        for (int i = 0; i < position.length; i++) {
+            JSONObject jp = ja.optJSONObject(position.length - i - 1);
+            position[i] = new LatLng(Double.parseDouble(jp.optString("Lat")), Double.parseDouble(jp.optString("Lon")));
+            positions.add(position[i]);
         }
-//定义Maker坐标点
-        LatLng point = new LatLng(31.24487,121.501991);
-//构建Marker图标
+        BitmapDescriptor custom1 = BitmapDescriptorFactory
+                .fromResource(R.drawable.icon_landing_arrow);
+//        List<BitmapDescriptor>customList = new ArrayList<BitmapDescriptor>();
+//        customList.add(custom1);
+        OverlayOptions ooPolyline = new PolylineOptions().width(10)
+                .color(0xAAFF0000).points(positions).customTexture(custom1);
         BitmapDescriptor bitmap = BitmapDescriptorFactory
-                .fromResource(R.drawable.icon_focus_marka);
-//构建MarkerOption，用于在地图上添加Marker
+                .fromResource(R.drawable.icon_gcoding);
         OverlayOptions option = new MarkerOptions()
-                .position(point)
+                .position(positions.get(positions.size() - 1))
                 .icon(bitmap);
-//在地图上添加Marker，并显示
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(position[position.length - 1]));
         mBaiduMap.addOverlay(option);
+        mBaiduMap.addOverlay(ooPolyline);
+        LatLng pt = position[position.length - 1];
+        TextView textView = new TextView(this);
+        textView.setBackgroundColor(0xffffff);
+        textView.setText(ja.optJSONObject(0).optString("ReportTime"));
+//创建InfoWindow , 传入 view， 地理坐标， y 轴偏移量
+        InfoWindow mInfoWindow = new InfoWindow(textView, pt, -77);
+//显示InfoWindow
+        mBaiduMap.showInfoWindow(mInfoWindow);
+        MapStatusUpdate u = MapStatusUpdateFactory.zoomTo(15);
+        mBaiduMap.animateMapStatus(u);
+    }
+
+    private void initMap() {
+        LatLng point = new LatLng(31.24487, 121.501991);
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(point));
-//        TextView popupText = new TextView(this);
-//        popupText.setText("123232");
-//        mBaiduMap.showInfoWindow(new InfoWindow(popupText, point, 0));
-
-
-
 
     }
 
+    public void refresh(){
+        positionQueryClient.callWs(ActivityHelper.getMyAccount(this).optString("account"),ActivityHelper.getMyAccount(this).optString("pwd"), account);
+    }
 
     @Override
     protected void onDestroy() {
@@ -108,12 +124,14 @@ public class ShowPositionActivity extends Activity {
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
     }
+
     @Override
     protected void onPause() {
         super.onPause();

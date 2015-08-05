@@ -22,9 +22,9 @@ import java.util.List;
  * Created by gongsheng on 2015/7/5.
  */
 public class ContactsDbManager {
+    private static ContactsDbManager instance;
     private ContactDBHelper helper;
     private SQLiteDatabase db;
-
     public String[] projection = new String[]{
             ContactDBHelper.COLUMN_ID,
             ContactDBHelper.COLUMN_ACCOUNT,
@@ -33,7 +33,21 @@ public class ContactsDbManager {
             ContactDBHelper.COLUMN_FIRST_CHAR,
     };
 
-    public ContactsDbManager(Context context) {
+    public static ContactsDbManager getInstance(Context cnt){
+        if(instance == null){
+            instance = new ContactsDbManager(cnt.getApplicationContext());
+        }
+        return instance;
+    }
+
+    public static void close(){
+        if(instance != null){
+            instance.closeDB();
+            instance=null;
+        }
+    }
+
+    private ContactsDbManager(Context context) {
         helper = new ContactDBHelper(context);
         //因为getWritableDatabase内部调用了mContext.openOrCreateDatabase(mName, 0, mFactory);
         //所以要确保context已初始化,我们可以把实例化DBManager的步骤放在Activity的onCreate里
@@ -187,7 +201,7 @@ public class ContactsDbManager {
     /**
      * close database
      */
-    public void closeDB() {
+    private void closeDB() {
         db.close();
     }
 

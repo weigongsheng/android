@@ -13,16 +13,12 @@
         layout="@layout/layout_simple_head"></include>
 
 
-    <TextView
-        android:id="@+id/divid0"
-        style="@style/divideStyle"
-        android:layout_below="@+id/includeHead"
-        android:layout_marginTop="@dimen/item_layout_height" />
 
     <RelativeLayout
         android:id="@+id/layoutInput"
-        style="@style/detailItemLayoutWide"
-        android:layout_below="@id/divid0">
+        style="@style/detailItemLayoutWide_top"
+        android:layout_marginTop="@dimen/item_layout_height"
+        android:layout_below="@id/includeHead">
 
 
         <TextView
@@ -40,14 +36,10 @@
             />
     </RelativeLayout>
 
-    <View
-        android:id="@+id/secondtDivi"
-        style="@style/divideStyleInner"
-        android:layout_below="@+id/layoutInput" />
     <RelativeLayout
         android:id="@+id/layoutInput2"
-        style="@style/detailItemLayoutWide"
-        android:layout_below="@id/secondtDivi">
+        style="@style/detailItemLayoutWide_bottom"
+        android:layout_below="@id/layoutInput">
 
 
         <TextView
@@ -88,6 +80,21 @@
         >
 
     </include>
+
+    <TextView
+         style="@style/defaultLableStyleStyle"
+        android:text=""
+        android:id="@+id/resultTip"
+        android:layout_below="@+id/submitCharge"
+        android:layout_alignLeft="@+id/submitCharge"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/btn_read"
+        android:layout_width="fill_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+          />
 
 
 </RelativeLayout>

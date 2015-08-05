@@ -35,7 +35,7 @@ public class ChangePwdActivity extends Activity {
         laodView = findViewById(R.id.loadingLayoutInclude);
         cpwdClient = WebServiceHelper.createChangePwdClient(this, new WsCallBack() {
             @Override
-            public void whenResponse(JSONObject json, int... position) {
+            public void whenResponse(JSONObject json, Object... position) {
                 Toast.makeText(ChangePwdActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                 finish();
             }

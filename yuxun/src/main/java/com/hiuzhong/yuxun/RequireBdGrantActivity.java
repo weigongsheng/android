@@ -11,9 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.helper.ActivityHelper;
 import com.hiuzhong.yuxun.helper.WebServiceHelper;
 import com.hiuzhong.yuxun.helper.WsCallBack;
+import com.hiuzhong.yuxun.vo.Contact;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +33,8 @@ public class RequireBdGrantActivity extends Activity {
 
     protected  int curIndex;
 
+    ContactsDbManager contactDao;
+
     private View[] grantViewList = new View[3];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +50,23 @@ public class RequireBdGrantActivity extends Activity {
                 e.printStackTrace();
             }
         }
-
+        contactDao =   ContactsDbManager.getInstance(this);
         grantListClient = WebServiceHelper.createGrantListClient(this, new WsCallBack() {
             @Override
-            public void whenResponse(JSONObject json, int... position) {
+            public void whenResponse(JSONObject json, Object... position) {
                 showGrant(json.optJSONObject("data").optJSONArray("GrantBDList"));
             }
         }).callWs(myAccount.optString("account"), myAccount.optString("pwd"));
         cancelClient = WebServiceHelper.createGrantCancelClient(this, new WsCallBack() {
             @Override
-            public void whenResponse(JSONObject json, int... position) {
-                grantViewList[position[0]].setVisibility(View.GONE);
+            public void whenResponse(JSONObject json,Object ... extra) {
+                grantViewList[(Integer) extra[0]].setVisibility(View.GONE);
+                contactDao.deleteContact((String)extra[1]);
             }
         });
         requestClient = WebServiceHelper.createGrantRegClient(this, new WsCallBack() {
             @Override
-            public void whenResponse(JSONObject json, int... position) {
+            public void whenResponse(JSONObject json, Object... position) {
                 Toast.makeText(RequireBdGrantActivity.this, json.optString("tip"), Toast.LENGTH_LONG).show();
             }
         });
@@ -95,7 +100,7 @@ public class RequireBdGrantActivity extends Activity {
 
     public void cancelGrant(View v){
 //        curIndex = (int) v.getTag();
-        cancelClient.callWs((int) v.getTag(), 0, myAccount.optString("account"), myAccount.optString("pwd"), grantBdInfo.optJSONObject(curIndex).optString("BdNum"));
+        cancelClient.callWs(myAccount.optString("account"), myAccount.optString("pwd"), grantBdInfo.optJSONObject(curIndex).optString("BdNum"),(int) v.getTag(), 0 );
          //todo
     }
 

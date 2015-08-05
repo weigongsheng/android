@@ -41,7 +41,7 @@ public class LoginActivity extends Activity {
         laodingView = findViewById(R.id.loadingLayoutInclude);
         loginClient = WebServiceHelper.createLoginClient(this, new WsCallBack() {
             @Override
-            public void whenResponse(JSONObject json,int ... p) {
+            public void whenResponse(JSONObject json,Object ... p) {
                 Toast.makeText(LoginActivity.this,json.optString("tip"),Toast.LENGTH_SHORT).show();
                 laodingView.setVisibility(View.GONE);
                 ActivityHelper.saveMyAccount(LoginActivity.this,"",userName.getText().toString(),pwd.getText().toString());
