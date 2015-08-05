@@ -8,9 +8,11 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hiuzhong.baselib.util.ImageLoaderUtil;
 import com.hiuzhong.yuxun.application.YuXunApplication;
 import com.hiuzhong.yuxun.helper.ActivityHelper;
 import com.hiuzhong.yuxun.helper.WebServiceHelper;
@@ -28,6 +30,7 @@ public class LoginActivity extends Activity {
     Handler handler;
     private WebServiceHelper loginClient;
     private View laodingView;
+    ImageView curHeadImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,17 @@ public class LoginActivity extends Activity {
         ((YuXunApplication)getApplication()).addRegistAct(this);
         handler = WebServiceHelper.createMsgHandler(this);
         laodingView = findViewById(R.id.loadingLayoutInclude);
+        curHeadImg = (ImageView) findViewById(R.id.myHeadView);
+        JSONObject myAccount = ActivityHelper.getMyAccount(this);
+        if(myAccount != null){
+            if( myAccount.optString("faceImgPath") != null){
+                try {
+                curHeadImg.setImageBitmap(ImageLoaderUtil.loadFromFile(this,myAccount.optString("faceImgPath")));
+                }catch (Exception e){}
+            }
+            userName.setText(myAccount.optString("account"));
+        }
+
         loginClient = WebServiceHelper.createLoginClient(this, new WsCallBack() {
             @Override
             public void whenResponse(JSONObject json,Object ... p) {
@@ -62,8 +76,7 @@ public class LoginActivity extends Activity {
 
 
     public void login(View v){
-        laodingView.setVisibility(View.VISIBLE);
-            loginClient.callWs(userName.getText().toString(), pwd.getText().toString());
+        laodingView.setVisibility(View.VISIBLE);loginClient.callWs(userName.getText().toString(), pwd.getText().toString());
     }
 
     protected  void toListMsg(){
