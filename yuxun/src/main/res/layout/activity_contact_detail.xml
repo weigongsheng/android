@@ -95,7 +95,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             style="@style/defaultLableStyleStyle"
+             style="@style/defaultLabelStyle"
             android:text="发送消息"
             android:id="@+id/sendMsgTip"
 
@@ -127,7 +127,7 @@
         >
 
         <TextView
-            style="@style/defaultLableStyleStyle"
+            style="@style/defaultLabelStyle"
             android:text="查看位置"
             android:id="@+id/posiTip"
 
@@ -159,7 +159,7 @@
         >
 
         <TextView
-            style="@style/defaultLableStyleStyle"
+            style="@style/defaultLabelStyle"
             android:text="查看余额"
             android:id="@+id/tipBalance"
 
@@ -186,7 +186,7 @@
         android:onClick="toCleanMsg"
         >
         <TextView
-            style="@style/defaultLableStyleStyle"
+            style="@style/defaultLabelStyle"
             android:text="清空聊天记录"
             android:id="@+id/cleanHistory"
 

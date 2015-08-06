@@ -38,6 +38,8 @@ public class RegistActivity extends Activity {
     private int type;
     private WebServiceHelper showMsgClient;
 
+    String curVc;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,67 +57,67 @@ public class RegistActivity extends Activity {
             findViewById(R.id.tipTitleContract).setVisibility(View.GONE);
         }
         ActivityHelper.initHeadInf(this, title);
-        initSMS();
-          handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what){
-                    case MSG_SEND_SUCCESS:{
-                        progressBarLayout.setVisibility(View.GONE);
-                        toCheckVc();
-                        break;
-                    }
-                    case MSG_ACQ_VC:{
-                        progressBarLayout.setVisibility(View.GONE);
-                        showMsg("验证码验证通过");
-                        break;
-                    }
-                    case MSG_ERROR:{
-                        progressBarLayout.setVisibility(View.GONE);
-                        Toast.makeText(RegistActivity.this,msg.getData().getString("tip"),Toast.LENGTH_LONG).show();
-                        break;
-                    }
-                }
-
-            }
-        };
+//        initSMS();
+//          handler = new Handler() {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                switch (msg.what){
+//                    case MSG_SEND_SUCCESS:{
+//                        progressBarLayout.setVisibility(View.GONE);
+//                        toCheckVc();
+//                        break;
+//                    }
+//                    case MSG_ACQ_VC:{
+//                        progressBarLayout.setVisibility(View.GONE);
+//                        showMsg("验证码验证通过");
+//                        break;
+//                    }
+//                    case MSG_ERROR:{
+//                        progressBarLayout.setVisibility(View.GONE);
+//                        Toast.makeText(RegistActivity.this,msg.getData().getString("tip"),Toast.LENGTH_LONG).show();
+//                        break;
+//                    }
+//                }
+//
+//            }
+//        };
     }
 
-    private void initSMS() {
-        SMSSDK.initSDK(this, getResources().getString(R.string.smsAppKey), getResources().getString(R.string.smsAppSecret));
-        EventHandler eh=new EventHandler(){
-            @Override
-            public void afterEvent(int event, int result, Object data) {
-                if (result == SMSSDK.RESULT_COMPLETE) {
-                    if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                        Message message = new Message();
-                        message.what = MSG_ACQ_VC;
-                        handler.sendMessage(message);
-                    }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
-                        Message message = new Message();
-                        message.what =MSG_SEND_SUCCESS ;
-                        handler.sendMessage(message);
-                    }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
-                        //返回支持发送验证码的国家列表
-                    }
-                }else{
-                    Throwable e = ((Throwable) data);;
-                    Message message = new Message();
-                    message.what = MSG_ERROR;
-                    Bundle b = new Bundle();
-                    try {
-                        JSONObject json = new JSONObject(e.getMessage());
-                    b.putString("tip", json.optString("detail"));
-                    message.setData(b);
-                    handler.sendMessage(message);
-                    } catch (JSONException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-        };
-        SMSSDK.registerEventHandler(eh); //注册短信回调
-    }
+//    private void initSMS() {
+//        SMSSDK.initSDK(this, getResources().getString(R.string.smsAppKey), getResources().getString(R.string.smsAppSecret));
+//        EventHandler eh=new EventHandler(){
+//            @Override
+//            public void afterEvent(int event, int result, Object data) {
+//                if (result == SMSSDK.RESULT_COMPLETE) {
+//                    if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+//                        Message message = new Message();
+//                        message.what = MSG_ACQ_VC;
+//                        handler.sendMessage(message);
+//                    }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+//                        Message message = new Message();
+//                        message.what =MSG_SEND_SUCCESS ;
+//                        handler.sendMessage(message);
+//                    }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
+//                        //返回支持发送验证码的国家列表
+//                    }
+//                }else{
+//                    Throwable e = ((Throwable) data);;
+//                    Message message = new Message();
+//                    message.what = MSG_ERROR;
+//                    Bundle b = new Bundle();
+//                    try {
+//                        JSONObject json = new JSONObject(e.getMessage());
+//                    b.putString("tip", json.optString("detail"));
+//                    message.setData(b);
+//                    handler.sendMessage(message);
+//                    } catch (JSONException e1) {
+//                        e1.printStackTrace();
+//                    }
+//                }
+//            }
+//        };
+//        SMSSDK.registerEventHandler(eh); //注册短信回调
+//    }
 
 protected void showMsg(String msg){
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -168,23 +170,19 @@ protected void showMsg(String msg){
 
     protected void sentMsg(){
         progressBarLayout.setVisibility(View.VISIBLE);
-        SMSSDK.getVerificationCode("86", phoneNum.getText().toString());
-//        toCheckVc();
-    }
+        curVc = WebServiceHelper.sendVc(phoneNum.getText().toString(), this, new WsCallBack() {
+            @Override
+            public void whenResponse(JSONObject json, Object... extraPara) {
+                Intent intent = new Intent(RegistActivity.this,ValidCodeActivity.class);
+                intent.putExtra("phoneNum",phoneNum.getText().toString());
+                intent.putExtra("type",type);
+                intent.putExtra("vc",(String)extraPara[0]);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+                finish();
+            }
+        });
 
-
-    @Override
-    public void finish() {
-        SMSSDK.unregisterAllEventHandler();
-        super.finish();
-    }
-
-    public void toCheckVc(){
-        Intent intent = new Intent(this,ValidCodeActivity.class);
-        intent.putExtra("phoneNum",phoneNum.getText().toString());
-        intent.putExtra("type",type);
-        startActivity(intent);
-        finish();
     }
 
 }

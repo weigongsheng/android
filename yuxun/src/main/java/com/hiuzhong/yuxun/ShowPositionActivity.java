@@ -83,7 +83,7 @@ public class ShowPositionActivity extends Activity {
             positions.add(position[i]);
         }
         BitmapDescriptor custom1 = BitmapDescriptorFactory
-                .fromResource(R.drawable.icon_landing_arrow);
+                .fromResource(R.drawable.icon_road_blue_arrow);
 //        List<BitmapDescriptor>customList = new ArrayList<BitmapDescriptor>();
 //        customList.add(custom1);
         OverlayOptions ooPolyline = new PolylineOptions().width(10)

@@ -88,8 +88,8 @@ public class MainActivity extends Activity {
     }
 
     private void loadMainUi(Message msg) {
-        JSONObject myAccount = ActivityHelper.getMyAccount(this);
-        if(myAccount != null && myAccount.optBoolean("autoLogin")){
+        final JSONObject myAccount = ActivityHelper.getMyAccount(this);
+        if(skipLogin(myAccount)){
             WebServiceHelper.createLoginClient(this, new WsCallBack() {
                 @Override
                 public void whenResponse(JSONObject json, Object... position) {
@@ -109,6 +109,16 @@ public class MainActivity extends Activity {
             toLogin();
         }
 
+    }
+
+    private boolean skipLogin(JSONObject myAccount){
+        if(myAccount == null){
+            return false;
+        }
+        if(myAccount.optBoolean("logOut",false)){
+            return false;
+        }
+        return myAccount.optBoolean("autoLogin");
     }
 
     protected  void toList(){

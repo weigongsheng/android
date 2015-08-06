@@ -51,7 +51,7 @@ public class YuXunApplication extends Application {
         MsgCountDbManager.close();
         System.exit(0);
     }
-    public void closeAllAct(){
+        public void closeAllAct(){
         stopService(new Intent(this,MsgService.class));
         finishReg();
         for (Activity activity : activities) {

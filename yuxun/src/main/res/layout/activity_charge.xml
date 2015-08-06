@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/textView12"
-            style="@style/defaultLableStyleStyle"
+            style="@style/defaultLabelStyle"
             android:text="北斗号" />
 
         <EditText
@@ -33,6 +33,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="80dp"
             android:hint="请输入北斗号"
+            android:numeric="integer"
             />
     </RelativeLayout>
 
@@ -44,7 +45,7 @@
 
         <TextView
             android:id="@+id/textView13"
-            style="@style/defaultLableStyleStyle"
+            style="@style/defaultLabelStyle"
             android:text="充值密码" />
 
         <EditText
@@ -57,6 +58,20 @@
             android:hint="请输入充值密码"
               />
     </RelativeLayout>
+    <TextView
+        style="@style/defaultLabelStyle"
+        android:text=""
+        android:id="@+id/resultTip"
+        android:layout_below="@+id/layoutInput2"
+        android:layout_alignLeft="@+id/submitCharge"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/btn_read"
+        android:layout_width="fill_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        />
 
     <View
         android:id="@+id/divid4"
@@ -71,6 +86,8 @@
         android:layout_marginTop="@dimen/item_layout_height"
         android:onClick="toCharge"
         />
+
+
     <include
         android:id="@+id/loadingLayoutInclude"
         layout="@layout/layout_loading"
@@ -78,23 +95,5 @@
         android:layout_height="fill_parent"
         android:visibility="gone"
         >
-
     </include>
-
-    <TextView
-         style="@style/defaultLableStyleStyle"
-        android:text=""
-        android:id="@+id/resultTip"
-        android:layout_below="@+id/submitCharge"
-        android:layout_alignLeft="@+id/submitCharge"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/btn_read"
-        android:layout_width="fill_parent"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-          />
-
-
 </RelativeLayout>

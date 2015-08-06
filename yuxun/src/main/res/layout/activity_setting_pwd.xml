@@ -12,25 +12,17 @@
     </include>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_below="@+id/head_title"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:padding="5dp"
+        style="@style/detailItemLayoutWide"
+        android:layout_marginTop="@dimen/item_layout_height"
         android:id="@+id/accountTipLayout"
+        android:layout_below="@id/head_title"
+        android:background="@null"
         >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/defaultLabelStyle"
             android:text="注册手机"
             android:id="@+id/tipPhoneNum"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="@dimen/item_margin_left"
             />
 
 
@@ -40,38 +32,46 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="13482175025"
             android:id="@+id/labelPhoneNum"
+            android:layout_marginLeft="26dp"
             android:layout_alignTop="@+id/tipPhoneNum"
             android:layout_toRightOf="@+id/tipPhoneNum"
-            android:layout_marginLeft="8dp"
-            />
+            android:layout_toEndOf="@+id/tipPhoneNum"
+            android:layout_marginStart="26dp" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/layoutTipApp"
+         style="@style/detailItemLayoutWide"
+        android:layout_below="@id/accountTipLayout"
+        >
+
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/defaultLabelStyle"
             android:text="APP号码"
             android:id="@+id/tipAccount"
-            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="30dp"
-            android:layout_marginLeft="@dimen/item_margin_left"
-            />
+            android:layout_alignParentStart="true" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="66682175025"
             android:id="@+id/labelAccount"
-            android:layout_alignTop="@+id/tipAccount"
+            android:layout_marginLeft="26dp"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/tipAccount"
-            android:layout_marginLeft="8dp"
-            />
+            android:layout_toEndOf="@+id/tipAccount"
+            android:layout_marginStart="26dp" />
     </RelativeLayout>
 
     <View
         android:id="@+id/divid1"
         style="@style/divideStyle"
-        android:layout_below="@+id/accountTipLayout"
+        android:layout_below="@+id/layoutTipApp"
+        android:layout_marginTop="@dimen/item_layout_height"
 
         />
     <RelativeLayout
@@ -84,25 +84,19 @@
         >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/defaultLabelStyle"
             android:text="设置密码"
             android:id="@+id/textView8"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/item_margin_left"
             android:layout_alignParentLeft="true"
 
             />
 
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/defaultEditStyleStyle"
+            style="@style/leftEditTextStyle"
             android:id="@+id/pwdText"
 
             android:layout_toRightOf="@+id/textView8"
-            android:layout_marginLeft="@dimen/editTextMarginLeft"
             android:password="true"
             android:layout_centerVertical="true"
             android:hint="请输入密码"
@@ -120,26 +114,19 @@
     android:layout_below="@+id/textView10"
     >
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/defaultLabelStyle"
             android:text="确认密码"
             android:id="@+id/textView9"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/item_margin_left"
              />
 
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/repPwd"
-            style="@style/defaultEditStyleStyle"
+            style="@style/leftEditTextStyle"
             android:layout_toRightOf="@+id/textView9"
-            android:layout_centerVertical="true"
             android:password="true"
             android:hint="请重复密码"
-            android:layout_marginLeft="@dimen/editTextMarginLeft"
              />
 
 

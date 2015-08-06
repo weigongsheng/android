@@ -7,7 +7,7 @@
 
     <dimen name="edit_text_size">15sp</dimen>
     <dimen name="label_text_size">15sp</dimen>
-    <dimen name="btn_text_size">15sp</dimen>
+    <dimen name="btn_text_size">16sp</dimen>
 
     <dimen name="btn_radius">4dp</dimen>
     <dimen name="height_common_bottom">45dp</dimen>
@@ -26,9 +26,10 @@
     <dimen name="list_item_margin_left">10dp</dimen>
     <dimen name="list_layout_padding">4dp</dimen>
     <dimen name="item_margin_Right">10dp</dimen>
+    <dimen name="left_edit_margin_left">20dp</dimen>
     <dimen name="width_editText">130dp</dimen>
-    <dimen name="editTextMarginLeft">15dp</dimen>
     <dimen name="txtSize_head">19sp</dimen>
     <dimen name="switch_width">36dp</dimen>
+    <dimen name="edit_text_padding_left">10dp</dimen>
 
 </resources>

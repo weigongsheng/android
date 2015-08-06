@@ -34,27 +34,21 @@
         >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
             android:text="手机号"
             android:id="@+id/textView2"
-            android:textSize="17sp"
-            android:paddingLeft="10dp"
+            style="@style/darGrayLabelStyle"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             />
 
         <EditText
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
             android:id="@+id/phoneNum"
             android:text=""
             android:phoneNumber="true"
-            android:paddingLeft="5dp"
-            style="@style/defaultEditStyleStyle"
+            style="@style/leftEditTextStyle"
             android:hint="请输入手机号码"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
+
             android:layout_toRightOf="@+id/textView2"
               />
     </RelativeLayout>
@@ -129,4 +123,5 @@
             android:layout_centerVertical="true"
             android:layout_marginBottom="68dp" />
     </RelativeLayout>
+
   </FrameLayout>

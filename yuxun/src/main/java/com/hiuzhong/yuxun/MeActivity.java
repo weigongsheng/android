@@ -126,6 +126,12 @@ public class MeActivity extends YuXunActivity implements ImgUploadedListener {
 
 
     public void logOut(View v){
+        try {
+            myAccount.put("logOut", true);
+            ActivityHelper.reSaveMyAccount(this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         YuXunApplication app = (YuXunApplication) getApplication();
         app.closeAllAct();
         startActivity(new Intent(this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

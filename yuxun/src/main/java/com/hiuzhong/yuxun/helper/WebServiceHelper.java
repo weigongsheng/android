@@ -22,6 +22,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import javax.security.auth.callback.Callback;
 
 /**
  * Created by gongsheng on 2015/7/25.
@@ -29,6 +32,8 @@ import java.util.List;
 public class WebServiceHelper {
     public static final String WS_NS = "http://tempuri.org/";//http://tempuri.org/
     public static final String URL = "http://service.ubinavi.com.cn:3339/Appwebsite/appservice.asmx";
+
+    public static final String SEND_SMS_PWD="ubi12345%%";
     public static final int WS_ERROR = 0XEE1;
     public static final int WS_WSTIP = 0X1F;
     public static final int WS_SUCCESS = 0X5cc;
@@ -39,6 +44,9 @@ public class WebServiceHelper {
     protected Handler wsHanlder;
     private Context cnt;
     private String[] paraName;
+
+
+    private static  WebServiceHelper vcClient;
 
     public WebServiceHelper(Context cnt, String methodName, String resultName, WsCallBack callBack, String... paraName) {
         this.cnt = cnt;
@@ -378,5 +386,42 @@ public class WebServiceHelper {
                 callBack,"username","pwd","tabId");
 
     }
+    public static WebServiceHelper createSendSMSVCClient(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebSendToMobileMsg","WebSendToMobileMsgResult",
+                callBack,"passwd","mobileNum","content");
+
+    }
+
+    public static String createVcCode(){
+        Random r = new Random(System.currentTimeMillis());
+        String s = String.valueOf(r.nextDouble()*1000000);
+        return s.substring(0,5);
+    }
+    public static String sendVc(String phone,Context cnt, final WsCallBack callBack){
+        final String vc = createVcCode();
+        if(vcClient == null){
+            vcClient = createSendSMSVCClient(cnt, new WsCallBack() {
+                @Override
+                public void whenResponse(JSONObject json, Object... extraPara) {
+                    if(callBack!= null)
+                        callBack.whenResponse(json,vc);
+                }
+                @Override
+                public void whenError() {
+                    if(callBack!= null)
+                        callBack.whenError();
+                }
+
+                @Override
+                public void whenFail(JSONObject json) {
+                    if(callBack!= null)
+                        callBack.whenFail(json);
+                }
+            });
+        }
+        vcClient.callWs(SEND_SMS_PWD,phone,"你的此次验证码为:"+vc);
+        return vc;
+    };
+
 
 }

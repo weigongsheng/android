@@ -56,7 +56,7 @@ public class LoginActivity extends Activity {
         loginClient = WebServiceHelper.createLoginClient(this, new WsCallBack() {
             @Override
             public void whenResponse(JSONObject json,Object ... p) {
-                Toast.makeText(LoginActivity.this,json.optString("tip"),Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LoginActivity.this,json.optString("tip"),Toast.LENGTH_SHORT).show();
                 laodingView.setVisibility(View.GONE);
                 ActivityHelper.saveMyAccount(LoginActivity.this,"",userName.getText().toString(),pwd.getText().toString());
                 toListMsg();
@@ -83,7 +83,9 @@ public class LoginActivity extends Activity {
         Intent intent =new Intent(this,ChatListActivity.class);
         intent.putExtra("b_index", 0);
         startActivity(intent);
-        startService(new Intent(getApplicationContext(),MsgService.class));
+        startService(new Intent(getApplicationContext(), MsgService.class));
+        ActivityHelper.getMyAccount(this).remove("logOut");
+        ActivityHelper.reSaveMyAccount(this);
         finish();
     }
     public  void toRegist(View v){

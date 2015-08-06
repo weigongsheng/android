@@ -73,7 +73,7 @@
         android:layout_below="@+id/divid2">
 
         <TextView
-            style="@style/darkLabelStyle"
+            style="@style/darGrayLabelStyle"
             android:text="自动登录"
             android:id="@+id/textView11"
             android:layout_centerVertical="true"
@@ -102,7 +102,7 @@
         android:layout_below="@+id/divid3">
 
         <TextView
-            style="@style/darkLabelStyle"
+            style="@style/darGrayLabelStyle"
             android:text="声音提示"
             android:id="@+id/tipSound"
             android:layout_centerVertical="true"
@@ -140,7 +140,7 @@
         >
 
         <TextView
-            style="@style/darkLabelStyle"
+            style="@style/darGrayLabelStyle"
             android:text="修改密码"
             android:id="@+id/tipchPwd"
             android:layout_centerVertical="true"
@@ -173,7 +173,7 @@
         >
 
         <TextView
-            style="@style/darkLabelStyle"
+            style="@style/darGrayLabelStyle"
             android:text="北斗授权"
             android:id="@+id/tip_bdgrant"
             android:layout_centerVertical="true"
@@ -205,7 +205,7 @@
         >
 
         <TextView
-            style="@style/darkLabelStyle"
+            style="@style/darGrayLabelStyle"
             android:text="充值业务"
             android:id="@+id/tipcharge"
             android:layout_centerVertical="true"
@@ -242,7 +242,7 @@
         >
 
         <TextView
-            style="@style/darkLabelStyle"
+            style="@style/darGrayLabelStyle"
             android:text="清空短信"
             android:id="@+id/tipcleanmsg"
             android:layout_centerVertical="true"
@@ -274,7 +274,7 @@
         >
 
         <TextView
-            style="@style/darkLabelStyle"
+            style="@style/darGrayLabelStyle"
             android:text="联系我们"
             android:id="@+id/tipcontactus"
             android:layout_centerVertical="true"

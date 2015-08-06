@@ -71,7 +71,13 @@
         <item name="android:layout_marginRight">@dimen/item_margin_Right</item>
         <item name="android:gravity">right</item>
     </style>
-    <style name="defaultLableStyleStyle" >
+    <style name="leftEditTextStyle" parent="defaultEditStyleStyle" >
+        <item name="android:layout_alignParentRight">false</item>
+        <item name="android:layout_marginLeft">@dimen/item_margin_Right</item>
+        <item name="android:paddingLeft">@dimen/edit_text_padding_left</item>
+        <item name="android:gravity">left</item>
+    </style>
+    <style name="defaultLabelStyle" >
         <item name="android:textSize">@dimen/label_text_size</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -79,6 +85,10 @@
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_marginLeft">@dimen/item_margin_Right</item>
         <item name="android:gravity">left</item>
+    </style>
+
+    <style name="darGrayLabelStyle" parent="defaultLabelStyle" >
+        <item name="android:textColor">@color/dark_gray_bg_0</item>
     </style>
 
 
@@ -131,12 +141,7 @@
         <item name="android:layout_marginLeft">@dimen/inner_divid_margin_Left</item>
     </style>
 
-    <style name="darkLabelStyle" >
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize" > @dimen/itemLabelTextSize</item>
-        <item name="android:textColor">@color/dark_gray_bg_0</item>
-    </style>
+
     <style name="numTip" >
         <item name="android:layout_width">18dp</item>
         <item name="android:layout_height">18dp</item>
