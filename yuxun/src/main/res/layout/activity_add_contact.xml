@@ -50,7 +50,6 @@
             android:src="@drawable/default_head"
              />
 
-
     </RelativeLayout>
     <View
         android:id="@+id/divid2"

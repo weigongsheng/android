@@ -1,11 +1,13 @@
 package com.hiuzhong.yuxun;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +26,11 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.helper.ActivityHelper;
 import com.hiuzhong.yuxun.helper.WebServiceHelper;
 import com.hiuzhong.yuxun.helper.WsCallBack;
+import com.hiuzhong.yuxun.vo.Contact;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,11 +87,10 @@ public class ShowPositionActivity extends Activity {
             positions.add(position[i]);
         }
         BitmapDescriptor custom1 = BitmapDescriptorFactory
-                .fromResource(R.drawable.icon_road_blue_arrow);
+                .fromResource(R.drawable.icon_landing_arrow);
 //        List<BitmapDescriptor>customList = new ArrayList<BitmapDescriptor>();
 //        customList.add(custom1);
-        OverlayOptions ooPolyline = new PolylineOptions().width(10)
-                .color(0xAAFF0000).points(positions).customTexture(custom1);
+        OverlayOptions ooPolyline = new PolylineOptions().width(10).points(positions).customTexture(custom1);
         BitmapDescriptor bitmap = BitmapDescriptorFactory
                 .fromResource(R.drawable.icon_gcoding);
         OverlayOptions option = new MarkerOptions()
@@ -137,5 +140,13 @@ public class ShowPositionActivity extends Activity {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
+    }
+
+    public void showContactDetail(View view) {
+        Intent intent = new Intent(this,ContactDetailActivity.class);
+        Bundle data = new Bundle();
+        Contact c = ContactsDbManager.getInstance(this).queryByAccount(account);
+        intent.putExtra("contactId", String.valueOf(c.id));
+        startActivity(intent);
     }
 }

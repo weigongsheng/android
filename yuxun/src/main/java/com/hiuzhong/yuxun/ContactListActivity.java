@@ -87,19 +87,20 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
 
     @Override
     protected void onRestart() {
-        super.onRestart();
-        if(ActivityHelper.contactChange){
+        if(ActivityHelper.contactListNeedChanged){
             adapter.clear();
             initListData();
-            ActivityHelper.contactChange=false;
+            ActivityHelper.contactListNeedChanged=false;
         }
+        super.onRestart();
     }
+
+
 
     private void initListData() {
         List<Contact> allContact = manager.query();
         HashMap<String,List<Map<String,String>>> datas = new HashMap<>();
         for (Contact c:allContact){
-            String fc = c.firstChar ;
             List<Map<String,String>> item = datas.get(c.firstChar);
             if(item == null){
                 item = new ArrayList<>();

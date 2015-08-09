@@ -45,9 +45,6 @@ public class WebServiceHelper {
     private Context cnt;
     private String[] paraName;
 
-
-    private static  WebServiceHelper vcClient;
-
     public WebServiceHelper(Context cnt, String methodName, String resultName, WsCallBack callBack, String... paraName) {
         this.cnt = cnt;
         this.methodName = methodName;
@@ -278,7 +275,7 @@ public class WebServiceHelper {
     }
 
     public static WebServiceHelper createShowMsg(Context cnt, WsCallBack callBack) {
-        return new WebServiceHelper(cnt, "WebGetCoporationInfo", "WebGetCoporationInfoResult", callBack, "username", "pwd", "flag");
+        return new WebServiceHelper(cnt, "WebGetCoporationInfo", "WebGetCoporationInfoResult", callBack, "flag");
     }
 
     public WebServiceHelper callWs(Object... values) {
@@ -314,6 +311,9 @@ public class WebServiceHelper {
             protected void onPostExecute(String data) {
                 if (data == null) {
                     Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
+                    if(WebServiceHelper.this.callBck != null){
+                        callBck.whenError();
+                    }
                 } else {
                     try {
                         JSONObject jsonObject = new JSONObject(data);
@@ -324,7 +324,7 @@ public class WebServiceHelper {
                             WebServiceHelper.this.callBck.whenResponse(jsonObject,extraPara.size()>0?extraPara.toArray():null);
                         }
                     } catch (JSONException e) {
-                        Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WebServiceHelper.this.cnt, "服务端数据错误", Toast.LENGTH_SHORT).show();
                         WebServiceHelper.this.callBck.whenError();
                     }
                 }
@@ -394,32 +394,32 @@ public class WebServiceHelper {
 
     public static String createVcCode(){
         Random r = new Random(System.currentTimeMillis());
-        String s = String.valueOf(r.nextDouble()*1000000);
-        return s.substring(0,5);
+        String s = String.valueOf(r.nextDouble());
+        return s.substring(2,6);
     }
     public static String sendVc(String phone,Context cnt, final WsCallBack callBack){
         final String vc = createVcCode();
-        if(vcClient == null){
-            vcClient = createSendSMSVCClient(cnt, new WsCallBack() {
+             createSendSMSVCClient(cnt, new WsCallBack() {
                 @Override
                 public void whenResponse(JSONObject json, Object... extraPara) {
-                    if(callBack!= null)
+                    if(callBack!= null){
                         callBack.whenResponse(json,vc);
+                    }
                 }
                 @Override
                 public void whenError() {
-                    if(callBack!= null)
+                    if(callBack!= null){
                         callBack.whenError();
+                    }
                 }
 
                 @Override
                 public void whenFail(JSONObject json) {
-                    if(callBack!= null)
+                    if(callBack!= null){
                         callBack.whenFail(json);
+                    }
                 }
-            });
-        }
-        vcClient.callWs(SEND_SMS_PWD,phone,"你的此次验证码为:"+vc);
+            }).callWs(SEND_SMS_PWD,phone,"您的此次验证码为:"+vc);
         return vc;
     };
 

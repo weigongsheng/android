@@ -20,13 +20,15 @@ import org.json.JSONObject;
  */
 public class ActivityHelper {
     public static boolean msgChanged=false;
-    public static boolean contactChange=false;
+    public static boolean contactListNeedChanged=false;
+    public static boolean contactDiscoverNeedChanged=false;
 
     public static void msgChanged(){
         msgChanged = true;
     }
     public static void contactChanged(){
-        contactChange = true;
+        contactListNeedChanged = true;
+        contactDiscoverNeedChanged = true;
     }
 
     public static JSONObject myAccount=null;
@@ -69,7 +71,7 @@ public class ActivityHelper {
 
     public static final void saveMyAccount(Activity sp, String phone, String account, String pwd) {
         if(myAccount == null){
-            myAccount = getMyAccount(sp);
+            myAccount = getMyAccount(sp,account);
             if(myAccount == null){
                 myAccount = new JSONObject();
             }
@@ -78,14 +80,31 @@ public class ActivityHelper {
             myAccount.put("phone", phone);
             myAccount.put("account", account);
             myAccount.put("pwd", pwd);
-            sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).edit().putString("myAccount", myAccount.toString()).commit();
+            sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).edit().putString(account, myAccount.toString()).commit();
+            saveLastLoginAccount(sp,account);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public static final void loginAccount(Activity sp, String phone, String account, String pwd) {
+        myAccount = getMyAccount(sp, account);
+        if (myAccount == null) {
+            myAccount = new JSONObject();
+        }
+
+        try {
+            myAccount.put("phone", phone);
+            myAccount.put("account", account);
+            myAccount.put("pwd", pwd);
+            sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).edit().putString(account, myAccount.toString()).commit();
+            saveLastLoginAccount(sp, account);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     public static final void reSaveMyAccount(Context sp) {
-        sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).edit().putString("myAccount", getMyAccount(sp).toString()).commit();
+        sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).edit().putString(getLastLoginAccount(sp), getMyAccount(sp).toString()).commit();
     }
 
     public static JSONObject getUserInfo(Context cnt){
@@ -99,12 +118,27 @@ public class ActivityHelper {
     public static final JSONObject getMyAccount(Context sp) {
         try {
             if(myAccount == null){
-                myAccount=new JSONObject(sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).getString("myAccount", null));
+                myAccount=new JSONObject(sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).getString(getLastLoginAccount(sp), null));
             }
             return myAccount;
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private static final JSONObject getMyAccount(Context sp,String account) {
+        try {
+            return new JSONObject(sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).getString(account, null));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static final String getLastLoginAccount(Context sp){
+        return sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).getString("lastAccount", null);
+    }
+    private static final void saveLastLoginAccount(Context sp,String account){
+        sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).edit().putString("lastAccount", account).commit();
     }
 
 

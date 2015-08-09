@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
@@ -90,7 +91,10 @@ public class ContactDetailActivity extends Activity {
     private void initData() {
         ContactsDbManager dao =  ContactsDbManager.getInstance(this);
         contact = dao.queryById(getIntent().getStringExtra("contactId"));
-        faceView.setImageBitmap(ImageLoaderUtil.loadFromFile(this, contact.faceImgPath));
+        Bitmap img = ImageLoaderUtil.loadFromFile(this, contact.faceImgPath);
+        if(img != null){
+            faceView.setImageBitmap(ImageLoaderUtil.loadFromFile(this, contact.faceImgPath));
+        }
         nickName.setText(contact.nickName);
         account.setText(contact.account);
     }
@@ -132,7 +136,9 @@ public class ContactDetailActivity extends Activity {
     }
 
     public void showPositon(View v){
-        startActivity(new Intent(this,ShowPositionActivity.class).putExtra("account",contact.account).putExtra("nickName",contact.nickName));
+        Intent intent =new Intent(this,ShowPositionActivity.class).putExtra("account",contact.account).putExtra("nickName", contact.nickName);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         finish();
 }
 
@@ -158,8 +164,10 @@ public class ContactDetailActivity extends Activity {
 
     }
 
-    @Override
-    public void finish() {
-        super.finish();
+    public void toEditContact(View view) {
+        Intent intent = new Intent(this,EditContactActivity.class);
+        intent.putExtra("contactId",""+contact.id);
+        startActivity(intent);
+        finish();
     }
 }

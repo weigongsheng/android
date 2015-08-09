@@ -172,6 +172,16 @@ public class DiscoverActivity extends YuXunActivity implements OnRefreshListener
         queryPostion();
     }
 
+    @Override
+    protected void onRestart() {
+        if(ActivityHelper.contactDiscoverNeedChanged){
+            adapter.clear();
+            initListData();
+            ActivityHelper.contactDiscoverNeedChanged=false;
+        }
+        super.onRestart();
+    }
+
     public void goToChat(int p,int c){
         Map<String,String> data = (Map<String, String>) adapter.getChild(p,c);
         Intent intent = new Intent(this,ContactDetailActivity.class);

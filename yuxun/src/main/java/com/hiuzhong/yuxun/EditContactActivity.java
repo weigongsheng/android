@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,78 +14,65 @@ import com.hiuzhong.baselib.listener.ImgUploadedListener;
 import com.hiuzhong.baselib.util.ImageLoaderUtil;
 import com.hiuzhong.baselib.view.UploadImgView;
 import com.hiuzhong.yuxun.dao.ContactsDbManager;
+import com.hiuzhong.yuxun.helper.ActivityHelper;
 import com.hiuzhong.yuxun.vo.Contact;
 
 
-
 public class EditContactActivity extends Activity implements ImgUploadedListener {
-    private UploadImgView faceView;
+
+    private Bitmap changedHead;
+    protected UploadImgView faceView;
     private Contact contact;
-//    private Bitmap contactFaceBitmap;
-    private TextView nickName;
-    private TextView account;
+    protected EditText account;
+    protected EditText nickName;
+    protected Button submitBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_contact);
+        setContentView(R.layout.activity_add_contact);
         faceView = (UploadImgView) findViewById(R.id.faceImg);
-        nickName= (TextView) findViewById(R.id.userNickName);
-        account = (TextView) findViewById(R.id.userAccount);
-        initData();
-    }
-
-    private void initData(){
-        ContactsDbManager dao = ContactsDbManager.getInstance(this);
-        contact =dao.queryById(getIntent().getStringExtra("contactId"));
-        faceView.setImageBitmap( ImageLoaderUtil.loadFromFile(this, contact.faceImgPath));
-        nickName.setText(contact.nickName);
-        account.setText(contact.account);
-        faceView.faceImgFileName = contact.faceImgPath;
         faceView.parentActivity = this;
-        faceView.uploadListener=this;
-
+        faceView.uploadListener = this;
+        ActivityHelper.initHeadInf(this);
+        account = (EditText) findViewById(R.id.userAccount);
+        nickName = (EditText) findViewById(R.id.userNickName);
+        submitBtn = (Button) findViewById(R.id.button);
+        submitBtn.setText("保存");
+        loadContact();
+        faceView.faceImgFileName = contact.faceImgPath== null? "" + System.currentTimeMillis() + ".jpg":contact.faceImgPath;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_contact, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    private void loadContact() {
+        ContactsDbManager manager = ContactsDbManager.getInstance(this);
+        contact = manager.queryById(getIntent().getStringExtra("contactId"));
+        if (contact.faceImgPath != null) {
+            Bitmap img = ImageLoaderUtil.loadFromFile(this, contact.faceImgPath);
+            if (img != null) {
+                faceView.setImageBitmap(img);
+            }
         }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void SendMsg(View v){
-        Intent intent = new Intent(this,ChatActivity.class);
-        intent.putExtra("contactId", String.valueOf(contact.id));
-        startActivity(intent);
-        finish();
+        account.setText(contact.account);
+        nickName.setText(contact.nickName);
     }
 
     @Override
     public void onLoadFinish(Bitmap imgPath) {
-        ImageLoaderUtil.saveBitmapToFile(this, contact.faceImgPath, imgPath);
-        faceView.setTag("ok");
+        changedHead = imgPath;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        faceView.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
     public void saveContactInfo(View view) {
-        Contact c = new Contact();
-        CharSequence nickName =this.nickName.getText();
-        CharSequence account = this.account.getText();
+        CharSequence nickName = ((TextView) findViewById(R.id.userNickName)).getText();
+        CharSequence account = ((TextView) findViewById(R.id.userAccount)).getText();
+
         if (nickName == null) {
             tip("昵称不能为空");
             return;
@@ -94,30 +81,20 @@ public class EditContactActivity extends Activity implements ImgUploadedListener
             tip("账号不能为空");
             return;
         }
+
         ContactsDbManager manager = ContactsDbManager.getInstance(this);
-        c.nickName = nickName.toString();
-        c.account = account.toString();
-        manager.updateAccount(c);
-        manager.updateFaceImg(c);
-        manager.updateNickName(c);
-        tip("保存联系人成功");
+        contact.nickName = nickName.toString();
+        contact.account = account.toString();
+        ActivityHelper.contactChanged();
+        if (changedHead != null) {
+            ImageLoaderUtil.saveBitmapToFile(this, faceView.faceImgFileName, changedHead);
+            changedHead.recycle();
+        }
+        manager.update(contact);
         finish();
     }
-
 
     private void tip(String tip) {
         Toast.makeText(this, tip, Toast.LENGTH_SHORT).show();
     }
-
-    public void delContact(View v){
-        ContactsDbManager manager = ContactsDbManager.getInstance(this);
-        manager.deleteContact(contact.account);
-        Toast.makeText(this,"删除成功",Toast.LENGTH_SHORT).show();
-        finish();
-    }
-
-    public void back(View v){
-        finish();
-    }
-
 }

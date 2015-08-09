@@ -33,17 +33,17 @@ public class ContactsDbManager {
             ContactDBHelper.COLUMN_FIRST_CHAR,
     };
 
-    public static ContactsDbManager getInstance(Context cnt){
-        if(instance == null){
+    public static ContactsDbManager getInstance(Context cnt) {
+        if (instance == null) {
             instance = new ContactsDbManager(cnt.getApplicationContext());
         }
         return instance;
     }
 
-    public static void close(){
-        if(instance != null){
+    public static void close() {
+        if (instance != null) {
             instance.closeDB();
-            instance=null;
+            instance = null;
         }
     }
 
@@ -113,7 +113,7 @@ public class ContactsDbManager {
         person.firstChar = String.valueOf(getFirstChar(person.nickName.charAt(0)));
         cv.put(ContactDBHelper.COLUMN_NICK_NAME, person.nickName);
         cv.put(ContactDBHelper.COLUMN_FIRST_CHAR, "" + person.firstChar);
-        db.update(ContactDBHelper.TABLE_CONTACTS_NAME, cv, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{person.account});
+        db.update(ContactDBHelper.TABLE_CONTACTS_NAME, cv, ContactDBHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(person.id)});
     }
 
     /**
@@ -124,11 +124,14 @@ public class ContactsDbManager {
     public void updateAccount(Contact person) {
         ContentValues cv = new ContentValues();
         cv.put(ContactDBHelper.COLUMN_ACCOUNT, person.account);
-        db.update(ContactDBHelper.TABLE_CONTACTS_NAME, cv, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{person.account});
+        db.update(ContactDBHelper.TABLE_CONTACTS_NAME, cv, ContactDBHelper.COLUMN_ID + " = ?",
+                new String[]{String.valueOf(person.id
+        )});
     }
 
     public void deleteContact(String account) {
-        db.delete(ContactDBHelper.TABLE_CONTACTS_NAME, ContactDBHelper.COLUMN_ACCOUNT + " = ?", new String[]{String.valueOf(account)});
+        db.delete(ContactDBHelper.TABLE_CONTACTS_NAME, ContactDBHelper.COLUMN_ACCOUNT + " = ?",
+                new String[]{String.valueOf(account)});
 
     }
 
@@ -169,6 +172,7 @@ public class ContactsDbManager {
         }
         return null;
     }
+
     public Contact queryByAccount(String account) {
         Cursor c = db.query(
                 ContactDBHelper.TABLE_CONTACTS_NAME,  // The table to query
@@ -205,4 +209,15 @@ public class ContactsDbManager {
         db.close();
     }
 
+    public void update(Contact person) {
+//        updateNickName(contact);
+//        updateAccount(contact);
+        ContentValues cv = new ContentValues();
+        person.firstChar = String.valueOf(getFirstChar(person.nickName.charAt(0)));
+        cv.put(ContactDBHelper.COLUMN_ACCOUNT, person.account);
+        cv.put(ContactDBHelper.COLUMN_NICK_NAME, person.nickName);
+        cv.put(ContactDBHelper.COLUMN_FIRST_CHAR, "" + person.firstChar);
+        cv.put(ContactDBHelper.COLUMN_FACE_IMG, "" + person.faceImgPath);
+        db.update(ContactDBHelper.TABLE_CONTACTS_NAME, cv, ContactDBHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(person.id)});
+    }
 }

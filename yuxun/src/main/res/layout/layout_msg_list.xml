@@ -48,13 +48,14 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
         style="@style/numTip"
-        android:text="0"
+        android:text=""
         android:id="@+id/list_textNumTip"
         android:layout_alignTop="@id/detailContactHeadImg"
-        android:layout_alignRight="@id/detailContactHeadImg"
+        android:layout_alignLeft="@id/detailContactHeadImg"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="-6dp"
         android:visibility="gone"
+
         />
 </RelativeLayout>

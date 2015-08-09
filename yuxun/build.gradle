@@ -21,8 +21,8 @@ android {
         applicationId "com.hiuzhong.yuxun"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 4
-        versionName "1.4.7"
+        versionCode 7
+        versionName "2.0.1"
     }
     buildTypes {
         release {
@@ -44,5 +44,4 @@ dependencies {
     compile files('libs/pinyin4j-2.5.0.jar')
     compile files('libs/ksoap2-android-assembly-3.3.0-jar-with-dependencies.jar')
     compile files('libs/baidumapapi_v3_5_0.jar')
-    compile project(':smssdk')
 }

@@ -161,8 +161,7 @@ public class MeActivity extends YuXunActivity implements ImgUploadedListener {
     }
 
     public void toContactUs(View v){
-        wsClientContactUs.callWs(ActivityHelper.getMyAccount(this).optString("account"),
-                ActivityHelper.getMyAccount(this).optString("pwd"), "1");
+        wsClientContactUs.callWs("1");
     }
 
     @Override

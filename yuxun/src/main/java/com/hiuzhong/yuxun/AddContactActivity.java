@@ -21,7 +21,7 @@ import com.hiuzhong.yuxun.vo.Contact;
 
 
 public class AddContactActivity extends Activity implements ImgUploadedListener {
-    private UploadImgView faceView;
+    protected UploadImgView faceView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,6 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
             tip(".请上传头像");
             ImageLoaderUtil.saveBitmapToFile(this, faceView.faceImgFileName, BitmapFactory.decodeResource(getResources(),R.drawable.default_head));
             faceView.setTag("ok");
-//            return;
         }
         if (nickName == null) {
             tip("昵称不能为空");

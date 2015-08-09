@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hiuzhong.yuxun"
-    android:versionCode="4"
-    android:versionName="1.4.7"
+    android:versionCode="5"
+    android:versionName="1.4.9"
     >
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -85,7 +85,9 @@
         </activity>
         <activity
             android:name=".ShowPositionActivity"
-            android:label="@string/title_activity_show_position" >
+            android:label="@string/title_activity_show_position"
+            android:launchMode="singleTask"
+            >
         </activity>
         <activity
             android:name=".RegistActivity"

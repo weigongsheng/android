@@ -58,13 +58,13 @@ public class LoginActivity extends Activity {
             public void whenResponse(JSONObject json,Object ... p) {
 //                Toast.makeText(LoginActivity.this,json.optString("tip"),Toast.LENGTH_SHORT).show();
                 laodingView.setVisibility(View.GONE);
-                ActivityHelper.saveMyAccount(LoginActivity.this,"",userName.getText().toString(),pwd.getText().toString());
+                ActivityHelper.loginAccount(LoginActivity.this,"",userName.getText().toString(),pwd.getText().toString());
                 toListMsg();
             }
 
             @Override
             public void whenError() {
-
+                laodingView.setVisibility(View.GONE);
             }
 
             @Override

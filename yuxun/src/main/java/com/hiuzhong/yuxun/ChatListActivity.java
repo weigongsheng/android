@@ -81,7 +81,6 @@ public class ChatListActivity extends YuXunActivity implements OnRefreshListener
 
         MsgService service = MsgService.getCurService();
         service.setCountMsgListener(new OnReceiveCountMsgListener() {
-
             @Override
             public void onMessage(Map<String, Integer> countInfo) {
                 if (msgHandler != null) {
