@@ -8,6 +8,12 @@ import java.io.IOException;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -27,7 +33,7 @@ public class ImageLoaderUtil {
 		Bitmap result = loadFromCache(cnt,fullUrl);
 		if(result == null){
 			result =WebUtil.getImageFromUrl(fullUrl);
-			saveBitmapToFile(cnt,fullUrl,result);
+			saveBitmapToFile(cnt, fullUrl, result);
 		}
 		return result;
 	}
@@ -39,7 +45,7 @@ public class ImageLoaderUtil {
 	 * @return
 	 */
 	public static Bitmap laodImageWithCacheAsySave(final Context cnt,final String fullUrl){
-		Bitmap result = loadFromCache(cnt,fullUrl);
+		Bitmap result = loadFromCache(cnt, fullUrl);
 		if(result == null){
 			result =WebUtil.getImageFromUrl(fullUrl);
 			new AsyncTask<Bitmap, Void, Void>() {
@@ -64,6 +70,7 @@ public class ImageLoaderUtil {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -127,7 +134,45 @@ public class ImageLoaderUtil {
 		return null;
 	}
 
-	public static String parseFilePath(String fullUrl) {
-		return null;
+	public static boolean deletImg(Context cnt,String fileName) {
+		File file = new File(cnt.getFilesDir().getAbsolutePath() + "/"
+				+ fileName);
+		try {
+			if (!file.exists() ) {// 空
+				return true;
+			}
+			if(file.isDirectory()){
+				return false;
+			}
+		 	return file.delete();
+		} catch (Exception e) {
+			Log.e("Asyload Image fail ", e.getMessage());
+		}
+		return false;
+	}
+
+
+	/**
+	 * 获取圆角位图的方法
+	 * @param bitmap 需要转化成圆角的位图
+	 * @param pixels 圆角的度数，数值越大，圆角越大
+	 * @return 处理后的圆角位图
+	 */
+	public static Bitmap toRoundCorner(Bitmap bitmap, int pixels) {
+		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+				bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(output);
+		final int color = 0xff424242;
+		final Paint paint = new Paint();
+		final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		final RectF rectF = new RectF(rect);
+		final float roundPx = pixels;
+		paint.setAntiAlias(true);
+		canvas.drawARGB(0, 0, 0, 0);
+		paint.setColor(color);
+		canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+		canvas.drawBitmap(bitmap, rect, rect, paint);
+		return output;
 	}
 }

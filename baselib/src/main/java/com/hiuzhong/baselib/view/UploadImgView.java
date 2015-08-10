@@ -27,9 +27,9 @@ import java.io.File;
  */
 public class UploadImgView extends ImageView {
     /* 请求码 */
-    private static final int IMAGE_REQUEST_CODE = 0xA1;
-    private static final int CAMERA_REQUEST_CODE = 0xA2;
-    private static final int RESULT_REQUEST_CODE = 0xA3;
+    private static final int IMAGE_REQUEST_CODE = 0x1;
+    private static final int CAMERA_REQUEST_CODE = 0x2;
+    private static final int RESULT_REQUEST_CODE = 0x3;
 
     public Activity parentActivity;
     public String faceImgFileName;
@@ -69,8 +69,8 @@ public class UploadImgView extends ImageView {
                                 intentFromGallery.setType("image/*"); // 设置文件类型
                                 intentFromGallery
                                         .setAction(Intent.ACTION_GET_CONTENT);
-                                parentActivity.startActivityForResult(intentFromGallery,
-                                        IMAGE_REQUEST_CODE);
+                                intentFromGallery.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                parentActivity.startActivityForResult(intentFromGallery,IMAGE_REQUEST_CODE);
                                 break;
                             case 1:
                                 Intent intentFromCapture = new Intent(
@@ -134,11 +134,12 @@ public class UploadImgView extends ImageView {
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         // outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", getMeasuredWidth());
-        intent.putExtra("outputY", getMeasuredHeight());
+        intent.putExtra("outputX", 240);
+        intent.putExtra("outputY", 240);
         intent.putExtra("return-data", true);
         parentActivity.startActivityForResult(intent, RESULT_REQUEST_CODE);
     }
+
 
     /**
      * 保存裁剪之后的图片数据
@@ -165,4 +166,6 @@ public class UploadImgView extends ImageView {
         }
         return false;
     }
+
+
 }

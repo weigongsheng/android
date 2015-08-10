@@ -7,12 +7,15 @@ import java.util.Map;
 import java.util.Set;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hiuzhong.baselib.util.ImageLoaderUtil;
@@ -28,6 +31,8 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
     private int[] itemIds;
     private String[] fieldNames;
     public ViewGroup vg;
+    private List<Bitmap> imgs = new ArrayList<>();
+
 
 
     /**
@@ -44,7 +49,7 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
                               int headTextId,
                               String headField,
                               int[] itemIds,
-                              String[] fieldNames) {
+                              String[] fieldNames ) {
         this.headLayoutId = headLayoutId;
         this.itemLayoutId = itemLayoutId;
         this.itemIds = itemIds;
@@ -101,10 +106,11 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-        TextView view = (TextView) LayoutInflater.from(cnt).inflate(headLayoutId,vg,false).findViewById(headTextId);
+        View v = LayoutInflater.from(cnt).inflate(headLayoutId,vg,false);
+        TextView view = (TextView)v.findViewById(headTextId);
         view.setText(heads.get(groupPosition));
         view.setClickable(true);
-        return view;
+        return v;
     }
 
     @Override
@@ -131,10 +137,14 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
         if (v instanceof TextView) {
             ((TextView) v).setText(value);
         } else if (v instanceof ImageView) {
+            Bitmap bitmap =null;
             try {
-                ((ImageView) v).setImageBitmap(ImageLoaderUtil.loadFromFile(cnt, value));
+                bitmap =ImageLoaderUtil.loadFromFile(cnt, value);
             } catch (Throwable e) {
-                Log.e("fillAdapter", e.getLocalizedMessage());
+            }
+            if(bitmap != null){
+                ((ImageView) v).setImageBitmap(bitmap);
+                imgs.add(bitmap);
             }
         }
     }
@@ -144,6 +154,10 @@ public class SimpleGroupAdapter extends BaseExpandableListAdapter {
         try {
             heads.clear();
             datas.clear();
+            for (Bitmap img:imgs){
+                img.recycle();
+            }
+            imgs.clear();
             notifyDataSetChanged();
         } catch (Exception e) {
 
