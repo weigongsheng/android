@@ -12,6 +12,7 @@ import com.hiuzhong.yuxun.MsgShowActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -110,25 +111,9 @@ public class WebServiceHelper {
         return new WebServiceHelper(cnt, "WebLoginAppSys", "WebLoginAppSysResult", callBack, "username", "pwd");
     }
 
-    /**
-     * 注册
-     *
-     * @param msgHanlder
-     * @param userName
-     * @param pwd
-     * @param mobileNum
-     * @param callBack
-     */
-    public static void regist(Handler msgHanlder, final String userName, final String pwd, String mobileNum, WsCallBack callBack) {
-        new AysncWsTask(msgHanlder, "WebRegisterAppUser", "WebRegisterAppUserResult", callBack)
-                .execute(new WsPara("username", userName)
-                        , new WsPara("pwd", pwd)
-                        , new WsPara("mobileNum", mobileNum));
+    public static WebServiceHelper  createRegistClient(Context cnt,WsCallBack callback){
+        return new WebServiceHelper(cnt, "WebRegisterAppUser", "WebRegisterAppUserResult", callback, "username","pwd","mobileNum");
     }
-//    public static void queryPwd(Handler msgHanlder, final String userName, WsCallBack callBack) {
-//        new AysncWsTask(msgHanlder,"WebQueryPasswd","WebQueryPasswdResult",callBack)
-//                .execute(new WsPara("username", userName) );
-//    }
 
     public static WebServiceHelper createQueryPwdClient(Context cnt, WsCallBack callBack) {
         return new WebServiceHelper(cnt, "WebQueryPasswd", "WebQueryPasswdResult", callBack, "username");
@@ -158,6 +143,8 @@ public class WebServiceHelper {
 
     //WebLoginAppSys  WebLoginAppSysResult
     public static final JSONObject callWS(Handler handler, String method, String respResult, WsCallBack callBack, WsPara... para) throws XmlPullParserException, IOException {
+        ArrayList<HeaderProperty> headerPropertyArrayList = new ArrayList<HeaderProperty>();
+        headerPropertyArrayList.add(new HeaderProperty("Connection", "close"));
         HttpTransportSE ht = new HttpTransportSE(URL);
         ht.debug = true;
         SoapObject request = new SoapObject(WS_NS, method);
@@ -169,7 +156,7 @@ public class WebServiceHelper {
         envelope.bodyOut = request;
         envelope.dotNet = true;
         envelope.setOutputSoapObject(request);
-        ht.call(WS_NS + method, envelope);
+        ht.call(WS_NS + method, envelope,headerPropertyArrayList);
 
         SoapObject result = (SoapObject) envelope.bodyIn;
 
@@ -194,6 +181,8 @@ public class WebServiceHelper {
     }
 
     public static final String callWS(String method, String respResult, WsPara... para) throws XmlPullParserException, IOException {
+        ArrayList<HeaderProperty> headerPropertyArrayList = new ArrayList<HeaderProperty>();
+        headerPropertyArrayList.add(new HeaderProperty("Connection", "close"));
         HttpTransportSE ht = new HttpTransportSE(URL);
         ht.debug = true;
         SoapObject request = new SoapObject(WS_NS, method);
@@ -205,7 +194,7 @@ public class WebServiceHelper {
         envelope.bodyOut = request;
         envelope.dotNet = true;
         envelope.setOutputSoapObject(request);
-        ht.call(WS_NS + method, envelope);
+        ht.call(WS_NS + method, envelope,headerPropertyArrayList);
 
         SoapObject result = (SoapObject) envelope.bodyIn;
 
@@ -419,7 +408,8 @@ public class WebServiceHelper {
                         callBack.whenFail(json);
                     }
                 }
-            }).callWs(SEND_SMS_PWD,phone,"您的此次验证码为:"+vc);
+             })
+                     .callWs(SEND_SMS_PWD,phone,"您的此次验证码为:"+vc);
         return vc;
     };
 

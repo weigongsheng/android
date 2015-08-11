@@ -57,7 +57,7 @@ protected void showMsg(String msg){
 
     public void toNext(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        if(phoneNum.getText() == null || phoneNum.getText().length()<11){
+        if(phoneNum.getText() == null || phoneNum.getText().length()!=11){
             showMsg("请填写正确的手机号");
             return;
         }

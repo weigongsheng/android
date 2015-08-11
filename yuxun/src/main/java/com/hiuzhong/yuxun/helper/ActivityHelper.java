@@ -107,13 +107,13 @@ public class ActivityHelper {
         sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).edit().putString(getLastLoginAccount(sp), getMyAccount(sp).toString()).commit();
     }
 
-    public static JSONObject getUserInfo(Context cnt){
-        try {
-            return new JSONObject(cnt.getSharedPreferences("yuxun", Context.MODE_PRIVATE).getString("myAccount", ""));
-        } catch (JSONException e) {
-            return null;
-        }
-    }
+//    public static JSONObject getUserInfo(Context cnt){
+//        try {
+//            return new JSONObject(cnt.getSharedPreferences("yuxun", Context.MODE_PRIVATE).getString("myAccount", ""));
+//        } catch (JSONException e) {
+//            return null;
+//        }
+//    }
 
     public static final JSONObject getMyAccount(Context sp) {
         try {

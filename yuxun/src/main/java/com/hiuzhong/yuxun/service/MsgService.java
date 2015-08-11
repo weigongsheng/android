@@ -88,7 +88,7 @@ public class MsgService extends Service {
         messageThread = new MessageThread();
         messageThread.isRunning = true;
         messageThread.start();
-        JSONObject json = ActivityHelper.getUserInfo(this);
+        JSONObject json = ActivityHelper.getMyAccount(this);
         account =json.optString("account");
         pwd =json.optString("pwd");
         json= null;

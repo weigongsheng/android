@@ -74,18 +74,18 @@ public class SettingPwdActivity extends Activity {
             Toast.makeText(this, "密码不一致", Toast.LENGTH_SHORT).show();
             return;
         }
-            WebServiceHelper.regist(handler, tipAccount.getText().toString(), pwdText.getText().toString(), tipPhoneNum.getText().toString(), new WsCallBack() {
-                @Override
-                public void whenResponse(JSONObject json,Object ... p) {
-                    Toast.makeText(SettingPwdActivity.this, json.optString("tip"), Toast.LENGTH_SHORT).show();
-                    ActivityHelper.saveMyAccount(SettingPwdActivity.this, tipPhoneNum.getText().toString(), tipAccount.getText().toString(), pwdText.getText().toString());
-                    toListMsg();
-                }
-            });
+        WebServiceHelper.createRegistClient(this,new WsCallBack() {
+            @Override
+            public void whenResponse(JSONObject json,Object ... p) {
+                Toast.makeText(SettingPwdActivity.this, json.optString("tip"), Toast.LENGTH_SHORT).show();
+                ActivityHelper.saveMyAccount(SettingPwdActivity.this, tipPhoneNum.getText().toString(), tipAccount.getText().toString(), pwdText.getText().toString());
+                toListMsg();
+            }
+        }).callWs(tipAccount.getText().toString().trim(), pwdText.getText().toString().trim(), tipPhoneNum.getText().toString().trim());
     }
 
     private final void toListMsg() {
-        Intent intent = new Intent(this, ChatListActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.putExtra("b_index", 0);
         startActivity(intent);
         finish();

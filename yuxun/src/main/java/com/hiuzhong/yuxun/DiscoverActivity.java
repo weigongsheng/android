@@ -81,6 +81,9 @@ public class DiscoverActivity extends YuXunActivity implements OnRefreshListener
                     return;
                 }
                 JSONArray grantList =json.optJSONObject("data").optJSONArray("GrantBDList");
+                if(grantList == null){
+                    return;
+                }
                 if(grantList.length()<1){
                     return;
                 }

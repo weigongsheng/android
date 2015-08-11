@@ -64,6 +64,9 @@ public class ContactListActivity extends YuXunActivity implements OnRefreshListe
                     return;
                 }
                 JSONArray grantList =json.optJSONObject("data").optJSONArray("GrantBDList");
+                if(grantList == null){
+                    return ;
+                }
                 boolean nr =false;
                 for (int i = 0; i <grantList.length() ; i++) {
                     if(!contactDao.existAccount(grantList.optJSONObject(i).optString("BdNum"))){//新的北斗号

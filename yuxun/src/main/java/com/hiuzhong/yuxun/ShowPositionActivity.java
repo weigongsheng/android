@@ -28,6 +28,7 @@ import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.hiuzhong.yuxun.dao.ContactsDbManager;
 import com.hiuzhong.yuxun.helper.ActivityHelper;
+import com.hiuzhong.yuxun.helper.BaiduGpsConvertHelper;
 import com.hiuzhong.yuxun.helper.WebServiceHelper;
 import com.hiuzhong.yuxun.helper.WsCallBack;
 import com.hiuzhong.yuxun.vo.Contact;
@@ -83,7 +84,7 @@ public class ShowPositionActivity extends Activity {
         LatLng[] position = new LatLng[ja.length()];
         for (int i = 0; i < position.length; i++) {
             JSONObject jp = ja.optJSONObject(position.length - i - 1);
-            position[i] = new LatLng(Double.parseDouble(jp.optString("Lat")), Double.parseDouble(jp.optString("Lon")));
+            position[i] = BaiduGpsConvertHelper.convertGpsToBaidu(new LatLng(Double.parseDouble(jp.optString("Lat")), Double.parseDouble(jp.optString("Lon"))));
             positions.add(position[i]);
         }
         BitmapDescriptor custom1 = BitmapDescriptorFactory
