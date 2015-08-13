@@ -36,9 +36,6 @@ public class YuXunApplication extends Application {
 
     @Override
     public void onCreate() {
-//        System.setProperty("http.proxySet", "true");
-//		System.setProperty("http.proxyHost", "172.31.1.246");
-//		System.setProperty("http.proxyPort", "8080");
         super.onCreate();
     }
 
