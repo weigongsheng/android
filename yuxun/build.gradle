@@ -21,8 +21,8 @@ android {
         applicationId "com.hiuzhong.yuxun"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 9
-        versionName "2.0.4"
+        versionCode 10
+        versionName "2.0.7"
     }
     buildTypes {
         release {

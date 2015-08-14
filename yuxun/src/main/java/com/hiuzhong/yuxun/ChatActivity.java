@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -43,6 +44,10 @@ import org.xmlpull.v1.XmlPullParserException;
 
 public class ChatActivity extends Activity {
 public static final String INTENT_PARA_CONTACT="contactAccount";
+    public static final int STAT_PULL_START=1;
+    public static final int STAT_PULL_ING=2;
+    public static final int STAT_PULL_ED=3;
+    public static final int STAT_PULL_NULL=4;
     protected TextView msgInput;
     private LinearLayout msgContainer;
     private ScrollView msgScrollView;
@@ -56,7 +61,12 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
     private JSONObject myAccount;
     private Handler msgHandler;
     private MsgCountDbManager msgcountDao;
+    protected int lastPage=0;
+    float startY=0;
 
+    int curStatus=STAT_PULL_NULL;
+
+    int pageSize = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,12 +123,13 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
             }
         });
 
-        ActivityHelper.initHeadInf(this,cant.nickName == null?cant.account:cant.nickName);
+        ActivityHelper.initHeadInf(this, cant.nickName == null ? cant.account : cant.nickName);
         msgcountDao.cleanCount(cant.account);
+//        msgScrollView.post()
     }
 
     private void showLostMsg(){
-        List<String[]> msgs = msgDao.query(3, 0,cant.account);
+        List<String[]> msgs = msgDao.query(pageSize, 0,cant.account);
         if(msgs == null){
             return ;
         }
@@ -177,9 +188,9 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
         if (msg != null) {
             //TODO
             inflateReceivedMsg(msg);
-            if(!cant.isStrange){
-                msgDao.add(String.valueOf(cant.account), MessageDbManager.MSG_TYPE_RECEIVE, msg.toString());
-            }
+//            if(!cant.isStrange){
+//                msgDao.add(String.valueOf(cant.account), MessageDbManager.MSG_TYPE_RECEIVE, msg.toString());
+//            }
             handler.sendEmptyMessage(0);
         }
     }
@@ -192,6 +203,13 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
         msgInput.setText(null);
         ActivityHelper.msgChanged();
     }
+    private void inflateSendMst(CharSequence msg,int index){
+        View sentView = LayoutInflater.from(this).inflate(R.layout.layout_msg_send, null);
+        ((TextView) sentView.findViewById(R.id.sendText)).setText(msg);
+        ((ImageView) sentView.findViewById(R.id.myFaceImg)).setImageResource(R.drawable.ic_me);
+        msgContainer.addView(sentView, index);
+        msgInput.setText(null);
+    }
 
     private void inflateReceivedMsg(CharSequence msg){
         View sentView = LayoutInflater.from(this).inflate(R.layout.layout_msg_receive, null);
@@ -200,6 +218,15 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
             ((ImageView) sentView.findViewById(R.id.senderHeadImg)).setImageBitmap(contactFaceBitmap);
         }
         msgContainer.addView(sentView);
+        ActivityHelper.msgChanged();
+    }
+    private void inflateReceivedMsg(CharSequence msg,int index){
+        View sentView = LayoutInflater.from(this).inflate(R.layout.layout_msg_receive, null);
+        ((TextView) sentView.findViewById(R.id.textReceive)).setText(msg);
+        if (contactFaceBitmap != null) {
+            ((ImageView) sentView.findViewById(R.id.senderHeadImg)).setImageBitmap(contactFaceBitmap);
+        }
+        msgContainer.addView(sentView,index);
         ActivityHelper.msgChanged();
     }
 
@@ -233,5 +260,57 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
         }catch (Throwable e){
         }
         super.onDestroy();
+    }
+
+    public void loadMore(View view) {
+        List<String[]> msgs = msgDao.query(pageSize, lastPage+1,cant.account);
+        if(msgs == null){
+            return ;
+        }
+        if(msgs.size()>0){
+            ++lastPage;
+        }
+
+        for (int i = 0; i <msgs.size(); i++) {
+            String[] msg = msgs.get(i);
+            if(msg!= null){
+                if(MessageDbManager.MSG_TYPE_SEND.equals(msg[3])){
+                    inflateSendMst(msg[1],0);
+                }else{
+                    inflateReceivedMsg(msg[1],0);
+                }
+            }
+        }
+
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        switch (ev.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                    curStatus=STAT_PULL_NULL;
+                startY = ev.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                    if(ev.getY()-startY>0){
+                        if(msgScrollView.getScrollY()==0){
+                            curStatus = STAT_PULL_ED;
+                        }else{
+                            curStatus = STAT_PULL_ING;
+                        }
+                    }else{
+                        curStatus = STAT_PULL_NULL;
+                    }
+                break;
+            case MotionEvent.ACTION_UP:
+                if(curStatus == STAT_PULL_ED){
+                    loadMore(null);
+                }
+            default:
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

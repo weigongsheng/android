@@ -10,7 +10,6 @@
         android:id="@+id/includeHead"
         layout="@layout/layout_simple_head"
         ></include>
-
     <ScrollView
         android:id="@+id/msgScrollView"
         android:layout_width="fill_parent"
@@ -34,7 +33,19 @@
 
         </LinearLayout>
     </ScrollView>
-
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:id="@+id/loadMore"
+        android:clickable="true"
+        android:text="加载更多记录"
+        android:gravity="center"
+        android:textColor="@color/dark_gray_bg_2"
+        android:layout_below="@id/includeHead"
+        android:background="#11000000"
+        android:onClick="loadMore"
+        android:visibility="gone"
+        />
     <RelativeLayout
         android:id="@+id/inputBottom"
         android:layout_width="fill_parent"

@@ -2,6 +2,7 @@ package com.hiuzhong.yuxun;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,7 +48,10 @@ public class LoginActivity extends Activity {
         if(myAccount != null){
             if( myAccount.optString("faceImgPath") != null){
                 try {
-                curHeadImg.setImageBitmap(ImageLoaderUtil.loadFromFile(this,myAccount.optString("faceImgPath")));
+                    Bitmap bitmap = ImageLoaderUtil.loadFromFile(this, myAccount.optString("faceImgPath"));
+                    if(bitmap != null){
+                         curHeadImg.setImageBitmap(bitmap);
+                    }
                 }catch (Exception e){}
             }
             userName.setText(myAccount.optString("account"));
