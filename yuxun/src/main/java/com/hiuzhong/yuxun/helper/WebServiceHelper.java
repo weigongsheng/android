@@ -186,8 +186,10 @@ public class WebServiceHelper {
         HttpTransportSE ht = new HttpTransportSE(URL);
         ht.debug = true;
         SoapObject request = new SoapObject(WS_NS, method);
-        for (int i = 0; i < para.length; i++) {
-            request.addProperty(para[i].name, para[i].value);
+        if(para != null){
+            for (int i = 0; i < para.length; i++) {
+                request.addProperty(para[i].name, para[i].value);
+            }
         }
         SoapSerializationEnvelope envelope = new
                 SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -270,7 +272,7 @@ public class WebServiceHelper {
     public WebServiceHelper callWs(Object... values) {
         WsPara[] para = null;
         final List  extraPara = new ArrayList();
-        if(paraName.length>0){
+        if(paraName != null && paraName.length>0){
             para = new WsPara[paraName.length];
             int i = 0;
             for (; i < paraName.length; i++) {
@@ -413,5 +415,9 @@ public class WebServiceHelper {
         return vc;
     };
 
+    public static WebServiceHelper createVersionCheck(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebQueryVersion","WebQueryVersionResult",
+                callBack);
+    }
 
 }

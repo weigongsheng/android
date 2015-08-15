@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.hiuzhong.baselib.util.UpadateConfirmListenr;
+import com.hiuzhong.baselib.util.UpdateVersionByDownloadManager;
 import com.hiuzhong.baselib.util.WebUtil;
 import com.hiuzhong.yuxun.helper.ActivityHelper;
 import com.hiuzhong.yuxun.helper.WebServiceHelper;
@@ -88,6 +89,43 @@ public class MainActivity extends Activity {
     }
 
     private void loadMainUi(Message msg) {
+
+        WebServiceHelper.createVersionCheck(this, new WsCallBack() {
+            @Override
+            public void whenResponse(JSONObject json, Object... extraPara) {
+                UpdateVersionByDownloadManager manager =
+                        new UpdateVersionByDownloadManager(MainActivity.this,
+                                json.optJSONObject("data").optString("curVersion"),
+                                json.optJSONObject("data").optString("downloadUrl"),
+                                new UpadateConfirmListenr() {
+                                    @Override
+                                    public void onOk() {
+                                        loadActUi();
+                                    }
+
+                                    @Override
+                                    public void onCancel() {
+                                        loadActUi();
+                                    }
+                                });
+                manager.start();
+
+            }
+
+            @Override
+            public void whenError() {
+                loadActUi();
+            }
+
+            @Override
+            public void whenFail(JSONObject json) {
+                loadActUi();
+            }
+        }).callWs();
+
+    }
+
+    protected void loadActUi(){
         final JSONObject myAccount = ActivityHelper.getMyAccount(this);
         if(skipLogin(myAccount)){
             WebServiceHelper.createLoginClient(this, new WsCallBack() {
@@ -108,7 +146,6 @@ public class MainActivity extends Activity {
         }else{
             toLogin();
         }
-
     }
 
     private boolean skipLogin(JSONObject myAccount){
