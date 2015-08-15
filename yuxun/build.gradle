@@ -11,7 +11,7 @@ android {
         config {
             keyAlias 'yuxun'
             keyPassword '3321677'
-            storeFile file('E:/private/apkkeystore/yuxun.jks')
+            storeFile file('/home/gongsheng/release/apkkeystore/yuxun.jks')
             storePassword '3321677'
         }
     }

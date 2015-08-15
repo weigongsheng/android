@@ -1,4 +1,4 @@
-package com.hiuzhong.smartlight;
+package com.hiuzhong.smssdk;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
