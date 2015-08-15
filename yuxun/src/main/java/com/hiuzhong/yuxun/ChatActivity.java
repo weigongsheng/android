@@ -129,7 +129,7 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
     }
 
     private void showLostMsg(){
-        List<String[]> msgs = msgDao.query(pageSize, 0,cant.account);
+        List<String[]> msgs = msgDao.query(pageSize, 0, cant.account);
         if(msgs == null){
             return ;
         }
@@ -174,16 +174,29 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
 
     public void sendMsg(View v) {
         CharSequence msg = msgInput.getText();
-        if (msg != null && ! msg.equals("")) {
+        if (msg != null && ! msg.toString().equals("")) {
+            String cont = msg.toString();
+            cont =cont.replaceAll("　"," ").trim();
+            if(cont.length()<1){
+                Toast.makeText(this,"请输入发送内容",Toast.LENGTH_SHORT).show();
+                return;
+            }else if( cant.isBdAccount() && cont.getBytes().length>62){
+                Toast.makeText(this,"发送内容过长",Toast.LENGTH_SHORT).show();
+                return;
+            }
             inflateSendMst(msg);
             if(!cant.isStrange){
                 msgDao.add(cant.account, MessageDbManager.MSG_TYPE_SEND, msg.toString());
             }
             handler.sendEmptyMessage(0);
             charWsClient.callWs(myAccount.optString("account"), myAccount.optString("pwd"), cant.account, msg.toString());
-
+        }else{
+            Toast.makeText(this,"请输入发送内容",Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
     public void showReceivedMsg(CharSequence msg) {
         if (msg != null) {
             //TODO

@@ -23,6 +23,7 @@ import com.hiuzhong.yuxun.helper.WsCallBack;
 import com.hiuzhong.yuxun.vo.Contact;
 import com.hp.hpl.sparta.xpath.ThisNodeTest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -136,10 +137,23 @@ public class ContactDetailActivity extends Activity {
     }
 
     public void showPositon(View v){
-        Intent intent =new Intent(this,ShowPositionActivity.class).putExtra("account",contact.account).putExtra("nickName", contact.nickName);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
+        WebServiceHelper.createGetPosiClient(this, new WsCallBack() {
+            @Override
+            public void whenResponse(JSONObject json, Object... p) {
+                JSONArray ja = json.optJSONObject("data").optJSONArray("BDPostion");
+                if (ja.length() < 1) {
+                    Toast.makeText(ContactDetailActivity.this, "没有可显示的位置信息", Toast.LENGTH_SHORT).show();
+                    return;
+                }else{
+                    Intent intent =new Intent(ContactDetailActivity.this,ShowPositionActivity.class).putExtra("account",contact.account).putExtra("nickName", contact.nickName);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+
+            }
+        }).callWs(ActivityHelper.getMyAccount(this).optString("account"),ActivityHelper.getMyAccount(this).optString("pwd"), contact.account);
+
 }
 
     public void showBalance(View v){

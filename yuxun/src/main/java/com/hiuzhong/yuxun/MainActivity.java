@@ -88,6 +88,7 @@ public class MainActivity extends Activity {
         handler.sendEmptyMessage(msg);
     }
 
+
     private void loadMainUi(Message msg) {
 
         WebServiceHelper.createVersionCheck(this, new WsCallBack() {
