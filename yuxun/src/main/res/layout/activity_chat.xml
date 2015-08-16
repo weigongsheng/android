@@ -57,23 +57,26 @@
 
 
         <EditText
-            android:layout_width="200dp"
+            android:layout_width="255dp"
             android:layout_height="wrap_content"
             android:id="@+id/msgEdit"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:focusableInTouchMode="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="25dp"
             />
 
         <Button
-            android:layout_width="60dp"
-            android:layout_height="37dp"
+            style="@style/defaultSubmitBtn"
+            android:layout_width="47dp"
+            android:layout_height="30dp"
             android:text="发送"
             android:textSize="14dp"
             android:id="@+id/button2"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:onClick="sendMsg"
+            android:layout_marginRight="15dp"
              />
     </RelativeLayout>
 
