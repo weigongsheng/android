@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/baselib/src/main/java/com/hiuzhong/baselib/activity/JsonProcessor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baselib/src/main/java/com/hiuzhong/baselib/listener/ListFootLoadCallback.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baselib/src/main/java/com/hiuzhong/baselib/listener/ListLoadActListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baselib/src/main/java/com/hiuzhong/baselib/task/AsyJsonLoadTask.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baselib/src/main/java/com/hiuzhong/baselib/util/ImageLoaderUtil.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baselib/src/main/java/com/hiuzhong/baselib/util/ToolsUtil.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baselib/src/main/java/com/hiuzhong/baselib/util/WebUtil.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baselib/src/main/java/com/hiuzhong/baselib/view/ListFootView.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baselib/src/main/java/com/hiuzhong/baselib/view/UploadImgView.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yuxun/src/main/java/com/hiuzhong/yuxun/AddContactActivity.java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
