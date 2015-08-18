@@ -75,15 +75,15 @@ public class AddContactActivity extends Activity implements ImgUploadedListener 
         CharSequence nickName = ((TextView) findViewById(R.id.userNickName)).getText();
         CharSequence account = ((TextView) findViewById(R.id.userAccount)).getText();
         if (faceView.getTag() == null || !faceView.getTag().equals("ok")) {
-            tip(".请上传头像");
+//            tip(".请上传头像");
             ImageLoaderUtil.saveBitmapToFile(this, faceView.faceImgFileName, BitmapFactory.decodeResource(getResources(),R.drawable.default_head));
             faceView.setTag("ok");
         }
-        if (nickName == null) {
+        if (nickName == null || nickName.toString().trim().length()<1) {
             tip("昵称不能为空");
             return;
         }
-        if (account == null) {
+        if (account == null || account.toString().trim().length()<1) {
             tip("账号不能为空");
             return;
         }
