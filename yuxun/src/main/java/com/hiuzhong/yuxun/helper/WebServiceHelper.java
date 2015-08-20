@@ -420,4 +420,9 @@ public class WebServiceHelper {
                 callBack);
     }
 
+    public static WebServiceHelper checkAccountClient(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"webQueryAppUserIfRegistered","WebQueryAppUserIfRegisteredResult",
+                callBack,"username");
+    }
+
 }

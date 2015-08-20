@@ -1,7 +1,9 @@
 package com.hiuzhong.yuxun.helper;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
@@ -141,6 +143,15 @@ public class ActivityHelper {
         sp.getSharedPreferences("yuxun", sp.MODE_PRIVATE).edit().putString("lastAccount", account).commit();
     }
 
+
+    public static void showAlert(Context cnt,String title,String msg,DialogInterface.OnClickListener listener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(cnt);
+        builder.setTitle(title);
+        builder.setMessage(msg)
+                .setCancelable(false);
+        builder.setPositiveButton("确定", listener);
+        builder.create().show();
+    }
 
 }
 
