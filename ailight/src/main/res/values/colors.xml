@@ -16,4 +16,7 @@
     <color name="edit_hint_color">#c0c0c0</color>
     <color name="edit_text_color">#505050</color>
     <color name="btn_read">#ff0000</color>
+    <color name="btn_connected_bg">#00ceff</color>
+    <color name="btn_selected_text">#fff</color>
+
 </resources>

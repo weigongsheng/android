@@ -20,7 +20,7 @@ public class LightComdSenderHelper {
     }
 
 
-    protected static void sendCmd(final int progress,BluetoothSocket curClienSocket , final int type){
+    public static void sendCmd(final int progress,BluetoothSocket curClienSocket , final int type){
         if(curClienSocket == null){
             return;
         }
@@ -57,5 +57,8 @@ public class LightComdSenderHelper {
         cmd.append(String.format("%02d",vc)).append('#');
         return cmd.toString();
     }
+
+
+
 
 }

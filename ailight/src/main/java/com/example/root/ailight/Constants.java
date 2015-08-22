@@ -17,9 +17,15 @@
 package com.example.root.ailight;
 
 
+import android.content.Context;
+import android.text.StaticLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  */
-public interface Constants {
+public class Constants {
 
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
@@ -29,5 +35,22 @@ public interface Constants {
 
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
+
+    public static final String PREFER_NAME ="smartLight";
+    public static final String PREFER_INFO_KEY ="connectInfo";
+
+    public static JSONObject getSavedInfo(Context cnt){
+        String info =cnt.getSharedPreferences(PREFER_NAME,cnt.MODE_PRIVATE).getString(PREFER_INFO_KEY,"{}");
+        try {
+            return new JSONObject(info);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  null;
+    }
+
+    public static void saveInfo(JSONObject info,Context cnt){
+        cnt.getSharedPreferences(PREFER_NAME,cnt.MODE_PRIVATE).edit().putString(PREFER_INFO_KEY,info.toString()).commit();
+    }
 
 }

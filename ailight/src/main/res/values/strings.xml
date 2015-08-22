@@ -2,8 +2,12 @@
     <string name="app_name">AiLight</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="none_paired">none paired</string>
-    <string name="scanning">acanning</string>
-    <string name="title_activity_main_ui">MainUiActivity</string>
+    <string name="action_settings">设置</string>
+    <string name="none_paired">没有设备</string>
+    <string name="scanning">扫描</string>
+    <string name="title_activity_main_ui">OKLEND</string>
+
+    <string name="title_other_devices">其它设备</string>
+    <string name="button_scan">扫描 </string>
+    <string name="select_device">选择设备列表</string>
 </resources>

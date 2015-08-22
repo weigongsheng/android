@@ -44,22 +44,44 @@
         android:weightSum="1">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="59dp"
+            android:layout_width="@dimen/btn_room_width"
+            android:layout_height="@dimen/btn_room_height"
             android:text="厨房"
             android:id="@+id/kitchenBtn"
-            android:layout_weight="0.54"
             android:onClick="toSwitchRoom"
+            android:background="@color/light_gray"
+            android:layout_marginLeft="2dp"
 
             />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="59dp"
+            android:layout_width="@dimen/btn_room_width"
+            android:layout_height="@dimen/btn_room_height"
             android:text="卧室"
             android:id="@+id/bedRoomBtn"
-            android:layout_weight="0.42"
             android:onClick="toSwitchRoom"
+            android:background="@color/light_gray"
+            android:layout_marginLeft="5dp"
+            />
+
+        <Button
+            android:layout_width="@dimen/btn_room_width"
+            android:layout_height="@dimen/btn_room_height"
+            android:text="浴室"
+            android:id="@+id/bathRoom"
+            android:onClick="toSwitchRoom"
+            android:background="@color/light_gray"
+            android:layout_marginLeft="5dp"
+            />
+
+        <Button
+            android:layout_width="@dimen/btn_room_width"
+            android:layout_height="@dimen/btn_room_height"
+            android:text="书房"
+            android:id="@+id/study"
+            android:onClick="toSwitchRoom"
+            android:background="@color/light_gray"
+            android:layout_marginLeft="5dp"
             />
 
 

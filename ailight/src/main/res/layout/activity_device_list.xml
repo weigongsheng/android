@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:background="#666"
         android:paddingLeft="5dp"
-        android:text="title_paired_devices"
+        android:text="匹配设备列表"
         android:textColor="#fff"
         android:visibility="gone"
         />
@@ -61,6 +61,6 @@
         android:id="@+id/button_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="button_scan"
+        android:text="@string/button_scan"
         />
 </LinearLayout>
