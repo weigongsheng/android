@@ -30,8 +30,8 @@
     <string name="none_paired">No devices have been paired</string>
     <string name="none_found">No devices found</string>
     <string name="title_paired_devices">Paired Devices</string>
-    <string name="title_other_devices">Other Available Devices</string>
-    <string name="button_scan">Scan for devices</string>
+    <string name="title_other_devices">其它设备</string>
+    <string name="button_scan">扫描 </string>
 
     <!-- Options Menu -->
     <string name="secure_connect">Connect a device - Secure</string>
