@@ -99,6 +99,16 @@ public class UpdateVersionByDownloadManager {
         }
         return String.valueOf(packInfo.versionCode);
     }
+    public static String getVersionName(Context cnt) {
+        PackageManager packageManager = cnt.getPackageManager();
+        PackageInfo packInfo = new PackageInfo();
+        try {
+            packInfo = packageManager.getPackageInfo(cnt.getPackageName(),0);
+        } catch (NameNotFoundException e) {
+
+        }
+        return String.valueOf(packInfo.versionName);
+    }
 
     protected void showUpdataDialog() {
         Builder builer = new Builder(mContext);
