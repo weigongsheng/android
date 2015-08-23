@@ -13,4 +13,7 @@ public abstract class WsCallBack {
         public void whenFail(JSONObject json){
 
         };
+        public boolean autoTip(){
+                return true;
+        }
 }

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.hiuzhong.baselib.listener.ImgUploadedListener;
 import com.hiuzhong.baselib.util.ImageLoaderUtil;
+import com.hiuzhong.baselib.util.UpdateVersionByDownloadManager;
 import com.hiuzhong.baselib.view.SwitchView;
 import com.hiuzhong.baselib.view.UploadImgView;
 import com.hiuzhong.yuxun.activity.YuXunActivity;
@@ -35,6 +36,7 @@ public class MeActivity extends YuXunActivity implements ImgUploadedListener {
     private MsgCountDbManager msgCountDao;
     private WebServiceHelper wsClientContactUs;
     protected UploadImgView myHeadImg;
+    private String curVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class MeActivity extends YuXunActivity implements ImgUploadedListener {
         myHeadImg.faceImgFileName=myAccount.optString("account")+".jpg";
         myHeadImg.uploadListener =  this;
         switchAutoLogin.setState(myAccount.optBoolean("autoLogin"));
-        switchSound.setState( myAccount.optBoolean("soundOn"));
+        switchSound.setState(myAccount.optBoolean("soundOn"));
         ActivityHelper.setTitle(this);
         msgDao = MessageDbManager.getInstance(this);
         msgCountDao = MsgCountDbManager.getInstance(this);
@@ -76,12 +78,14 @@ public class MeActivity extends YuXunActivity implements ImgUploadedListener {
         wsClientContactUs = WebServiceHelper.createShowMsg(this, new WsCallBack() {
             @Override
             public void whenResponse(JSONObject json, Object... position) {
-                Intent intent= new Intent(MeActivity.this, MsgShowActivity.class);
-                intent.putExtra("title","关于我们");
-                intent.putExtra("msg",json.optString("data"));
+                Intent intent = new Intent(MeActivity.this, MsgShowActivity.class);
+                intent.putExtra("title", "关于我们");
+                intent.putExtra("msg", json.optString("data"));
                 MeActivity.this.startActivity(intent);
             }
         });
+        curVersion= UpdateVersionByDownloadManager.getVersionName(this);
+        ((TextView)findViewById(R.id.version)).setText(curVersion);
     }
 
     public void onLoadFinish(Bitmap imgBitMap){
@@ -167,5 +171,29 @@ public class MeActivity extends YuXunActivity implements ImgUploadedListener {
     @Override
     public void finish() {
         super.finish();
+    }
+
+    public void showVersion(View v){
+
+//        String phoneInfo ="";
+//        phoneInfo += "系统当前版本: " + curVersion;
+//        phoneInfo +="\nProduct: " + android.os.Build.PRODUCT;
+//        phoneInfo += "\nCPU_ABI: " + android.os.Build.CPU_ABI;
+//        phoneInfo += "\nTAGS: " + android.os.Build.TAGS;
+//        phoneInfo += "\nVERSION_CODES.BASE: " + android.os.Build.VERSION_CODES.BASE;
+//        phoneInfo += "\nMODEL: " + android.os.Build.MODEL;
+//        phoneInfo += "\nSDK: " + android.os.Build.VERSION.SDK;
+//        phoneInfo += "\nVERSION.RELEASE: " + android.os.Build.VERSION.RELEASE;
+//        phoneInfo += "\nDEVICE: " + android.os.Build.DEVICE;
+//        phoneInfo += "\nDISPLAY: " + android.os.Build.DISPLAY;
+//        phoneInfo += "\nBRAND: " + android.os.Build.BRAND;
+//        phoneInfo += "\nBOARD: " + android.os.Build.BOARD;
+//        phoneInfo += "\nFINGERPRINT: " + android.os.Build.FINGERPRINT;
+//        phoneInfo += "\nID: " + android.os.Build.ID;
+//        phoneInfo += "\nMANUFACTURER: " + android.os.Build.MANUFACTURER;
+//        phoneInfo += "\nUSER: " + android.os.Build.USER;
+//        // Toast.makeText(this, phoneInfo, Toast.LENGTH_LONG).show();
+//        ActivityHelper.showAlert(this,"系统信息",phoneInfo,null);
+
     }
 }

@@ -275,12 +275,47 @@
     </RelativeLayout>
     <View
         android:id="@+id/divid11"
-        style="@style/divideStyle"
+        style="@style/divideStyleInner"
         android:layout_below="@id/layoutContactus" />
+    <RelativeLayout
+        style="@style/detailItemLayoutWide"
+        android:layout_below="@id/divid11"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="showVersion"
+        android:id="@+id/layoutVersion"
+
+        >
+
+        <TextView
+            style="@style/darGrayLabelStyle"
+            android:text="系统版本"
+            android:id="@+id/tipVersion"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"
+            android:text=""
+            />
+
+
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/divid12"
+        style="@style/divideStyleInner"
+        android:layout_below="@id/layoutVersion" />
 
     <Button
         android:id="@+id/btnQuit"
-        android:layout_below="@id/divid11"
+        android:layout_below="@id/divid12"
         android:layout_marginTop="@dimen/item_layout_height"
 
         style="@style/readAlarmBtn"

@@ -77,13 +77,19 @@ public class RegistActivity extends Activity {
     public void checkAccount(){
         progressBarLayout.setVisibility(View.VISIBLE);
         WebServiceHelper.checkAccountClient(this, new WsCallBack() {
+
+            @Override
+            public boolean autoTip() {
+                return false;
+            }
+
             @Override
             public void whenResponse(JSONObject json, Object... extraPara) {
                 progressBarLayout.setVisibility(View.GONE);
                 int code = json.optInt("code");
                 if(type ==1){
-                    // Toast.makeText(RegistActivity.this,json.optString("tip"),Toast.LENGTH_SHORT).show();
-                    ActivityHelper.showAlert(RegistActivity.this,"账号不存在",json.optString("tip"),null);
+//                     Toast.makeText(RegistActivity.this,json.optString("tip"),Toast.LENGTH_LONG).show();
+                    ActivityHelper.showAlert(RegistActivity.this, "账号不存在", json.optString("tip"), null);
                 }else{
                     sentMsg();
                 }
@@ -99,6 +105,7 @@ public class RegistActivity extends Activity {
                 progressBarLayout.setVisibility(View.GONE);
                 if(type ==0){
                     ActivityHelper.showAlert(RegistActivity.this,"账号已存在",json.optString("tip"),null);
+//                    Toast.makeText(RegistActivity.this,json.optString("tip"),Toast.LENGTH_LONG).show();
                 }else{
                     sentMsg();
                 }

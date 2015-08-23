@@ -301,7 +301,9 @@ public class WebServiceHelper {
             @Override
             protected void onPostExecute(String data) {
                 if (data == null) {
-                    Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
+                    if(callBck == null || callBck.autoTip() ){
+                        Toast.makeText(WebServiceHelper.this.cnt, "服务端错误", Toast.LENGTH_SHORT).show();
+                    }
                     if(WebServiceHelper.this.callBck != null){
                         callBck.whenError();
                     }
@@ -309,14 +311,22 @@ public class WebServiceHelper {
                     try {
                         JSONObject jsonObject = new JSONObject(data);
                         if (jsonObject.optInt("code", -1) != 0) {
-                            Toast.makeText(WebServiceHelper.this.cnt, jsonObject.optString("tip"), Toast.LENGTH_SHORT).show();
-                            WebServiceHelper.this.callBck.whenFail(jsonObject);
+                            if(callBck == null || callBck.autoTip() ){
+                                Toast.makeText(WebServiceHelper.this.cnt, jsonObject.optString("tip"), Toast.LENGTH_SHORT).show();
+                            }
+                            if(callBck != null){
+                              WebServiceHelper.this.callBck.whenFail(jsonObject);
+                            }
                         } else {
                             WebServiceHelper.this.callBck.whenResponse(jsonObject,extraPara.size()>0?extraPara.toArray():null);
                         }
                     } catch (JSONException e) {
-                        Toast.makeText(WebServiceHelper.this.cnt, "服务端数据错误", Toast.LENGTH_SHORT).show();
-                        WebServiceHelper.this.callBck.whenError();
+                        if(callBck == null || callBck.autoTip() ){
+                            Toast.makeText(WebServiceHelper.this.cnt, "服务端数据错误", Toast.LENGTH_SHORT).show();
+                        }
+                        if(callBck != null){
+                            WebServiceHelper.this.callBck.whenError();
+                        }
                     }
                 }
             }
@@ -421,7 +431,7 @@ public class WebServiceHelper {
     }
 
     public static WebServiceHelper checkAccountClient(Context cnt, WsCallBack callBack){
-        return new WebServiceHelper(cnt,"webQueryAppUserIfRegistered","WebQueryAppUserIfRegisteredResult",
+        return new WebServiceHelper(cnt,"WebQueryAppUserIfRegistered","WebQueryAppUserIfRegisteredResult",
                 callBack,"username");
     }
 
