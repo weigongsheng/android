@@ -44,7 +44,7 @@ public class YuXunActivity extends Activity {
     public void onBackPressed() {
         long cur = System.currentTimeMillis();
         if (cur - lastBackTime > MAX_EXIT_SPAN) {
-            Toast.makeText(this, "再按一次推出系统", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "再按一次退出系统", Toast.LENGTH_SHORT).show();
             lastBackTime = cur;
         } else if (lastBackTime > 0) {
             getApplication().onTerminate();

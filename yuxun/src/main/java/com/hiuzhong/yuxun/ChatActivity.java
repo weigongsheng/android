@@ -67,6 +67,8 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
     int curStatus=STAT_PULL_NULL;
 
     int pageSize = 20;
+    long lastSendTime;
+    int frequence=30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +128,12 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
         ActivityHelper.initHeadInf(this, cant.nickName == null ? cant.account : cant.nickName);
         msgcountDao.cleanCount(cant.account);
 //        msgScrollView.post()
+        WebServiceHelper.fetchMsgSendFrequence(this, new WsCallBack() {
+            @Override
+            public void whenResponse(JSONObject json, Object... extraPara) {
+                frequence=json.optJSONObject("data").optInt("SendReq",29);
+            }
+        }).callWs(myAccount.optString("account"), myAccount.optString("pwd"));
     }
 
     private void showLostMsg(){
@@ -180,11 +188,18 @@ public static final String INTENT_PARA_CONTACT="contactAccount";
             if(cont.length()<1){
                 Toast.makeText(this,"请输入发送内容",Toast.LENGTH_SHORT).show();
                 return;
-            }else if( cant.isBdAccount() && cont.getBytes().length>62){
-                Toast.makeText(this,"发送内容过长",Toast.LENGTH_SHORT).show();
-                return;
+            }else if( cant.isBdAccount() ){
+                if(cont.getBytes().length>62){
+                    Toast.makeText(this,"发送内容过长",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(System.currentTimeMillis()-lastSendTime<frequence*1000){
+                    Toast.makeText(this,"发送过于频繁，请间隔"+frequence+"秒后再发送",Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
             inflateSendMst(msg);
+            lastSendTime=System.currentTimeMillis();
             if(!cant.isStrange){
                 msgDao.add(cant.account, MessageDbManager.MSG_TYPE_SEND, msg.toString());
             }

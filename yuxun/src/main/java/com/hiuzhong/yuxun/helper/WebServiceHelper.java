@@ -434,5 +434,9 @@ public class WebServiceHelper {
         return new WebServiceHelper(cnt,"WebQueryAppUserIfRegistered","WebQueryAppUserIfRegisteredResult",
                 callBack,"username");
     }
+    public static WebServiceHelper fetchMsgSendFrequence(Context cnt, WsCallBack callBack){
+        return new WebServiceHelper(cnt,"WebGetSendMsgFreq","WebGetSendMsgFreqResult",
+                callBack,"username","pwd");
+    }
 
 }
